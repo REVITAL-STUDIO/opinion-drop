@@ -1,5 +1,6 @@
 export class Topic {
 
+    private topicId!: number;
     private name: string;
     private description: string;
     private createdAt: Date;

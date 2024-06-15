@@ -50,6 +50,7 @@ export class UserDAO {
             }
             const userData = result.rows[0];
             const user = new User(
+                userData.user_id,
                 userData.username,
                 userData.email,
                 userData.password_hash,

@@ -1,6 +1,7 @@
 
 export class Highlight {
 
+    private highlightId!: number;
     private userId: number;
     private opinionId: number;
     private reactionId: number;

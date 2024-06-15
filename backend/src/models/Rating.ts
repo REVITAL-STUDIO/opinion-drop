@@ -1,5 +1,6 @@
 export class Rating {
 
+    private ratingId!: number;
     private userId: number;
     private opinionId: number;
     private value: number;

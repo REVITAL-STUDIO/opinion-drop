@@ -1,6 +1,7 @@
 
 export class Reaction {
 
+    private reactionId!: number;
     private userId: number;
     private highlightId: number;
     private type: string;
