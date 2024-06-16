@@ -77,7 +77,7 @@ export class OpinionDAO {
     }
 
     async updateOpinion(opinion: Opinion): Promise<void> {
-        const query = "UPDATE opinions SET user_id = $1, topic_id = $2, title = $3, text_content = $4, images = $5, videos = $6, documents = $7, audios = $8, createdAt = $9, updatedAt = $10 WHERE opinion_id = $11"
+        const query = "UPDATE opinions SET user_id = $1, topic_id = $2, title = $3, text_content = $4, images = $5, videos = $6, documents = $7, audios = $8, created_at = $9, updatedAt = $10 WHERE opinion_id = $11"
         const opinionData = opinion.getOpinionData();
 
         const values = [

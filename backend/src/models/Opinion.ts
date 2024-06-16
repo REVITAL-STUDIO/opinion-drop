@@ -5,10 +5,10 @@ export class Opinion {
     private topicId: number;
     private title: string;
     private textContent: string;
-    private images: string[];
-    private videos: string[];
-    private documents: string[];
-    private audios: string[];
+    private images: string[] | null;
+    private videos: string[]| null;
+    private documents: string[]| null;
+    private audios: string[]| null;
     private createdAt: Date;
     private updatedAt: Date;
 

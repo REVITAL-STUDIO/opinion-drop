@@ -13,7 +13,7 @@ export class User {
 
 
 
-    constructor(username: string, email: string, passwordHash: string, createdAt: Date, bio?: string | null, profilePicture?: string | null, politicalAlignment?: string) {
+    constructor(username: string, email: string, passwordHash: string, createdAt: Date, bio?: string | null, profilePicture?: string | null, politicalAlignment?: string, userId?: number) {
 
         this.username = username;
         this.email = email;
@@ -22,7 +22,9 @@ export class User {
         this.profilePicture = profilePicture ?? null;
         this.politicalAlignment = politicalAlignment ?? Constants.PoliticalAlignment.Moderate;
         this.createdAt = createdAt;
-        
+        this.userId = userId ?? this.userId;
+
+
 
     }
 
