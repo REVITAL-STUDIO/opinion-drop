@@ -13,7 +13,7 @@ export class Opinion {
     private updatedAt: Date;
 
 
-    constructor(userId: number, topicId: number, title: string, textContent: string, images: string[], videos: string[], documents: string[], audios: string[], createdAt: Date, updatedAt: Date, opinionId?: number) {
+    constructor(userId: number, topicId: number, title: string, textContent: string, images: string[] | null, videos: string[] | null, documents: string[] | null, audios: string[] | null, createdAt: Date, updatedAt: Date, opinionId?: number) {
 
         this.userId = userId;
         this.topicId = topicId;

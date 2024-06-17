@@ -40,7 +40,7 @@ export class RatingService {
     }
 
     async updateRating(ratingData: {
-        ratingId: number
+        ratingId?: number
         userId: number,
         opinionId: number,
         value: number,
