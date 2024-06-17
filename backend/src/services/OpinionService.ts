@@ -53,7 +53,7 @@ export class OpinionService {
     }
 
     async updateOpinion(opinionData: {
-        opinionId: number
+        opinionId?: number
         userId: number,
         topicId: number,
         title: string,

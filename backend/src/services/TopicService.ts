@@ -38,7 +38,7 @@ export class TopicService {
     }
 
     async updateTopic(topicData: {
-        topicId: number,
+        topicId?: number,
         name: string,
         description: string,
         createdAt: Date

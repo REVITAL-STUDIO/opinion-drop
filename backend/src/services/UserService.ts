@@ -46,13 +46,13 @@ export class UserService {
     }
 
     async updateUser(userData: {
-        userId: number,
+        userId?: number,
         username: string,
         email: string,
         passwordHash: string,
-        bio: string,
-        profilePicture: string,
-        politicalAlignment: string,
+        bio?: string,
+        profilePicture?: string,
+        politicalAlignment?: string,
         createdAt: Date
     }): Promise<void> {
         try {

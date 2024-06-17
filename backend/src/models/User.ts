@@ -1,4 +1,4 @@
-import Constants from "../../libs/enums";
+import Constants from "../utils/enums";
 export class User {
 
     private userId!: number;
