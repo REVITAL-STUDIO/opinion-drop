@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@sinclair/typebox": "^0.32.32",
-    "ajv": "^8.16.0",
-    "ajv-formats": "^3.0.1"
-  }
-}
