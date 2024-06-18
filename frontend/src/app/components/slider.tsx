@@ -1,76 +1,78 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import Image from "next/image";
 
-const Slider = () => {
+import { EffectCoverflow, Pagination, Navigation } from "swiper/modules";
+
+function Slider() {
+  const cardInfo = [
+    {
+      images: "/Images/pexels-itfeelslikefilm-590496.jpg",
+    },
+    {
+      images: "/Images/pexels-daniel-reche-718241-1556652.jpg",
+    },
+    {
+      images: "/Images/pexels-kelvinocta16-1973270.jpg",
+    },
+  ];
+
   return (
-    <section className="news">
-      <div className="container">
-        <input
-          className="border "
-          type="radio"
-          name="slider"
-          id="item-1"
-          checked
-        />
-        <input type="radio" name="slider" id="item-2" />
-        <input type="radio" name="slider" id="item-3" />
-        <input type="radio" name="slider" id="item-4" />
-        <input type="radio" name="slider" id="item-5" />
-        <div className="cards">
-          <label className="card" htmlFor="item-1" id="song-1">
-            <input type="checkbox" />
-            <video
-              autoPlay
-              muted
-              loop
-              className="picture video-filter"
-              src="/videos/mag.mp4"
-              playsInline
-            />
-          </label>
-          <label className="card" htmlFor="item-2" id="song-2">
-            <Image
-              alt="song"
-              className="picture"
-              height="400"
-              width="400"
-              src="/images/softxlaunch-instagram.jpg"
-            />
-          </label>
-          <label className="card" htmlFor="item-3" id="song-3">
-            <Image
-              alt="song"
-              className="picture"
-              height="400"
-              width="400"
-              src="/images/how not to gate keep 101.png"
-            />
-          </label>
-          <label className="card" htmlFor="item-4" id="song-4">
-            <video
-              autoPlay
-              muted
-              loop
-              className="picture"
-              src="/videos/trnsprnc.mp4"
-              playsInline
-            />
-          </label>
-          <label className="card" htmlFor="item-5" id="song-5">
-            <Image
-              alt="song"
-              className="picture"
-              height="400"
-              width="400"
-              src="/images/revitalxtrnsprnc.png"
-            />
-          </label>
-        </div>
+    <section className="flex justify-center items-center  p-4 ">
+      <div className="container border-2 border-dashed rounded-md border-green-500">
+        <Swiper
+          effect={"coverflow"}
+          spaceBetween={1}
+          centeredSlides={true}
+          loop={true}
+          slidesPerView={"auto"}
+          coverflowEffect={{
+            rotate: 0,
+            stretch: 0,
+            depth: 100,
+            modifier: 2.5,
+            slideShadows: false,
+          }}
+          pagination={{ el: ".swiper-pagination", clickable: true }}
+          navigation={{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+            clickable: true,
+          }}
+          modules={[EffectCoverflow, Pagination, Navigation]}
+          className="swiper_container"
+        >
+          {cardInfo.map((info, index) => (
+            <SwiperSlide key={index} className="swiper-slide">
+              <Image
+                src={info.images}
+                layout="fill"
+                alt="slider"
+                className="absolute"
+                style={{ objectFit: "fill" }}
+              />
+            </SwiperSlide>
+          ))}
+
+          <div className="slider-controler">
+            <div className="swiper-button-prev slider-arrow">
+              <ion-icon name="arrow-back-outline"></ion-icon>
+            </div>
+            <div className="swiper-button-next slider-arrow">
+              <ion-icon name="arrow-forward-outline"></ion-icon>
+            </div>
+          </div>
+        </Swiper>
       </div>
     </section>
   );
-};
+}
 
 export default Slider;
