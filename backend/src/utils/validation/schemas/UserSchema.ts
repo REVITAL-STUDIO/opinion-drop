@@ -17,6 +17,7 @@ export const userSchema = Type.Object({
   profilePicture: Type.Optional(Type.String()),
   politicalAlignment: Type.Optional(Type.String()),
   createdAt: Type.Date(),
+  updatedAt: Type.Date(),
 });
 
 // Validate the schema with AJV

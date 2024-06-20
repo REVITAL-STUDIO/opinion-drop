@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { UserController } from './controllers/UserController';
 import { OpinionController } from './controllers/OpinionController';
+import { CommentController } from './controllers/CommentController';
 import { TopicController } from './controllers/TopicController';
 import { RatingController } from './controllers/RatingController';
 
@@ -9,8 +10,10 @@ const router = Router();
 // Instantiate controllers
 const userController = new UserController();
 const opinionController = new OpinionController();
+const commentController = new CommentController();
 const topicController = new TopicController();
 const ratingController = new RatingController();
+
 
 // User Routes
 router.post('/users', userController.createUser.bind(userController));
@@ -27,6 +30,11 @@ router.put('/opinions/:opinionId', opinionController.updateOpinion.bind(opinionC
 router.delete('/opinions/:opinionId', opinionController.deleteOpinion.bind(opinionController));
 
 
+// Comment Routes
+router.post('/comments', commentController.createComment.bind(commentController));
+router.get('/comments/:commentId', commentController.getComment.bind(commentController));
+router.put('/comments/:commentId', commentController.updateComment.bind(commentController));
+router.delete('/comments/:commentId', commentController.deleteComment.bind(commentController));
 
 // Topic Routes
 router.post('/topics', topicController.createTopic.bind(topicController));

@@ -9,11 +9,11 @@ export class User {
     private profilePicture: string | null;
     private politicalAlignment: string;
     private createdAt: Date;
+    private updatedAt: Date;
 
 
 
-
-    constructor(username: string, email: string, passwordHash: string, createdAt: Date, bio?: string | null, profilePicture?: string | null, politicalAlignment?: string, userId?: number) {
+    constructor(username: string, email: string, passwordHash: string, createdAt: Date, updatedAt: Date, bio?: string | null, profilePicture?: string | null, politicalAlignment?: string, userId?: number) {
 
         this.username = username;
         this.email = email;
@@ -22,9 +22,8 @@ export class User {
         this.profilePicture = profilePicture ?? null;
         this.politicalAlignment = politicalAlignment ?? Constants.PoliticalAlignment.Moderate;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.userId = userId ?? this.userId;
-
-
 
     }
 
@@ -35,6 +34,7 @@ export class User {
             email: this.email,
             passwordHash: this.passwordHash,
             createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
             bio: this.bio,
             profilePicture: this.profilePicture,
             politicalAlignment: this.politicalAlignment

@@ -27,7 +27,6 @@ export class Opinion {
         this.updatedAt = updatedAt;
         this.opinionId = opinionId ?? this.opinionId;
 
-
     }
 
     public getOpinionData(): Record<string, any> {

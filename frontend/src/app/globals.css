@@ -149,3 +149,32 @@
     transform: translate(-100%);
   }
 }
+
+
+/* scroll bar style */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+  height: 8px; /* Height of the scrollbar */
+  background-color: transparent; /* Background color of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: gray; /* Color of the scrollbar handle */
+  border-radius: 10px; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth transition for color change */
+}
+
+/* Handle on hover or when scrolling */
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(96, 96, 96, 0.7); /* Darker color on hover */
+}
+
+/* Display scrollbar only when scrolling */
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Transparent track */
+  border-radius: 10px; /* Rounded corners of the track */
+}
+
+
+

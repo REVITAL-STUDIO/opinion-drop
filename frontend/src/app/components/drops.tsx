@@ -56,7 +56,7 @@ const Drop = () => {
         <h1 className="absolute left-[200%]">Abortion</h1>
         <h1 className="absolute left-[300%]">Abortion</h1>
       </div>
-      <Slider />
+      {/* <Slider /> */}
     </section>
   );
 };

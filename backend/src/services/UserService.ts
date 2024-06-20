@@ -17,7 +17,8 @@ export class UserService {
         bio?: string,
         profilePicture?: string,
         politicalAlignment?: string,
-        createdAt: Date
+        createdAt: Date,
+        updatedAt: Date
     }): Promise<void> {
         try {
             const newUser = new User(
@@ -25,6 +26,7 @@ export class UserService {
                 userData.email,
                 userData.passwordHash,
                 userData.createdAt,
+                userData.updatedAt,
                 userData.bio,
                 userData.profilePicture,
                 userData.politicalAlignment
@@ -53,7 +55,8 @@ export class UserService {
         bio?: string,
         profilePicture?: string,
         politicalAlignment?: string,
-        createdAt: Date
+        createdAt: Date,
+        updatedAt: Date
     }): Promise<void> {
         try {
         
@@ -62,6 +65,7 @@ export class UserService {
                 userData.email,
                 userData.passwordHash,
                 userData.createdAt,
+                userData.updatedAt,
                 userData.bio,
                 userData.profilePicture,
                 userData.politicalAlignment,
