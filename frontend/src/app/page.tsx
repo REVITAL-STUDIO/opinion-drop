@@ -5,7 +5,7 @@ import Drop from "./components/drops";
 
 export default function Home() {
   return (
-    <main className="bg-[#FFFFF0]">
+    <main className="bg-[#2b2b2b]">
       <Nav />
       <Hero />
       <Drop />

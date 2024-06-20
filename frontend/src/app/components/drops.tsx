@@ -54,13 +54,19 @@ const Drop = () => {
         </button>
       </div>
       <div
-        className="  py-4 my-2 w-full text-black uppercase
+        className=" w-full text-white uppercase
        overflow-hidden relative text-[240px] font-bold list-none flex gap-x-12"
       >
         <h1 ref={firstText} className="m-0 ">
           Abortion
         </h1>
         <h1 ref={secondText} className="absolute left-[100%]">
+          Abortion
+        </h1>
+        <h1 ref={thirdText} className="absolute left-[200%]">
+          Abortion
+        </h1>
+        <h1 ref={fourthText} className="absolute left-[300%]">
           Abortion
         </h1>
       </div>
