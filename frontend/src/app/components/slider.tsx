@@ -89,12 +89,23 @@ function Slider() {
                       {info.title}
                     </h1>
                     <p className="text-xs text-white">{info.description}</p>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <button className="px-4 py-2 my-4 text-sm text-white rounded-full border border-[#A6E81B]">
                         Join the Conversation
                       </button>
-                      <div>
-                        <Icon icon></Icon>
+                      <div className="w-fit flex gap-x-4">
+                        <button className="w-8 h-8">
+                          <Icon
+                            icon="ph:arrow-fat-up-light"
+                            className="text-white w-6 h-6 hover:bg-white duration-300 ease-in-out"
+                          />
+                        </button>
+                        <button className="w-8 h-8">
+                          <Icon
+                            icon="ph:arrow-fat-up-light"
+                            className="text-white w-6 h-6 rotate-180"
+                          />
+                        </button>
                       </div>
                     </div>
                   </div>
