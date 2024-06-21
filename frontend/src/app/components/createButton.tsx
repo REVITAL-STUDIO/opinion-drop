@@ -18,7 +18,7 @@ const CreateButton = () => {
       >
         create +
       </button>
-      {openCreateOpinion && <OpinionCreate />}
+      {openCreateOpinion && <OpinionCreate toggleCreate={toggleCreate} />}
     </div>
   );
 };
