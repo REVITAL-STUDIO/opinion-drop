@@ -3,12 +3,18 @@ import Image from "next/image";
 import { useState } from "react";
 import DetailsModal from "../components/DetailsModal";
 import OpinionModal from "../components/OpinionModal";
-
+import RepliesModal
+ from "../components/RepliesModal";
 export default function Modal() {
   const [selectedOpinion, setSelectedOpinion] = useState(true);
+  const [showRepliesModal, setShowRepliesModal] = useState(true);
 
   const closeModal = () => {
     setSelectedOpinion(false);
+  };
+
+  const closeReplies = () => {
+    setShowRepliesModal(false);
   };
 
   return (
@@ -23,6 +29,9 @@ export default function Modal() {
             <DetailsModal />
             <OpinionModal closeModal={closeModal} />
           </>
+        )}
+        {showRepliesModal && (
+          <RepliesModal closeModal={closeReplies} />
         )}
       </div>
     </div>

@@ -1,5 +1,5 @@
-CREATE DATABASE opiniondrop_db;
 
+\c opiniondrop_db;
 
 -- creating Tables
 

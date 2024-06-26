@@ -17,7 +17,7 @@ interface OpinionModalProps {
 
 const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
   return (
-    <div className="absolute left-[1.5%] top-[1.5%] h-[30rem] w-[27%] bg-black/50 text-white p-4 z-20 shadow-lg">
+    <div className="z-30 absolute left-[1.5%] top-[1.5%] h-[30rem] w-[27%] bg-black/50 text-white p-4 shadow-lg">
       <div className="flex justify-between mb-8 relative">
         <div className="w-fit h-fit rounded-full p-4 bg-[#FFFFF0] "></div>
         <div className="flex flex-col text-sm font-semibold right-0">
