@@ -36,6 +36,9 @@ const ReplyShort: React.FC<ReplyShortProps> = ({ reply }) => {
                     <PiSmileySadBold className='w-[1.4rem] h-[1.4rem] text-[#9191FF]' />
                 </div>
             </div>
+            <div className='absolute -bottom-4 -right-4 w-[8rem] h-[2.6rem] bg-[#F2F2F2] rounded-full flex justify-center items-center'>
+                <p className='font-semibold text-[0.8rem]'>100 REPLIES</p>
+            </div>
         </div>
     );
 };
