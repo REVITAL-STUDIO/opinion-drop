@@ -7,13 +7,13 @@ export class User {
     private passwordHash: string;
     private bio: string | null;
     private profilePicture: string | null;
-    private politicalAlignment: string;
-    private createdAt: Date;
-    private updatedAt: Date;
+    private politicalAlignment: string | null;
+    private createdAt!: Date;
+    private updatedAt!: Date;
 
 
 
-    constructor(username: string, email: string, passwordHash: string, createdAt: Date, updatedAt: Date, bio?: string | null, profilePicture?: string | null, politicalAlignment?: string, userId?: number) {
+    constructor(username: string, email: string, passwordHash: string, bio: string | null, profilePicture: string | null, politicalAlignment: string | null, userId?: number, createdAt?: Date, updatedAt?: Date,) {
 
         this.username = username;
         this.email = email;
@@ -21,10 +21,9 @@ export class User {
         this.bio = bio ?? null;
         this.profilePicture = profilePicture ?? null;
         this.politicalAlignment = politicalAlignment ?? Constants.PoliticalAlignment.Moderate;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.userId = userId ?? this.userId;
-
+        this.createdAt = createdAt ?? this.createdAt;
+        this.updatedAt = updatedAt ?? this.updatedAt;
     }
 
     public getUserData(): Record<string, any> {

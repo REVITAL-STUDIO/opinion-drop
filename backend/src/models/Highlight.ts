@@ -6,17 +6,18 @@ export class Highlight {
     private opinionId: number;
     private reactionId: number;
     private highlightedText: string;
-    private createdAt: Date;
+    private createdAt!: Date;
 
 
 
 
-    constructor(userId: number, opinionId: number, reactionId: number, highlightedText: string, createdAt: Date) {
+    constructor(userId: number, opinionId: number, reactionId: number, highlightedText: string, highlightId?: number, createdAt?: Date) {
 
         this.userId = userId;
         this.opinionId = opinionId;
         this.reactionId = reactionId;
         this.highlightedText = highlightedText;
-        this.createdAt = createdAt;
+        this.highlightId = highlightId ?? this.highlightId;
+        this.createdAt = createdAt ?? this.createdAt;
     }
 }

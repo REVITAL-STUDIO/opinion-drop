@@ -10,7 +10,7 @@ export class UserDAO {
 
 
     async createUser(newUser: User): Promise<void> {
-        const query = "INSERT INTO users (username, email, password_hash, bio, profile_picture, political_alignment, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7)"
+        const query = "INSERT INTO users (username, email, password_hash, bio, profile_picture, political_alignment) VALUES ($1, $2, $3, $4, $5, $6)"
         const userData = newUser.getUserData();
         const values = [
             userData.username,
@@ -19,7 +19,6 @@ export class UserDAO {
             userData.bio,
             userData.profilePicture,
             userData.politicalAlignment,
-            userData.createdAt
         ];
 
         let client: PoolClient | undefined;
@@ -49,16 +48,20 @@ export class UserDAO {
                 return null; // user does not exist
             }
             const userData = result.rows[0];
+            console.log("userData: ", userData);
             const user = new User(
-                userData.user_id,
                 userData.username,
                 userData.email,
                 userData.password_hash,
-                userData.created_at,
                 userData.bio,
                 userData.profile_picture,
-                userData.political_alignment
+                userData.political_alignment,
+                userData.user_id,
+                userData.created_at,
+                userData.updated_at,
+
             );
+            console.log("user: ", user);
             return user;
         } catch (error) {
             console.error('Error executing get user query:', error);
@@ -70,9 +73,10 @@ export class UserDAO {
     }
 
     async updateUser(user: User): Promise<void> {
-        const query = "UPDATE users SET username = $1, email = $2, password_hash = $3, bio = $4, profile_picture = $5, political_alignment = $6, created_at = $7 WHERE user_id = $8"
-        const userData = user.getUserData();
 
+        const query = "UPDATE users SET username = $1, email = $2, password_hash = $3, bio = $4, profile_picture = $5, political_alignment = $6 WHERE user_id = $7"
+        const userData = user.getUserData();
+        console.log("user data: ", userData);
         const values = [
             userData.username,
             userData.email,
@@ -80,7 +84,6 @@ export class UserDAO {
             userData.bio,
             userData.profilePicture,
             userData.politicalAlignment,
-            userData.createdAt,
             userData.userId
 
         ];
@@ -89,7 +92,10 @@ export class UserDAO {
 
         try {
             client = await this.pool.connect();
-            await client.query(query, values);
+            const resp = await client.query(query, values);
+            if (resp.rowCount == 0){
+                throw new Error(`User with ID ${userData.userId} does not exist.`);
+            }
         } catch (error) {
             console.error('Error executing update user query:', error);
             throw new Error(`Error updating user: ${error}`);

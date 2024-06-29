@@ -9,10 +9,9 @@ export const commentSchema = Type.Object({
     commentId: Type.Optional(Type.Integer()), 
     userId: Type.Integer(),
     opinionId: Type.Integer(),
-    parentCommentId: Type.Integer(),
+    parentCommentId: Type.Union([Type.Null(), Type.Integer()]),
     content: Type.String(),
-    createdAt: Type.Date(),
-    updatedAt: Type.Date(),
+
 });
 
 const validate = ajv.compile(commentSchema);

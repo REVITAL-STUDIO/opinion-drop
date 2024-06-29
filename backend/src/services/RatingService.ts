@@ -14,14 +14,12 @@ export class RatingService {
         userId: number,
         opinionId: number,
         value: number,
-        createdAt: Date
     }): Promise<void> {
         try {
             const newRating = new Rating(
                 ratingData.userId,
                 ratingData.opinionId,
                 ratingData.value,
-                ratingData.createdAt,
             );
             await this.ratingDAO.createRating(newRating);
         } catch (error) {
@@ -44,7 +42,6 @@ export class RatingService {
         userId: number,
         opinionId: number,
         value: number,
-        createdAt: Date
     }): Promise<void> {
         try {
         
@@ -52,7 +49,6 @@ export class RatingService {
                 ratingData.userId,
                 ratingData.opinionId,
                 ratingData.value,
-                ratingData.createdAt,
                 ratingData.ratingId
             );
             await this.ratingDAO.updateRating(updatedRating);

@@ -9,7 +9,6 @@ export const topicSchema = Type.Object({
     topicId: Type.Optional(Type.Integer()), 
     name: Type.String(),
     description: Type.String(),
-    createdAt: Type.Date(),
 });
 
 const validate = ajv.compile(topicSchema);

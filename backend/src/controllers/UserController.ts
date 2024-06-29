@@ -54,13 +54,19 @@ export class UserController {
     async updateUser(req: Request, res: Response): Promise<void> {
         try {
 
+            const userId: number = parseInt(req.params.userId, 10);
+            if (isNaN(userId)) {
+                res.status(400).send('Invalid user ID');
+                return;
+            }
+
             if (!validate(req.body)) {
                 res.status(400).send('Invalid user data');
                 return;
             }
 
             const userData: UserSchemaType = req.body as UserSchemaType;
-
+            userData.userId = userId;
             await this.userService.updateUser(userData);
             res.status(201).send('User updated successfully');
         } catch (error) {

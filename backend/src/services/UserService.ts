@@ -14,19 +14,15 @@ export class UserService {
         username: string,
         email: string,
         passwordHash: string,
-        bio?: string,
-        profilePicture?: string,
-        politicalAlignment?: string,
-        createdAt: Date,
-        updatedAt: Date
+        bio: string | null,
+        profilePicture: string | null,
+        politicalAlignment: string | null,
     }): Promise<void> {
         try {
             const newUser = new User(
                 userData.username,
                 userData.email,
                 userData.passwordHash,
-                userData.createdAt,
-                userData.updatedAt,
                 userData.bio,
                 userData.profilePicture,
                 userData.politicalAlignment
@@ -52,20 +48,15 @@ export class UserService {
         username: string,
         email: string,
         passwordHash: string,
-        bio?: string,
-        profilePicture?: string,
-        politicalAlignment?: string,
-        createdAt: Date,
-        updatedAt: Date
+        bio: string | null,
+        profilePicture: string | null,
+        politicalAlignment: string | null,
     }): Promise<void> {
-        try {
-        
+        try {        
             const updatedUser = new User(
                 userData.username,
                 userData.email,
                 userData.passwordHash,
-                userData.createdAt,
-                userData.updatedAt,
                 userData.bio,
                 userData.profilePicture,
                 userData.politicalAlignment,

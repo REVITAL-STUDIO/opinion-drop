@@ -10,14 +10,12 @@ export class RatingDAO {
 
 
     async createRating(newRating: Rating): Promise<void> {
-        const query = "INSERT INTO ratings (user_id, opinion_id, value, created_at) VALUES ($1, $2, $3, $4)"
+        const query = "INSERT INTO ratings (user_id, opinion_id, value) VALUES ($1, $2, $3)"
         const ratingData = newRating.getRatingData();
         const values = [
             ratingData.userId,
             ratingData.opinionId,
-            ratingData.value,
-            ratingData.createdAt
-            
+            ratingData.value,            
         ];
 
         let client: PoolClient | undefined;
@@ -48,11 +46,11 @@ export class RatingDAO {
             }
             const ratingData = result.rows[0];
             const rating = new Rating(
-                ratingData.number,
-                ratingData.opinionId,
+                ratingData.user_id,
+                ratingData.opinion_id,
                 ratingData.value,
-                ratingData.createdAt,
-                ratingData.ratingId
+                ratingData.rating_id,
+                ratingData.created_at,
             );
             return rating;
         } catch (error) {
@@ -65,14 +63,13 @@ export class RatingDAO {
     }
 
     async updateRating(rating: Rating): Promise<void> {
-        const query = "UPDATE ratings SET user_id = $1, opinion_id = $2, value = $3, created_at = $4 WHERE rating_id = $5"
+        const query = "UPDATE ratings SET user_id = $1, opinion_id = $2, value = $3 WHERE rating_id = $4"
         const ratingData = rating.getRatingData();
 
         const values = [
                 ratingData.userId,
                 ratingData.opinionId,
                 ratingData.value,
-                ratingData.createdAt,
                 ratingData.ratingId
         ];
 
@@ -80,7 +77,10 @@ export class RatingDAO {
 
         try {
             client = await this.pool.connect();
-            await client.query(query, values);
+            const resp = await client.query(query, values);
+            if (resp.rowCount == 0){
+                throw new Error(`Rating with ID ${ratingData.ratingId} does not exist.`);
+            }
         } catch (error) {
             console.error('Error executing update rating query:', error);
             throw new Error(`Error updating rating: ${error}`);

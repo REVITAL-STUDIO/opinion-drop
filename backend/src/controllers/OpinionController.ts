@@ -34,6 +34,7 @@ export class OpinionController {
         try {
 
             const opinionId: number = parseInt(req.params.opinionId, 10);
+
             if (isNaN(opinionId)) {
                 res.status(400).send('Invalid opinion ID');
                 return;
@@ -53,19 +54,24 @@ export class OpinionController {
 
     async updateOpinion(req: Request, res: Response): Promise<void> {
         try {
-
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            
             if (!validate(req.body)) {
                 res.status(400).send('Invalid opinion data');
                 return;
             }
 
             const opinionData: OpinionSchemaType = req.body as OpinionSchemaType;
-
+            opinionData.opinionId = opinionId;
             await this.opinionService.updateOpinion(opinionData);
             res.status(201).send('Opinion updated successfully');
         } catch (error) {
             console.error('Error in OpinionController createOpinion:', error);
-            res.status(500).send('Failed to create opinion');
+            res.status(500).send('Failed to update opinion');
         }
     }
 

@@ -13,11 +13,9 @@ export const userSchema = Type.Object({
   username: Type.String(),
   email: Type.String({ format: 'email' }), 
   passwordHash: Type.String(),
-  bio: Type.Optional(Type.String()),
-  profilePicture: Type.Optional(Type.String()),
-  politicalAlignment: Type.Optional(Type.String()),
-  createdAt: Type.Date(),
-  updatedAt: Type.Date(),
+  bio: Type.Union([Type.Null(), Type.String()]),
+  profilePicture: Type.Union([Type.Null(), Type.String()]),
+  politicalAlignment: Type.Union([Type.Null(), Type.String()]),
 });
 
 // Validate the schema with AJV

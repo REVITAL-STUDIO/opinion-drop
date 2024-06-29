@@ -15,17 +15,13 @@ export class CommentService {
         opinionId: number,
         parentCommentId: number | null,
         content: string,
-        createdAt: Date,
-        updatedAt: Date
     }): Promise<void> {
         try {
             const newComment = new Comment(
                 commentData.userId,
                 commentData.opinionId,
-                commentData.parentCommentId,
                 commentData.content,
-                commentData.createdAt,
-                commentData.updatedAt,
+                commentData.parentCommentId,
             );
             await this.commentDAO.createComment(newComment);
         } catch (error) {
@@ -49,18 +45,14 @@ export class CommentService {
         opinionId: number,
         parentCommentId: number | null,
         content: string,
-        createdAt: Date,
-        updatedAt: Date
     }): Promise<void> {
         try {
         
             const updatedComment = new Comment(
                 commentData.userId,
                 commentData.opinionId,
-                commentData.parentCommentId,
                 commentData.content,
-                commentData.createdAt,
-                commentData.updatedAt,
+                commentData.parentCommentId,
                 commentData.commentId
             );
             await this.commentDAO.updateComment(updatedComment);

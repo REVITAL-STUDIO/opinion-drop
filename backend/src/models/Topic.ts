@@ -3,17 +3,17 @@ export class Topic {
     private topicId!: number;
     private name: string;
     private description: string;
-    private createdAt: Date;
+    private createdAt!: Date;
 
 
 
 
 
-    constructor(name: string, description: string, createdAt: Date, topicId?: number) {
+    constructor(name: string, description: string, topicId?: number, createdAt?: Date,) {
 
         this.name = name;
         this.description = description;
-        this.createdAt = createdAt;
+        this.createdAt = createdAt ?? this.createdAt;
         this.topicId = topicId ?? this.topicId;
 
     }

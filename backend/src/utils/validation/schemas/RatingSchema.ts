@@ -10,7 +10,6 @@ export const ratingSchema = Type.Object({
     userId: Type.Integer(),
     opinionId: Type.Integer(),
     value: Type.Integer({ minimum: 1, maximum: 100 }), 
-    createdAt: Type.Date(),
 });
 
 const validate = ajv.compile(ratingSchema);

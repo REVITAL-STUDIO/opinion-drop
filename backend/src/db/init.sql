@@ -22,6 +22,7 @@ CREATE TABLE opinions (
     topic_id INTEGER NOT NULL,
     title TEXT NOT NULL,
     text_content TEXT NOT NULL,
+    background_image TEXT,
     images TEXT[],
     videos TEXT[],
     documents TEXT[],
@@ -114,3 +115,30 @@ ADD CONSTRAINT fk_rating_opinion_id
 FOREIGN KEY (opinion_id)
 REFERENCES opinions (opinion_id)
 ON DELETE CASCADE;  -- Delete ratings if referenced opinion is deleted
+
+
+-- Functions
+
+CREATE OR REPLACE FUNCTION update_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER update_users_timestamp
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+CREATE TRIGGER update_opinions_timestamp
+BEFORE UPDATE ON opinions
+FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+CREATE TRIGGER update_comments_timestamp
+BEFORE UPDATE ON comments
+FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();

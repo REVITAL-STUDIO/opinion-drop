@@ -15,12 +15,11 @@ export class OpinionService {
         topicId: number,
         title: string,
         textContent: string,
-        images?: string[],
-        videos?: string[],
-        documents?: string[],
-        audios?: string[],
-        createdAt: Date,
-        updatedAt: Date
+        backgroundImage: string | null,
+        images: string[] | null,
+        videos: string[] | null,
+        documents: string[] | null,
+        audios: string[] | null,
     }): Promise<void> {
         try {
             const newOpinion = new Opinion(
@@ -28,12 +27,11 @@ export class OpinionService {
                 opinionData.topicId,
                 opinionData.title,
                 opinionData.textContent,
+                opinionData.backgroundImage,
                 opinionData.images ?? null,
                 opinionData.videos?? null,
                 opinionData.documents?? null,
                 opinionData.audios?? null,
-                opinionData.createdAt,
-                opinionData.updatedAt
 
             );
             await this.opinionDAO.createOpinion(newOpinion);
@@ -58,12 +56,11 @@ export class OpinionService {
         topicId: number,
         title: string,
         textContent: string,
-        images?: string[],
-        videos?: string[],
-        documents?: string[],
-        audios?: string[],
-        createdAt: Date,
-        updatedAt: Date
+        backgroundImage: string | null,
+        images: string[] | null,
+        videos: string[] | null,
+        documents: string[] | null,
+        audios: string[] | null,
     }): Promise<void> {
         try {
         
@@ -72,12 +69,11 @@ export class OpinionService {
                 opinionData.topicId,
                 opinionData.title,
                 opinionData.textContent,
+                opinionData.backgroundImage,
                 opinionData.images ?? null,
                 opinionData.videos?? null,
                 opinionData.documents?? null,
                 opinionData.audios?? null,
-                opinionData.createdAt,
-                opinionData.updatedAt,
                 opinionData.opinionId
             );
             await this.opinionDAO.updateOpinion(updatedOpinion);

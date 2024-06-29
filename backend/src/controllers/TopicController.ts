@@ -20,8 +20,15 @@ export class TopicController {
                 return;
             }
 
-            const topicData: TopicSchemaType = req.body as TopicSchemaType;
+            const topicId: number = parseInt(req.params.topicId, 10);
+            if (isNaN(topicId)) {
+                res.status(400).send('Invalid topic ID');
+                return;
+            }
 
+            const topicData: TopicSchemaType = req.body as TopicSchemaType;
+            topicData.topicId = topicId;
+            
             await this.topicService.createTopic(topicData);
             res.status(201).send('topic created successfully');
         } catch (error) {
@@ -53,19 +60,24 @@ export class TopicController {
 
     async updateTopic(req: Request, res: Response): Promise<void> {
         try {
-
+            const topicId: number = parseInt(req.params.topicId, 10);
+            if (isNaN(topicId)) {
+                res.status(400).send('Invalid topic ID');
+                return;
+            }
+            
             if (!validate(req.body)) {
                 res.status(400).send('Invalid topic data');
                 return;
             }
 
             const topicData: TopicSchemaType = req.body as TopicSchemaType;
-
+            topicData.topicId = topicId;
             await this.topicService.updateTopic(topicData);
             res.status(201).send('topic updated successfully');
         } catch (error) {
             console.error('Error in TopicController createTopic:', error);
-            res.status(500).send('Failed to create topic');
+            res.status(500).send('Failed to update topic');
         }
     }
 

@@ -1,4 +1,10 @@
 import { Pool } from 'pg';
+import dotenv from 'dotenv';
+import path from 'path';
+
+const envPath = path.resolve(__dirname, '../../../.env');
+
+dotenv.config({ path: envPath });
 
 const port = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432; // Default to 5432 if DB_PORT is not set or invalid
 

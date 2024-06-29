@@ -54,13 +54,19 @@ export class CommentController {
     async updateComment(req: Request, res: Response): Promise<void> {
         try {
 
+            const commentId: number = parseInt(req.params.commentId, 10);
+            if (isNaN(commentId)) {
+                res.status(400).send('Invalid comment ID');
+                return;
+            }
+
             if (!validate(req.body)) {
                 res.status(400).send('Invalid comment data');
                 return;
             }
 
             const commentData: CommentSchemaType = req.body as CommentSchemaType;
-
+            commentData.commentId = commentId;
             await this.commentService.updateComment(commentData);
             res.status(201).send('comment updated successfully');
         } catch (error) {

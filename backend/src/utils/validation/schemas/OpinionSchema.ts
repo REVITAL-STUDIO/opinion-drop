@@ -11,12 +11,12 @@ export const opinionSchema = Type.Object({
     topicId: Type.Integer(),
     title: Type.String(),
     textContent: Type.String(),
-    images: Type.Optional(Type.Array(Type.String())),
-    videos: Type.Optional(Type.Array(Type.String())),
-    documents: Type.Optional(Type.Array(Type.String())),
-    audios: Type.Optional(Type.Array(Type.String())),
-    createdAt: Type.Date(),
-    updatedAt: Type.Date(),
+    backgroundImage: Type.Union([Type.Null(), Type.String()]),
+    images: Type.Union([Type.Null(), Type.Array(Type.String())]),
+    videos: Type.Union([Type.Null(), Type.Array(Type.String())]),
+    documents: Type.Union([Type.Null(), Type.Array(Type.String())]),
+    audios: Type.Union([Type.Null(), Type.Array(Type.String())]),
+
 });
 
 const validate = ajv.compile(opinionSchema);

@@ -5,19 +5,19 @@ export class Comment {
     private opinionId: number;
     private parentCommentId: number | null;
     private content: string;
-    private createdAt: Date;
-    private updatedAt: Date;
+    private createdAt!: Date;
+    private updatedAt!: Date;
 
 
-    constructor(userId: number, opinionId: number, parentCommentId: number | null, content: string, createdAt: Date, updatedAt: Date, commentId?: number) {
+    constructor(userId: number, opinionId: number, content: string, parentCommentId: number | null, commentId?: number, createdAt?: Date, updatedAt?: Date, ) {
 
         this.userId = userId;
         this.opinionId = opinionId;
-        this.parentCommentId = parentCommentId ?? null;
+        this.parentCommentId = parentCommentId;
         this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.commentId = commentId ?? this.commentId;
+        this.createdAt = createdAt ?? this.createdAt;
+        this.updatedAt = updatedAt ?? this.updatedAt;
 
 
     }
@@ -26,7 +26,7 @@ export class Comment {
         return {
             commentId: this.commentId,
             userId: this.userId,
-            opinoinId: this.opinionId,
+            opinionId: this.opinionId,
             parentCommentId: this.parentCommentId,
             content: this.content,
             createdAt: this.createdAt,

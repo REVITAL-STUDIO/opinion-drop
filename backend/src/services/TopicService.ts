@@ -13,13 +13,11 @@ export class TopicService {
     async createTopic(topicData: {
         name: string,
         description: string,
-        createdAt: Date
     }): Promise<void> {
         try {
             const newTopic = new Topic(
                 topicData.name,
                 topicData.description,
-                topicData.createdAt,
             );
             await this.topicDAO.createTopic(newTopic);
         } catch (error) {
@@ -41,14 +39,12 @@ export class TopicService {
         topicId?: number,
         name: string,
         description: string,
-        createdAt: Date
     }): Promise<void> {
         try {
         
             const updatedTopic = new Topic(
                 topicData.name,
                 topicData.description,
-                topicData.createdAt,
                 topicData.topicId
             );
             await this.topicDAO.updateTopic(updatedTopic);

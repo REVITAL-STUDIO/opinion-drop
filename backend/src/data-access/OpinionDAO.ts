@@ -10,20 +10,18 @@ export class OpinionDAO {
 
 
     async createOpinion(newOpinion: Opinion): Promise<void> {
-        const query = "INSERT INTO opinions (user_id, topic_id, title, text_content, images, videos, documents, audios, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)"
+        const query = "INSERT INTO opinions (user_id, topic_id, title, text_content, background_image, images, videos, documents, audios) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)"
         const opinionData = newOpinion.getOpinionData();
         const values = [
             opinionData.userId,
             opinionData.topicId,
             opinionData.title,
             opinionData.textContent,
+            opinionData.backgroundImage,
             opinionData.images,
             opinionData.videos,
             opinionData.documents,
             opinionData.audios,
-            opinionData.createdAt,
-            opinionData.updatedAt
-
         ];
 
         let client: PoolClient | undefined;
@@ -57,14 +55,15 @@ export class OpinionDAO {
                 opinionData.userId,
                 opinionData.topicId,
                 opinionData.title,
-                opinionData.textContent,
+                opinionData.text_content,
+                opinionData.background_image,
                 opinionData.images,
                 opinionData.videos,
                 opinionData.documents,
                 opinionData.audios,
-                opinionData.createdAt,
-                opinionData.updatedAt,
-                opinionData.opinionId
+                opinionData.opinion_id,
+                opinionData.created_at,
+                opinionData.updated_at,
             );
             return opinion;
         } catch (error) {
@@ -77,7 +76,7 @@ export class OpinionDAO {
     }
 
     async updateOpinion(opinion: Opinion): Promise<void> {
-        const query = "UPDATE opinions SET user_id = $1, topic_id = $2, title = $3, text_content = $4, images = $5, videos = $6, documents = $7, audios = $8, created_at = $9, updatedAt = $10 WHERE opinion_id = $11"
+        const query = "UPDATE opinions SET user_id = $1, topic_id = $2, title = $3, text_content = $4, images = $5, videos = $6, documents = $7, audios = $8, background_image = $9 WHERE opinion_id = $10"
         const opinionData = opinion.getOpinionData();
 
         const values = [
@@ -89,8 +88,7 @@ export class OpinionDAO {
                 opinionData.videos,
                 opinionData.documents,
                 opinionData.audios,
-                opinionData.createdAt,
-                opinionData.updatedAt,
+                opinionData.backgroundImage,
                 opinionData.opinionId,
 
         ];
@@ -99,7 +97,10 @@ export class OpinionDAO {
 
         try {
             client = await this.pool.connect();
-            await client.query(query, values);
+            const resp = await client.query(query, values);
+            if (resp.rowCount == 0){
+                throw new Error(`Opinion with ID ${opinionData.opinionId} does not exist.`);
+            }
         } catch (error) {
             console.error('Error executing update opinion query:', error);
             throw new Error(`Error updating opinion: ${error}`);
