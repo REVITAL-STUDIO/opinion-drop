@@ -75,6 +75,44 @@ export class OpinionDAO {
         }
     }
 
+    async getOpinions(): Promise<Opinion[]> {
+        const query = "SELECT * FROM opinions"
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result: QueryResult = await client.query(query);
+
+            const opinions: Opinion[] = [];
+            for (const row of result.rows) {
+                const opinion = new Opinion(
+                row.userId,
+                row.topicId,
+                row.title,
+                row.text_content,
+                row.background_image,
+                row.images,
+                row.videos,
+                row.documents,
+                row.audios,
+                row.opinion_id,
+                row.created_at,
+                row.updated_at,
+            );
+                opinions.push(opinion);
+            }
+
+            return opinions;
+        } catch (error) {
+            console.error('Error executing get opinions query:', error);
+            throw new Error(`Error retrieving opinions: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
     async updateOpinion(opinion: Opinion): Promise<void> {
         const query = "UPDATE opinions SET user_id = $1, topic_id = $2, title = $3, text_content = $4, images = $5, videos = $6, documents = $7, audios = $8, background_image = $9 WHERE opinion_id = $10"
         const opinionData = opinion.getOpinionData();

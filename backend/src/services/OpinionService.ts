@@ -50,6 +50,15 @@ export class OpinionService {
         }
     }
 
+    async getOpinions(): Promise<Opinion[]> {
+        try {
+            return await this.opinionDAO.getOpinions();
+        } catch (error) {
+            console.error('Error in OpinionService getOpinions:', error);
+            throw new Error('Error retrieving opinions');
+        }
+    }
+
     async updateOpinion(opinionData: {
         opinionId?: number
         userId: number,

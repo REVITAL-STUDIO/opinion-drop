@@ -62,6 +62,36 @@ export class TopicDAO {
         }
     }
 
+    async getTopics(): Promise<Topic[]> {
+        const query = "SELECT * FROM topics"
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result: QueryResult = await client.query(query);
+
+            const topics: Topic[] = [];
+            for (const row of result.rows) {
+                const topic = new Topic(
+                    row.name,
+                    row.description,
+                    row.topic_id,
+                    row.created_at
+                );
+                topics.push(topic);
+            }
+
+            return topics;
+        } catch (error) {
+            console.error('Error executing get topics query:', error);
+            throw new Error(`Error retrieving topics: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
     async updateTopic(topic: Topic): Promise<void> {
         const query = "UPDATE topics SET name = $1, description = $2 WHERE topic_id = $3"
         const topicData = topic.getTopicData();

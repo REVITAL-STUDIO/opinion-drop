@@ -35,6 +35,15 @@ export class TopicService {
         }
     }
 
+    async getTopics(): Promise<Topic[]> {
+        try {
+            return await this.topicDAO.getTopics();
+        } catch (error) {
+            console.error('Error in TopicService getTopics:', error);
+            throw new Error('Error retrieving topics');
+        }
+    }
+
     async updateTopic(topicData: {
         topicId?: number,
         name: string,

@@ -52,6 +52,27 @@ export class OpinionController {
         }
     }
 
+    async getOpinions(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinions = await this.opinionService.getOpinions();
+            res.status(200).json({
+                status: 'success',
+                message: 'Opinions retrieved successfully',
+                data: {
+                    count: opinions.length,
+                    opinions: opinions
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController getOpinions:', error);
+            res.status(500).json({
+                status: 'error',
+                message: 'Failed to retrieve opinions'
+            });
+        }
+    }
+
     async updateOpinion(req: Request, res: Response): Promise<void> {
         try {
             const opinionId: number = parseInt(req.params.opinionId, 10);

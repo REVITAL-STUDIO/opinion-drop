@@ -26,6 +26,7 @@ router.delete('/users/:userId', userController.deleteUser.bind(userController));
 // Opinion Routes
 router.post('/opinions', opinionController.createOpinion.bind(opinionController));
 router.get('/opinions/:opinionId', opinionController.getOpinion.bind(opinionController));
+router.get('/opinions', opinionController.getOpinions.bind(opinionController));
 router.put('/opinions/:opinionId', opinionController.updateOpinion.bind(opinionController));
 router.delete('/opinions/:opinionId', opinionController.deleteOpinion.bind(opinionController));
 
@@ -39,6 +40,7 @@ router.delete('/comments/:commentId', commentController.deleteComment.bind(comme
 // Topic Routes
 router.post('/topics', topicController.createTopic.bind(topicController));
 router.get('/topics/:topicId', topicController.getTopic.bind(topicController));
+router.get('/topics', topicController.getTopics.bind(topicController));
 router.put('/topics/:topicId', topicController.updateTopic.bind(topicController));
 router.delete('/topics/:topicId', topicController.deleteTopic.bind(topicController));
 

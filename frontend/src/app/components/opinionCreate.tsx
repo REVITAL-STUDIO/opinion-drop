@@ -7,6 +7,47 @@ interface OpinionCreateProps {
   toggleCreate: () => void;
 }
 
+const [formData, setFormData] = useState({
+  title: "",
+  textContent: "",
+  backgroundImage: "",
+  images: null,
+  videos: null,
+  documents: null,
+  audios: null,
+
+});
+
+const createOpinion = async () => {
+
+  const opinionData = {
+    ...formData,
+    userId: 0,
+    topicId: 0,
+
+  };
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(opinionData),
+      }
+    );
+    if (!res.ok) {
+      throw new Error("Error creating opinion");
+    }
+
+  } catch (error) {
+    console.log("Error creating opinion: ", error);
+  }
+};
+
+
 const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
   return (
     <section className="fixed  top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-75 z-50">

@@ -47,6 +47,52 @@ const Drop = () => {
     requestAnimationFrame(animation);
   };
 
+
+
+  const fetchTopics = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/topics`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving topics");
+      }
+      const response = await res.json();
+      console.log("data: ", response.data);
+
+    } catch (error) {
+      console.log("Error Fetching Topics: ", error);
+    }
+  };
+
+  const fetchOpinions = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving opinions");
+      }
+      const response = await res.json();
+      console.log("data: ", response.data);
+
+    } catch (error) {
+      console.log("Error Fetching Opinions: ", error);
+    }
+  };
+
   return (
     <section className="min-h-screen relative">
       <CreateButton />

@@ -28,7 +28,7 @@ export class TopicController {
 
             const topicData: TopicSchemaType = req.body as TopicSchemaType;
             topicData.topicId = topicId;
-            
+
             await this.topicService.createTopic(topicData);
             res.status(201).send('topic created successfully');
         } catch (error) {
@@ -58,6 +58,27 @@ export class TopicController {
         }
     }
 
+    async getTopics(req: Request, res: Response): Promise<void> {
+        try {
+
+            const topics = await this.topicService.getTopics();
+            res.status(200).json({
+                status: 'success',
+                message: 'Topics retrieved successfully',
+                data: {
+                    count: topics.length,
+                    topics: topics
+                }
+            });
+        } catch (error) {
+            console.error('Error in TopicController getTopics:', error);
+            res.status(500).json({
+                status: 'error',
+                message: 'Failed to retrieve topics'
+            });
+        }
+    }
+
     async updateTopic(req: Request, res: Response): Promise<void> {
         try {
             const topicId: number = parseInt(req.params.topicId, 10);
@@ -65,7 +86,7 @@ export class TopicController {
                 res.status(400).send('Invalid topic ID');
                 return;
             }
-            
+
             if (!validate(req.body)) {
                 res.status(400).send('Invalid topic data');
                 return;
