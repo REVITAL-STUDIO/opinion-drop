@@ -9,15 +9,21 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 const Nav = () => {
   return (
     <section className="h-auto p-4  ">
-      <div className="w-full flex justify-between items-center text-black">
+      <div className="w-full flex justify-between items-center text-white">
         <ul className="flex justify-center items-center gap-x-12">
           <button className="">
             <FontAwesomeIcon icon={faUser} className="w-8" />
           </button>
-          <Link href="/" className="px-4 py-2 border border-black rounded-full">
+          <Link
+            href="/"
+            className="px-4 py-2 border border-white  rounded-full"
+          >
             Menu
           </Link>
-          <Link href="/" className="px-4 py-2 border border-black rounded-full">
+          <Link
+            href="/"
+            className="px-4 py-2 border border-white  rounded-full"
+          >
             Founder Podcast
           </Link>
         </ul>
@@ -30,10 +36,10 @@ const Nav = () => {
           />
         </Link> */}
         <ul className="flex justify-center items-center gap-x-12">
-          <Link href="/" className="px-4 py-2 border border-black rounded-full">
+          <Link href="/" className="px-4 py-2 border border-white rounded-full">
             Chat
           </Link>
-          <Link href="/" className="px-4 py-2 border border-black rounded-full">
+          <Link href="/" className="px-4 py-2 border border-white rounded-full">
             Drop <span>+</span>
           </Link>
           <button className="">

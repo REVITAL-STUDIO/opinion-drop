@@ -39,7 +39,7 @@ function Slider() {
 
   return (
     <section className="flex justify-center items-center  p-4 ">
-      <div className="container border-2 border-dashed rounded-md border-green-500">
+      <div className="container border-2 border-dashed my-4 rounded-md border-green-500">
         <Swiper
           effect={"coverflow"}
           spaceBetween={5}
