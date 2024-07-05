@@ -17,6 +17,7 @@
     "@iconify-icons/mdi": "^1.2.48",
     "@iconify/react": "^5.0.1",
     "@ionic/react": "^8.2.2",
+    "@netlify/plugin-nextjs": "^5.5.0",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.2.13",
     "gsap": "^3.12.5",
