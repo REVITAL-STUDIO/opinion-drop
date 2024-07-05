@@ -1,0 +1,9 @@
+[build]
+  base    = "frontend"   # This should be the directory where your Next.js project is located.
+  publish = "frontend/.next"   # Output directory for the build.
+  command = "npm run build"    # Build command to generate the build.
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

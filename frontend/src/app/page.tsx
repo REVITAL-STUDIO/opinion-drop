@@ -11,9 +11,7 @@ export default function Home() {
     <main className="bg-[#2b2b2b]">
       <Nav />
       <Hero />
-      {/* <Promo1 />
-      <Promo2 />
-      <Promo3 /> */}
+      <Promo1 />
       <Drop />
     </main>
   );
