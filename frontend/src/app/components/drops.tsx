@@ -47,8 +47,6 @@ const Drop = () => {
     requestAnimationFrame(animation);
   };
 
-
-
   const fetchTopics = async () => {
     try {
       const res = await fetch(
@@ -65,7 +63,6 @@ const Drop = () => {
       }
       const response = await res.json();
       console.log("data: ", response.data);
-
     } catch (error) {
       console.log("Error Fetching Topics: ", error);
     }
@@ -87,14 +84,13 @@ const Drop = () => {
       }
       const response = await res.json();
       console.log("data: ", response.data);
-
     } catch (error) {
       console.log("Error Fetching Opinions: ", error);
     }
   };
 
   return (
-    <section className="min-h-screen relative">
+    <section className="min-h-screen relative bg-black">
       <CreateButton />
       <div className="w-full text-white uppercase overflow-hidden relative text-[240px] font-bold list-none flex gap-x-12">
         <h1 ref={firstText} className="m-0">
