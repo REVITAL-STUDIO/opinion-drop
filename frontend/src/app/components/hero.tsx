@@ -9,8 +9,9 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <section className="w-full bg-[url('/Images/OD-Mic-Background.jpg')] min-h-[850px] bg-cover h-screen p-4">
-      <div className="w-full flex justify-between items-center text-white">
+    <section className="w-full bg-[url('/Images/OD-Mic-Background.jpg')] min-h-[850px] bg-cover h-screen p-4 flex items-center justify-center">
+      <h1 className=" text-white text-6xl w-2/5 text-center p-4 font-bold"></h1>
+      {/* <div className="w-full flex justify-between items-center text-white">
         <ul className="flex justify-center font-black items-center gap-x-12">
           <button className="">
             <FontAwesomeIcon icon={faUser} className="w-8" />
@@ -27,8 +28,8 @@ const Hero = () => {
           >
             Founder Podcast
           </Link>
-        </ul>
-        {/* <Link href="/">
+        </ul> */}
+      {/* <Link href="/">
           <Image
             src="/images/opinion-drop-logo.png"
             alt="Logo"
@@ -36,7 +37,7 @@ const Hero = () => {
             height={80}
           />
         </Link> */}
-        <ul className="flex justify-center items-center gap-x-12">
+      {/* <ul className="flex justify-center items-center gap-x-12">
           <Link
             href="/"
             className="px-4 py-2 border bg-[#2b2b2b]/50 border-white rounded-full"
@@ -53,7 +54,7 @@ const Hero = () => {
             <FontAwesomeIcon icon={faUser} className="w-8" />
           </button>
         </ul>
-      </div>
+      </div> */}
       {/* <div className="w-full py-[20%]  flex justify-around">
         <div className="relative">
           <FontAwesomeIcon

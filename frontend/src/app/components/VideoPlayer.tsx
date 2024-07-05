@@ -1,6 +1,6 @@
 import React from "react";
 
-const Promo2 = () => {
+const VideoPlayer = () => {
   return (
     <section className="min-h-screen w-full bg-black">
       <div></div>
@@ -8,4 +8,4 @@ const Promo2 = () => {
   );
 };
 
-export default Promo2;
+export default VideoPlayer;
