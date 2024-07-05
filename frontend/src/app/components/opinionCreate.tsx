@@ -67,6 +67,11 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
     setIsVisible(false);
   };
 
+  const closeEssayPrompt = () => {
+    openEssay(false);
+    setIsVisible(true);
+  };
+
   return (
     <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-90 z-50">
       <button
@@ -216,7 +221,21 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
           </motion.div>
         )}
       </AnimatePresence>
-      {essay && <EssayPrompt />}
+      {essay && (
+        <>
+          <button
+            onClick={closeEssayPrompt}
+            className="p-8 absolute left-8 flex gap-x-8"
+          >
+            <div className="arrow">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </button>
+          <EssayPrompt />
+        </>
+      )}
     </section>
   );
 };

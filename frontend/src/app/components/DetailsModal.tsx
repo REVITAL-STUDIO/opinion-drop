@@ -28,7 +28,7 @@ const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
       <div className="h-2/3 w-full flex flex-col justify-center text-left">
         <h2 className="text-xl font-bold mb-2">Jessica Wynters,</h2>
         <h2 className="text-2xl font-bold mb-10 uppercase">
-          Viability AS TIME LIMIt
+          Viability AS TIME LIMIT
         </h2>
 
         <p className="text-xs">

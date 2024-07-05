@@ -8,7 +8,7 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 const Nav = () => {
   return (
-    <section className="h-auto p-4  ">
+    <section className="h-auto hidden">
       <div className="w-full flex justify-between items-center text-white">
         <ul className="flex justify-center items-center gap-x-12">
           <button className="">

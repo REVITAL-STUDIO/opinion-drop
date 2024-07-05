@@ -3,8 +3,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import DetailsModal from "../components/DetailsModal";
 import OpinionModal from "../components/OpinionModal";
-import RepliesModal
- from "../components/RepliesModal";
+import RepliesModal from "../components/RepliesModal";
 export default function Modal() {
   const [selectedOpinion, setSelectedOpinion] = useState(true);
   const [showRepliesModal, setShowRepliesModal] = useState(true);
@@ -33,7 +32,6 @@ export default function Modal() {
       }
       const response = await res.json();
       console.log("data: ", response.data);
-
     } catch (error) {
       console.log("Error Fetching Opinions: ", error);
     }
@@ -41,9 +39,8 @@ export default function Modal() {
 
   useEffect(() => {
     fetchOpinions();
-  },);
+  });
 
-  
   return (
     <div className="min-h-screen">
       <div>
@@ -57,9 +54,9 @@ export default function Modal() {
             <OpinionModal closeModal={closeModal} />
           </>
         )}
-        {showRepliesModal && (
+        {/* {showRepliesModal && (
           <RepliesModal closeModal={closeReplies} />
-        )}
+        )} */}
       </div>
     </div>
   );
