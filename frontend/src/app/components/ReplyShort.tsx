@@ -22,7 +22,7 @@ const ReplyShort: React.FC<ReplyShortProps> = ({ reply }) => {
                     <h1 className="text-2xl">
                         John Doe
                     </h1>
-                    <p className="truncate max-w-[20rem]">I don't know whether to believe this or</p>
+                    <p className="truncate max-w-[20rem]">I don&apos;t know whether to believe this or</p>
                 </div>
             </div>
             <div className='flex absolute top-4 right-4'>

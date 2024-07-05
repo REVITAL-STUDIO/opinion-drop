@@ -2,15 +2,14 @@
 
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
-
 import { EffectCoverflow, Pagination, Navigation } from "swiper/modules";
+import { arrowBackOutline, arrowForwardOutline } from 'ionicons/icons';
 
 function Slider() {
   const cardInfo = [
@@ -57,7 +56,6 @@ function Slider() {
           navigation={{
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
-            clickable: true,
           }}
           modules={[EffectCoverflow, Pagination, Navigation]}
           className="swiper_container"
@@ -117,10 +115,10 @@ function Slider() {
 
           <div className="slider-controler">
             <div className="swiper-button-prev slider-arrow">
-              <ion-icon name="arrow-back-outline"></ion-icon>
+              <Icon icon={arrowBackOutline} className="text-white w-6 h-6" />
             </div>
             <div className="swiper-button-next slider-arrow">
-              <ion-icon name="arrow-forward-outline"></ion-icon>
+              <Icon icon={arrowForwardOutline} className="text-white w-6 h-6" />
             </div>
           </div>
         </Swiper>
