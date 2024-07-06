@@ -4,7 +4,6 @@ import Hero from "./components/hero";
 import Drop from "./components/drops";
 import Promo1 from "./components/promo1";
 import Promo2 from "./components/VideoPlayer";
-import Promo3 from "./components/promo3";
 
 export default function Home() {
   return (

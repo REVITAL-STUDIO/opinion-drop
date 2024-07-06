@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import Slider from "./slider";
+import Slider from "../frontend/src/app/components/slider";
 import gsap from "gsap";
 import { useEffect } from "react";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -91,8 +91,8 @@ const Drop = () => {
 
   return (
     <section className="min-h-screen relative bg-black">
-      {/* <CreateButton /> */}
-      {/* <div className="w-full text-white uppercase overflow-hidden relative text-[240px] font-bold list-none flex gap-x-12">
+      <CreateButton />
+      <div className="w-full text-white uppercase overflow-hidden relative text-[240px] font-bold list-none flex gap-x-12">
         <h1 ref={firstText} className="m-0">
           Abortion
         </h1>
@@ -105,7 +105,7 @@ const Drop = () => {
         <h1 ref={fourthText} className="absolute left-[300%]">
           Abortion
         </h1>
-      </div> */}
+      </div>
       <Slider />
     </section>
   );

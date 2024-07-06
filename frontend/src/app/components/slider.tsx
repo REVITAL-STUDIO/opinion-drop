@@ -9,7 +9,7 @@ import "swiper/css/navigation";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import { EffectCoverflow, Pagination, Navigation } from "swiper/modules";
-import { arrowBackOutline, arrowForwardOutline } from 'ionicons/icons';
+import { arrowBackOutline, arrowForwardOutline } from "ionicons/icons";
 
 function Slider() {
   const cardInfo = [
@@ -22,15 +22,15 @@ function Slider() {
     },
     {
       name: "David Barnes",
-      images: "/Images/pexels-daniel-reche-718241-1556652.jpg",
-      title: "Pro-Choice until birth",
+      images: "/Images/gun-control.jpg",
+      title: "How Many?",
       description:
         "Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....",
     },
     {
       name: "Sarah Lee",
-      images: "/Images/pexels-kelvinocta16-1973270.jpg",
-      title: "Born to Change",
+      images: "/Images/poverty.webp",
+      title: "Born to Chains",
       description:
         "Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....",
     },
@@ -80,18 +80,18 @@ function Slider() {
                     key={index}
                     className="px-4 flex flex-col justify-end h-full"
                   >
-                    <h2 className="text-white text-[18px] my-1 font-bold">
+                    <h2 className="text-white text-[18px] my-1 px-4 font-bold">
                       {info.name}
                     </h2>
-                    <h1 className="text-white my-1 text-[20px] font-black">
+                    <h1 className="text-white my-1 text-[20px] px-4 font-black">
                       {info.title}
                     </h1>
-                    <p className="text-xs text-white">{info.description}</p>
+                    {/* <p className="text-xs text-white">{info.description}</p> */}
                     <div className="flex justify-between items-center">
                       <button className="px-4 py-2 my-4 text-sm text-white rounded-full border border-[#A6E81B]">
                         Join the Conversation
                       </button>
-                      <div className="w-fit flex gap-x-4">
+                      {/* <div className="w-fit flex gap-x-4">
                         <button className="w-8 h-8">
                           <Icon
                             icon="ph:arrow-fat-up-light"
@@ -104,11 +104,11 @@ function Slider() {
                             className="text-white w-6 h-6 rotate-180"
                           />
                         </button>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
-                <div className="w-fit top-4 left-4 rounded-full p-4 bg-[#FFFFF0] absolute"></div>
+                {/* <div className="w-fit top-4 left-4 rounded-full p-4 bg-[#FFFFF0] absolute"></div> */}
               </div>
             </SwiperSlide>
           ))}

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useRef, useEffect, useState } from "react";
 
 interface VideoPlayerProps {
@@ -12,13 +12,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src }) => {
   useEffect(() => {
     const handlePlay = () => {
       // Pause all other videos
-      document
-        .querySelectorAll("video")
-        .forEach((video) => {
-          if (video !== videoRef.current) {
-            (video as HTMLVideoElement).pause();
-          }
-        });
+      document.querySelectorAll("video").forEach((video) => {
+        if (video !== videoRef.current) {
+          (video as HTMLVideoElement).pause();
+        }
+      });
 
       // Toggle play/pause for the current video
       if (videoRef.current) {
@@ -57,9 +55,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src }) => {
           className="m-auto"
           width="100%"
           height="auto"
-          controls
           autoPlay
           muted
+          controls
           loop
           preload="auto"
         >

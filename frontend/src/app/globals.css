@@ -17,7 +17,7 @@
 
 .swiper_container {
   height: 35rem;
-  padding: 2rem 0;
+  padding: 4rem 0;
   position: relative;
   display: flex;
   justify-content: center;
@@ -33,11 +33,11 @@
 
 @media (max-width: 500px) {
   .swiper_container {
-    height: 47rem;
+    height: 42rem;
   }
   .swiper-slide {
-    width: 28rem !important;
-    height: 36rem !important;
+    width: 20rem !important;
+    height: 20rem !important;
   }
   .swiper-slide img {
     width: 28rem !important;

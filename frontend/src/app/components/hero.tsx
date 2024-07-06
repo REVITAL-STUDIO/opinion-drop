@@ -9,8 +9,13 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <section className="w-full bg-[url('/Images/OD-Mic-Background.jpg')] min-h-[850px] bg-cover h-screen p-4 flex items-center justify-center">
-      <h1 className=" text-white text-6xl w-2/5 text-center p-4 font-bold"></h1>
+    <section className="w-full xl:bg-[url('/Images/OD-Mic-Background.jpg')] bg-[url('/Images/Artboard-1.jpg')] min-h-[850px] bg-cover bg-center h-screen p-4 flex flex-col items-center justify-end">
+      <h1 className=" text-[#fffff0] xl:text-6xl text-3xl w-3/4 text-center  p-4 font-bold">
+        NOT YOUR AVERAGE PUBLIC AFFAIR.
+      </h1>
+      <h3 className="text-white text-center text-xl font-semibold ">
+        A civic blog platform that gains insight on political perspective.
+      </h3>
       {/* <div className="w-full flex justify-between items-center text-white">
         <ul className="flex justify-center font-black items-center gap-x-12">
           <button className="">
