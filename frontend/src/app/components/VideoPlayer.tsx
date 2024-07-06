@@ -39,8 +39,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src }) => {
           className="m-auto"
           width="100%"
           height="auto"
-          autoPlay
-          muted
+          // autoPlay
+          // muted
           controls
           loop
           preload="auto"
