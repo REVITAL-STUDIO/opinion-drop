@@ -22,9 +22,8 @@ const Promo1 = () => {
             <h1 className="text-red-800 xl:text-8xl text-5xl font-bold">
               MAJORITY RULES
             </h1>
-            <h3 className="text-white  text-3xl font-semibold">
-              AI integrated algorithm that organizes your feed based on most
-              voted likes and dislikes.
+            <h3 className="text-white  text-3xl font-semibold w-fit">
+            Be part of the conversation that matters. Share your views, connect with the community.
             </h3>
           </div>
         </div>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 
 interface VideoPlayerProps {
   src: string;
@@ -7,7 +7,6 @@ interface VideoPlayerProps {
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ src }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const handlePlay = () => {
@@ -17,32 +16,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src }) => {
           (video as HTMLVideoElement).pause();
         }
       });
-
-      // Toggle play/pause for the current video
-      if (videoRef.current) {
-        const videoElement = videoRef.current;
-        if (videoElement.paused || videoElement.ended) {
-          videoElement.play().catch((error) => {
-            // Handle play error if needed
-            console.error("Video playback failed:", error);
-          });
-          setIsPlaying(true);
-        } else {
-          videoElement.pause();
-          setIsPlaying(false);
-        }
-      }
     };
 
-    // Add click event listener to the video element
+    // Add play event listener to the video element
     if (videoRef.current) {
-      videoRef.current.addEventListener("click", handlePlay);
+      videoRef.current.addEventListener("play", handlePlay);
     }
 
     return () => {
       // Clean up event listener on unmount
       if (videoRef.current) {
-        videoRef.current.removeEventListener("click", handlePlay);
+        videoRef.current.removeEventListener("play", handlePlay);
       }
     };
   }, [src]);
