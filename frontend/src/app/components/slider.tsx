@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -10,28 +10,80 @@ import Image from "next/image";
 import { Icon } from "@iconify/react";
 import { EffectCoverflow, Pagination, Navigation } from "swiper/modules";
 import { arrowBackOutline, arrowForwardOutline } from "ionicons/icons";
+import DetailsModal from "../components/DetailsModal";
+import OpinionModal from "../components/OpinionModal";
+
+interface Opinion {
+  id: number;
+  author: string;
+  title: string;
+  textContent: string;
+  backgroundImage: string;
+  profilePicture?: string;
+};
 
 function Slider() {
-  const cardInfo = [
+
+  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
+  const [showRepliesModal, setShowRepliesModal] = useState(true);
+
+  const closeModal = () => {
+    setSelectedOpinion(null);
+  };
+
+  const closeReplies = () => {
+    setShowRepliesModal(false);
+  };
+
+  const fetchOpinions = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving opinions");
+      }
+      const response = await res.json();
+      console.log("data: ", response.data);
+    } catch (error) {
+      console.log("Error Fetching Opinions: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchOpinions();
+  });
+
+
+  const opinions: Opinion[] = [
     {
-      images: "/Images/pexels-itfeelslikefilm-590496.jpg",
-      name: "Jessica Wynters",
+      id: 1,
+      backgroundImage: "/Images/pexels-itfeelslikefilm-590496.jpg",
+      author: "Jessica Wynters",
       title: "Viability As A Time Limit",
-      description:
+      textContent:
         "Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....",
     },
     {
-      name: "David Barnes",
-      images: "/Images/gun-control.jpg",
+      id: 2,
+      author: "David Barnes",
+      backgroundImage: "/Images/gun-control.jpg",
       title: "How Many?",
-      description:
+      textContent:
         "Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....",
     },
     {
-      name: "Sarah Lee",
-      images: "/Images/poverty.webp",
+      id: 3,
+      author: "Sarah Lee",
+      backgroundImage: "/Images/poverty.webp",
       title: "Born to Chains",
-      description:
+      textContent:
         "Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....",
     },
   ];
@@ -60,7 +112,7 @@ function Slider() {
           modules={[EffectCoverflow, Pagination, Navigation]}
           className="swiper_container"
         >
-          {cardInfo.map((info, index) => (
+          {opinions.map((opinion, index) => (
             <SwiperSlide key={index} className="swiper-slide ">
               {/* Ensure SwiperSlide has a defined size */}
               <div className="w-full h-full relative">
@@ -68,7 +120,7 @@ function Slider() {
                 <div className="absolute inset-0 w-full h-full">
                   {/* The actual image, styled to cover its parent container */}
                   <Image
-                    src={info.images} // Make sure info.images is correctly set
+                    src={opinion.backgroundImage} // Make sure info.images is correctly set
                     layout="fill"
                     alt="slider"
                     className="object-cover" // Additional styling as needed
@@ -81,34 +133,20 @@ function Slider() {
                     className="px-4 flex flex-col justify-end h-full"
                   >
                     <h2 className="text-white text-[18px] my-1 px-4 font-bold">
-                      {info.name}
+                      {opinion.author}
                     </h2>
                     <h1 className="text-white my-1 text-[20px] px-4 font-black">
-                      {info.title}
+                      {opinion.title}
                     </h1>
                     {/* <p className="text-xs text-white">{info.description}</p> */}
                     <div className="flex justify-between items-center">
-                      <button className="px-4 py-2 my-4 text-sm text-white rounded-full border border-[#A6E81B]">
-                        Join the Conversation
+                      <button onClick={()=>{setSelectedOpinion(opinion)}} className="px-4 py-2 my-4 text-sm text-white rounded-full border border-[#A6E81B] hover:bg-[#a7e81b71]">
+                        View
                       </button>
-                      {/* <div className="w-fit flex gap-x-4">
-                        <button className="w-8 h-8">
-                          <Icon
-                            icon="ph:arrow-fat-up-light"
-                            className="text-white w-6 h-6 hover:bg-white duration-300 ease-in-out"
-                          />
-                        </button>
-                        <button className="w-8 h-8">
-                          <Icon
-                            icon="ph:arrow-fat-up-light"
-                            className="text-white w-6 h-6 rotate-180"
-                          />
-                        </button>
-                      </div> */}
+    
                     </div>
                   </div>
                 </div>
-                {/* <div className="w-fit top-4 left-4 rounded-full p-4 bg-[#FFFFF0] absolute"></div> */}
               </div>
             </SwiperSlide>
           ))}
@@ -122,6 +160,21 @@ function Slider() {
             </div>
           </div>
         </Swiper>
+      </div>
+      <div>
+        {selectedOpinion && (
+          <>
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 z-10"
+              onClick={closeModal}
+            ></div>
+            <DetailsModal opinionData={selectedOpinion} />
+            <OpinionModal opinionData={selectedOpinion} closeModal={closeModal} />
+          </>
+        )}
+        {/* {showRepliesModal && (
+          <RepliesModal closeModal={closeReplies} />
+        )} */}
       </div>
     </section>
   );

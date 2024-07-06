@@ -8,16 +8,27 @@ import { BiUpvote } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
 
 interface OpinionModalProps {
-  opinionData?: {
+  opinionData: {
     id: number;
+    author: string;
     title: string;
-    details: string;
+    textContent: string;
+    backgroundImage: string;
   };
 }
 
 const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
   return (
     <div className="z-30 absolute left-[1.5%] top-[1.5%] h-[30rem] w-[27%] bg-black/50 text-white p-4 shadow-lg">
+      <div className="absolute inset-0 w-full h-full -z-10">
+        <Image
+          src={opinionData.backgroundImage} 
+          layout="fill"
+          alt="slider"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+      </div>
       <div className="flex justify-between mb-8 relative">
         <div className="w-fit h-fit rounded-full p-4 bg-[#FFFFF0] "></div>
         <div className="flex flex-col text-sm font-semibold right-0">
@@ -26,9 +37,9 @@ const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
         </div>
       </div>
       <div className="h-2/3 w-full flex flex-col justify-center text-left">
-        <h2 className="text-xl font-bold mb-2">Jessica Wynters,</h2>
+        <h2 className="text-xl font-bold mb-2">{opinionData.author},</h2>
         <h2 className="text-2xl font-bold mb-10 uppercase">
-          Viability AS TIME LIMIT
+          {opinionData.title.toUpperCase()}
         </h2>
 
         <p className="text-xs">
