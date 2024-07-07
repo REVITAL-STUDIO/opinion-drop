@@ -28,68 +28,140 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const [selectedOpinion, setSelectedOpinion] = useState(null);
   const [selectedTab, setSelectedTab] = useState("Opinion");
   const [hideOpinion, setHideOpinion] = useState(true);
+  const [selectedText, setSelectedText] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [textContent, setTextContent] = useState(opinionData.textContent);
+  const [highlightEnabled, setHighlightEnabled] = useState(true);
+
+  const handleTextSelect = () => {
+    if (!highlightEnabled) return;
+
+    const selection = window.getSelection();
+    const selectedText = selection?.toString();
+    if (selectedText) {
+        const range = selection?.getRangeAt(0);
+        const container = document.createElement("div");
+        container.style.position = "relative";
+        container.style.display = "inline-block";
+
+        const highlightedText = document.createElement("span");
+        highlightedText.className = "highlightedText"; // Apply CSS class for highlighting
+        highlightedText.textContent = selectedText;
+
+        const closeButton = document.createElement("button");
+        closeButton.textContent = "✕"; // Custom close button content
+        closeButton.style.position = "absolute";
+        closeButton.style.top = "-10px";
+        closeButton.style.right = "-10px";
+        closeButton.style.backgroundColor = "red";
+        closeButton.style.color = "white";
+        closeButton.style.border = "none";
+        closeButton.style.borderRadius = "50%";
+        closeButton.style.width = "20px";
+        closeButton.style.height = "20px";
+        closeButton.style.display = "none"; // Initially hide the button
+        closeButton.style.cursor = "pointer";
+
+        closeButton.onclick = (event) => {
+            event.stopPropagation(); // Prevents the click from bubbling up to other elements
+            container.removeChild(highlightedText); // Remove the highlighted text
+            container.removeChild(closeButton); // Remove the close button
+        };
+
+        container.appendChild(highlightedText);
+        container.appendChild(closeButton);
+
+        range?.deleteContents();
+        range?.insertNode(container);
+
+        setSelectedText(selectedText);
+        setShowEmojiPicker(true);
+
+        // Show close button on hover over container
+        container.onmouseover = () => {
+            closeButton.style.display = "inline-block";
+        };
+
+        container.onmouseout = () => {
+            closeButton.style.display = "none";
+        };
+    }
+};
+  
+  useEffect(() => {
+    document.addEventListener("mouseup", handleTextSelect);
+    return () => {
+      document.removeEventListener("mouseup", handleTextSelect);
+    };
+  }, [highlightEnabled]);
 
   //Progress bar
   const containerRef = useRef(null);
 
+
   return (
-    <div className="z-30 absolute right-[1.5%] top-[1.5%] w-[60%] min-h-[900px] bg-white p-6 shadow-lg rounded-md">
+    <div className="z-30 absolute right-[1.5%] top-[1.5%] w-[60%] h-[800px] bg-white p-6 shadow-lg rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <IoClose onClick={closeModal} className="cursor-pointer" />
         <a
-          className={`cursor-pointer ${
-            selectedTab === "Opinion"
-              ? "border-b-[4px] border-[#606060] "
-              : "border-b-0"
-          }`}
+          className={`cursor-pointer ${selectedTab === "Opinion"
+            ? "border-b-[4px] border-[#606060] "
+            : "border-b-0"
+            }`}
           onClick={() => setSelectedTab("Opinion")}
         >
           Opinion
         </a>
         <a
-          className={`cursor-pointer ${
-            selectedTab === "Discussion"
-              ? "border-b-[4px] border-[#606060] "
-              : "border-b-0"
-          }`}
+          className={`cursor-pointer ${selectedTab === "Discussion"
+            ? "border-b-[4px] border-[#606060] "
+            : "border-b-0"
+            }`}
           onClick={() => setSelectedTab("Discussion")}
         >
           Discussion
         </a>
       </div>
-      <div className="w-full flex justify-evenly items-center  p-4">
-        <div className="relative w-[60%] flex">
-          <h2 className="text-7xl leading-tight- mb-4 w-5/6 font-black px-4">
-            {opinionData.title.toUpperCase()}
-          </h2>
-          <button className="absolute bottom-6  left-1/2 flex items-center gap-x-2">
-            Reply
+      <div className="w-full flex justify-between items-center  p-4">
+        {selectedTab == "Discussion" ?
+
+          <button className="flex items-center gap-x-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-300">
+            Write a Rebuttal
             <IoIosArrowDropdown />
           </button>
-        </div>
-        <div className="w-[40%] flex justify-center items-center relative">
-          <div className="progress">
-            <div className="barOverflow">
-              <div className="bar"></div>
+          :
+          <div className="flex">
+            <div className="relative w-[60%] flex">
+              <h2 className="text-7xl leading-tight- mb-4 w-5/6 font-black px-4">
+                {opinionData.title.toUpperCase()}
+              </h2>
             </div>
-            <div className="w-full flex flex-col items-center absolute top-1/2">
-              <span className="text-sm font-bold w-1/2">
-                Attention Currency
-              </span>
-              <div className="flex items-center">
-                <span className="text-3xl font-black flex">100</span>%
-              </div>
+
+            <div className="w-[40%] flex justify-center items-center relative">
+              <div className="progress">
+                <div className="barOverflow">
+                  <div className="bar"></div>
+                </div>
+                <div className="w-full flex flex-col items-center absolute top-1/2">
+                  <span className="text-sm font-bold w-1/2">
+                    Attention Currency
+                  </span>
+                  <div className="flex items-center">
+                    <span className="text-3xl font-black flex">100</span>%
+                  </div>
+                </div>
+              </div>{" "}
             </div>
-          </div>{" "}
-        </div>
+          </div>
+        }
       </div>
 
-      <div className="flex-1 max-h-[700px] overflow-y-auto custom-scrollbar">
+      <div className="flex-1 max-h-[550px] overflow-y-auto custom-scrollbar">
         {/* Opinion Content */}
         {selectedTab == "Opinion" && (
           <div>
             <div className="relative z-10 mx-4 px-4">
-              <p className="text-sm indent-3">
+              <p className="opinion-text text-sm indent-3">
                 {opinionData.textContent}
               </p>
             </div>

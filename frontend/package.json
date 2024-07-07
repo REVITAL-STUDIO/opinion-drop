@@ -19,6 +19,7 @@
     "@ionic/react": "^8.2.2",
     "@netlify/plugin-nextjs": "^5.5.0",
     "dotenv": "^16.4.5",
+    "emoji-picker-react": "^4.11.1",
     "framer-motion": "^11.2.13",
     "gsap": "^3.12.5",
     "next": "^14.2.4",

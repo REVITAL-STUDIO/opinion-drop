@@ -226,6 +226,12 @@
   animation-delay: -0.4s;
 }
 
+::selection {
+  background: yellow;
+}
+
+
+
 @keyframes animate {
   0% {
       opacity: 0;

@@ -18,20 +18,20 @@ const Drop = () => {
   let direction = -1;
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    requestAnimationFrame(animation);
+    // gsap.registerPlugin(ScrollTrigger);
+    // requestAnimationFrame(animation);
 
-    gsap.to(slider.current, {
-      scrollTrigger: {
-        trigger: document.documentElement,
-        start: 0,
-        end: window.innerHeight,
-        scrub: 0.25,
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        onUpdate: (e) => (direction = e.direction * -1),
-      },
-      x: "-=300px",
-    });
+    // gsap.to(slider.current, {
+    //   scrollTrigger: {
+    //     trigger: document.documentElement,
+    //     start: 0,
+    //     end: window.innerHeight,
+    //     scrub: 0.25,
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    //     onUpdate: (e) => (direction = e.direction * -1),
+    //   },
+    //   x: "-=300px",
+    // });
   }, []);
 
   const animation = () => {
