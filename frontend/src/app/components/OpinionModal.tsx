@@ -34,59 +34,54 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const [highlightEnabled, setHighlightEnabled] = useState(true);
 
   const handleTextSelect = () => {
+
     if (!highlightEnabled) return;
+    const opinionText = document.querySelector('.opinion-text');
 
     const selection = window.getSelection();
     const selectedText = selection?.toString();
+    if(selection && !opinionText?.contains(selection.anchorNode)) return;
     if (selectedText) {
-        const range = selection?.getRangeAt(0);
-        const container = document.createElement("div");
-        container.style.position = "relative";
-        container.style.display = "inline-block";
+      const range = selection?.getRangeAt(0);
+      const container = document.createElement("span");
+      container.style.position = "relative";
+      container.style.display = "inline-block";
+      container.style.textIndent = "0";
 
-        const highlightedText = document.createElement("span");
-        highlightedText.className = "highlightedText"; // Apply CSS class for highlighting
-        highlightedText.textContent = selectedText;
+      const highlightedText = document.createElement("span");
+      highlightedText.className = "highlightedText";
+      highlightedText.textContent = selectedText;
+      highlightedText.style.fontSize = "1.2em";
 
-        const closeButton = document.createElement("button");
-        closeButton.textContent = "✕"; // Custom close button content
-        closeButton.style.position = "absolute";
-        closeButton.style.top = "-10px";
-        closeButton.style.right = "-10px";
-        closeButton.style.backgroundColor = "red";
-        closeButton.style.color = "white";
-        closeButton.style.border = "none";
-        closeButton.style.borderRadius = "50%";
-        closeButton.style.width = "20px";
-        closeButton.style.height = "20px";
-        closeButton.style.display = "none"; // Initially hide the button
-        closeButton.style.cursor = "pointer";
+      const closeButton = document.createElement("button");
+      closeButton.className = "highlight-close-button";
+      closeButton.textContent = "✕";
 
-        closeButton.onclick = (event) => {
-            event.stopPropagation(); // Prevents the click from bubbling up to other elements
-            container.removeChild(highlightedText); // Remove the highlighted text
-            container.removeChild(closeButton); // Remove the close button
-        };
+      // Ensure the close button click event works
+      closeButton.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevents the click from bubbling up to other elements
+        const parent = container.parentNode;
+        if (parent) {
+          parent.replaceChild(document.createTextNode(selectedText), container);
+        }
+      });
 
-        container.appendChild(highlightedText);
-        container.appendChild(closeButton);
+      container.appendChild(highlightedText);
+      container.appendChild(closeButton);
 
-        range?.deleteContents();
-        range?.insertNode(container);
+      // Remove the selected text and insert the container in its place
+      range?.deleteContents();
+      range?.insertNode(container);
 
-        setSelectedText(selectedText);
-        setShowEmojiPicker(true);
-
-        // Show close button on hover over container
-        container.onmouseover = () => {
-            closeButton.style.display = "inline-block";
-        };
-
-        container.onmouseout = () => {
-            closeButton.style.display = "none";
-        };
+      // Move the cursor after the inserted container
+      range?.setStartAfter(container);
+      selection?.removeAllRanges();
+      if(range){
+      selection?.addRange(range);
+      }
     }
-};
+  };
+
   
   useEffect(() => {
     document.addEventListener("mouseup", handleTextSelect);

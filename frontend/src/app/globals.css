@@ -141,6 +141,32 @@
   }
 }
 
+
+.highlightedText {
+  background-color: yellow;
+}
+
+.highlight-close-button {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 1000; /* Ensure the button is above other elements */
+  display: none; /* Initially hide the button */
+}
+
+/* Show the close button when the container is hovered */
+span:hover .highlight-close-button,
+.highlight-close-button:hover {
+  display: block;
+}
+
 @keyframes moving {
   from {
     transform: translateX(0%);
@@ -226,10 +252,9 @@
   animation-delay: -0.4s;
 }
 
-::selection {
+.opinion-text::selection {
   background: yellow;
 }
-
 
 
 @keyframes animate {
