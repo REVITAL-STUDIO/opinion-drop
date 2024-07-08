@@ -141,6 +141,93 @@
   }
 }
 
+
+.highlightedText {
+  background-color: yellow;
+}
+
+.highlight-close-button {
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 1000; /* Ensure the button is above other elements */
+  display: none; /* Initially hide the button */
+}
+
+/* Show the close button when the container is hovered */
+span:hover .highlight-close-button,
+.highlight-close-button:hover {
+  display: block;
+}
+
+.highlight-edit-button {
+  position: absolute;
+  top: -15px;
+  left: -10px;
+  border: none;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 1000; /* Ensure the button is above other elements */
+  display: none; /* Initially hide the button */
+}
+
+.highlight-edit-button svg {
+width: 24px;
+height: 24px;
+fill: #4482b4;
+}
+
+span:hover .highlight-edit-button,
+.highlight-edit-button:hover {
+  display: block;
+}
+
+/* Style for overlay container */
+.overlay-container {
+  z-index: 1000; /* Ensure it's above other content */
+  display: none; /* Initially hide the overlay */
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+span:hover .overlay-container
+ {
+  display: block;
+}
+
+/* Reactions style */
+.reactions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Reaction items style */
+.emoji {
+  font-size: 1.5rem; /* Adjust size as needed */
+}
+
+.comment {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  padding: 4px;
+  margin: 4px 4px;
+  border-radius: 4px;
+}
+
+
+
 @keyframes moving {
   from {
     transform: translateX(0%);
@@ -226,10 +313,9 @@
   animation-delay: -0.4s;
 }
 
-::selection {
+.opinion-text::selection {
   background: yellow;
 }
-
 
 
 @keyframes animate {
