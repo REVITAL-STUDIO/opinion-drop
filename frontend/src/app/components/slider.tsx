@@ -12,8 +12,8 @@ import { EffectCoverflow, Pagination, Navigation } from "swiper/modules";
 import { arrowBackOutline, arrowForwardOutline } from "ionicons/icons";
 import DetailsModal from "../components/DetailsModal";
 import OpinionModal from "../components/OpinionModal";
-import RepliesModal from "./RepliesModal";
-
+import RepliesModal
+  from "./RepliesModal";
 interface Opinion {
   id: number;
   author: string;
@@ -21,9 +21,10 @@ interface Opinion {
   textContent: string;
   backgroundImage: string;
   profilePicture?: string;
-}
+};
 
 function Slider() {
+
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
   const [showRepliesModal, setShowRepliesModal] = useState(true);
 
@@ -34,8 +35,6 @@ function Slider() {
   const closeReplies = () => {
     setShowRepliesModal(false);
   };
-
-  // Set overflow property when component mounts and unmounts
 
   const fetchOpinions = async () => {
     try {
@@ -62,13 +61,15 @@ function Slider() {
     fetchOpinions();
   });
 
+
   const opinions: Opinion[] = [
     {
       id: 1,
       backgroundImage: "/Images/pexels-itfeelslikefilm-590496.jpg",
       author: "Jessica Wynters",
       title: "Viability As A Time Limit",
-      textContent: `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
+      textContent:
+        `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
         adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
         adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....
         `,
@@ -78,7 +79,8 @@ function Slider() {
       author: "David Barnes",
       backgroundImage: "/Images/gun-control.jpg",
       title: "How Many?",
-      textContent: `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
+      textContent:
+        `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
       adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
       adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....
       `,
@@ -88,7 +90,8 @@ function Slider() {
       author: "Sarah Lee",
       backgroundImage: "/Images/poverty.webp",
       title: "Born to Chains",
-      textContent: `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
+      textContent:
+        `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
       adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
       adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....
       `,
@@ -96,7 +99,7 @@ function Slider() {
   ];
 
   return (
-    <section className="flex justify-center items-center  p-4 ">
+    <section className="relative flex justify-center items-center  p-4 ">
       <div className="container border-2 border-dashed my-4 rounded-md border-green-500">
         <Swiper
           effect={"coverflow"}
@@ -134,7 +137,7 @@ function Slider() {
                   />
                 </div>
                 {/* Other content or overlays can be placed here */}
-                <div className="w-full h-full absolute uppercase shadow-2xl">
+                <div className="bg-black/40 w-full h-full absolute uppercase shadow-2xl">
                   <div
                     key={index}
                     className="px-4 flex flex-col justify-end h-full"
@@ -147,14 +150,10 @@ function Slider() {
                     </h1>
                     {/* <p className="text-xs text-white">{info.description}</p> */}
                     <div className="flex justify-between items-center">
-                      <button
-                        onClick={() => {
-                          setSelectedOpinion(opinion);
-                        }}
-                        className="px-4 py-2 my-4 text-sm text-white rounded-full border border-[#A6E81B] hover:bg-[#a7e81b71]"
-                      >
+                      <button onClick={() => { setSelectedOpinion(opinion) }} className="px-4 py-2 my-4 text-sm text-white rounded-full border border-[#A6E81B] hover:bg-[#a7e81b71]">
                         View
                       </button>
+
                     </div>
                   </div>
                 </div>
@@ -176,15 +175,14 @@ function Slider() {
         {selectedOpinion && (
           <>
             <div
-              className="fixed inset-0 bg-black bg-opacity-90 z-10"
+              className="fixed inset-0 bg-black bg-opacity-50 z-10"
               onClick={closeModal}
             ></div>
             <DetailsModal opinionData={selectedOpinion} />
-            <OpinionModal
-              opinionData={selectedOpinion}
-              closeModal={closeModal}
-            />
-            {showRepliesModal && <RepliesModal closeModal={closeReplies} />}
+            <OpinionModal opinionData={selectedOpinion} closeModal={closeModal} />
+            {showRepliesModal && (
+              <RepliesModal closeModal={closeReplies} />
+            )}
           </>
         )}
       </div>

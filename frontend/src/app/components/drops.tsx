@@ -90,9 +90,9 @@ const Drop = () => {
   };
 
   return (
-    <section className="min-h-screen relative bg-[#2b2b2b]">
-      <CreateButton />
-      <div className="w-full text-white uppercase overflow-hidden relative text-[240px] font-bold list-none flex gap-x-12">
+    <section className="min-h-screen relative bg-black">
+      {/* <CreateButton /> */}
+      {/* <div className="w-full text-white uppercase overflow-hidden relative text-[240px] font-bold list-none flex gap-x-12">
         <h1 ref={firstText} className="m-0">
           Abortion
         </h1>
@@ -105,7 +105,7 @@ const Drop = () => {
         <h1 ref={fourthText} className="absolute left-[300%]">
           Abortion
         </h1>
-      </div>
+      </div> */}
       <Slider />
     </section>
   );

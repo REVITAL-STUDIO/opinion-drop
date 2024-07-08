@@ -87,7 +87,7 @@ const EssayPrompt = () => {
                   Media Bias
                 </h1>
                 <p className="text-xs text-white mt-2 leading-4">
-                  I am aware of the subject of media bias and it's impact of
+                  I am aware of the subject of media bias and it&apos;s impact of
                   public perception.
                 </p>
               </div>

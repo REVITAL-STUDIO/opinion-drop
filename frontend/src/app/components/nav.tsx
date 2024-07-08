@@ -8,7 +8,7 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 const Nav = () => {
   return (
-    <section className="h-auto">
+    <section className="h-auto hidden">
       <div className="w-full flex justify-between items-center text-white">
         <ul className="flex justify-center items-center gap-x-12">
           <button className="">
@@ -27,14 +27,14 @@ const Nav = () => {
             Founder Podcast
           </Link>
         </ul>
-        {/* <Link href="/">
+        <Link href="/">
           <Image
             src="/images/opinion-drop-logo.png"
             alt="Logo"
             width={80}
             height={80}
           />
-        </Link> */}
+        </Link>
         <ul className="flex justify-center items-center gap-x-12">
           <Link href="/" className="px-4 py-2 border border-white rounded-full">
             Chat
