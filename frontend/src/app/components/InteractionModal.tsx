@@ -38,8 +38,8 @@ const InteractionModal: React.FC<InteractionModalProps> = ({
         <button className="absolute top-0 right-0 m-2 p-2" onClick={onClose}>
           <IoClose className="text-gray-500" />
         </button>
-        <h2 className="text-xl font-bold mb-4">Interact with Highlighted Text</h2>
-        <p className="mb-4">{highlightedText}</p>
+        <h2 className="text-xl font-bold mb-4">React to Highlighted Text</h2>
+        <p className="mb-4">"{highlightedText}"</p>
         {!interactionType ? (
           <div className="flex justify-end">
             <button
