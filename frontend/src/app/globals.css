@@ -246,3 +246,14 @@
   }
 }
 
+.range-slider {
+  --min: 0;
+  --max: 10;
+  --step: 1;
+  --value: 1;
+  --text-value: '5';
+}
+
+.range-slider__progress {
+  width: calc(var(--value) * 1%);
+}

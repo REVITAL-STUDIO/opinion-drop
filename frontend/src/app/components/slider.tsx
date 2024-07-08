@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -12,6 +12,7 @@ import { EffectCoverflow, Pagination, Navigation } from "swiper/modules";
 import { arrowBackOutline, arrowForwardOutline } from "ionicons/icons";
 import DetailsModal from "../components/DetailsModal";
 import OpinionModal from "../components/OpinionModal";
+import RepliesModal from "./RepliesModal";
 
 interface Opinion {
   id: number;
@@ -20,10 +21,9 @@ interface Opinion {
   textContent: string;
   backgroundImage: string;
   profilePicture?: string;
-};
+}
 
 function Slider() {
-
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
   const [showRepliesModal, setShowRepliesModal] = useState(true);
 
@@ -34,6 +34,8 @@ function Slider() {
   const closeReplies = () => {
     setShowRepliesModal(false);
   };
+
+  // Set overflow property when component mounts and unmounts
 
   const fetchOpinions = async () => {
     try {
@@ -59,7 +61,6 @@ function Slider() {
   useEffect(() => {
     fetchOpinions();
   });
-
 
   const opinions: Opinion[] = [
     {
@@ -127,7 +128,7 @@ function Slider() {
                   />
                 </div>
                 {/* Other content or overlays can be placed here */}
-                <div className="bg-black/40 w-full h-full absolute uppercase shadow-2xl">
+                <div className="w-full h-full absolute uppercase shadow-2xl">
                   <div
                     key={index}
                     className="px-4 flex flex-col justify-end h-full"
@@ -140,10 +141,14 @@ function Slider() {
                     </h1>
                     {/* <p className="text-xs text-white">{info.description}</p> */}
                     <div className="flex justify-between items-center">
-                      <button onClick={()=>{setSelectedOpinion(opinion)}} className="px-4 py-2 my-4 text-sm text-white rounded-full border border-[#A6E81B] hover:bg-[#a7e81b71]">
+                      <button
+                        onClick={() => {
+                          setSelectedOpinion(opinion);
+                        }}
+                        className="px-4 py-2 my-4 text-sm text-white rounded-full border border-[#A6E81B] hover:bg-[#a7e81b71]"
+                      >
                         View
                       </button>
-    
                     </div>
                   </div>
                 </div>
@@ -165,16 +170,17 @@ function Slider() {
         {selectedOpinion && (
           <>
             <div
-              className="fixed inset-0 bg-black bg-opacity-50 z-10"
+              className="fixed inset-0 bg-black bg-opacity-90 z-10"
               onClick={closeModal}
             ></div>
             <DetailsModal opinionData={selectedOpinion} />
-            <OpinionModal opinionData={selectedOpinion} closeModal={closeModal} />
+            <OpinionModal
+              opinionData={selectedOpinion}
+              closeModal={closeModal}
+            />
+            {showRepliesModal && <RepliesModal closeModal={closeReplies} />}
           </>
         )}
-        {/* {showRepliesModal && (
-          <RepliesModal closeModal={closeReplies} />
-        )} */}
       </div>
     </section>
   );

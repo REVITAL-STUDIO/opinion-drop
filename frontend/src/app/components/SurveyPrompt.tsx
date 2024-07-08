@@ -1,21 +1,19 @@
-'use client'
-import React from 'react';
+"use client";
+import React from "react";
 import { MdArrowForwardIos } from "react-icons/md";
-import SpectrumBar from "./SpectrumBar";
+import Ratings from "./ratings";
 
 interface SurveyPromptProps {
-    prompt: String
+  prompt: String;
 }
 
 const SurveyPrompt: React.FC<SurveyPromptProps> = ({ prompt }) => {
-    return (
-        <div className="mb-8 flex flex-col items-center gap-6">
-            <p className="text-center text-xl">
-                {prompt}
-            </p>
-            <SpectrumBar />
-        </div>
-    );
+  return (
+    <div className="flex  p-4 gap-2">
+      <p className="text-left p-4 text-base">{prompt}</p>
+      <Ratings />
+    </div>
+  );
 };
 
 export default SurveyPrompt;

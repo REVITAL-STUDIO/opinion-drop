@@ -18,20 +18,20 @@ const Drop = () => {
   let direction = -1;
 
   useEffect(() => {
-    // gsap.registerPlugin(ScrollTrigger);
-    // requestAnimationFrame(animation);
+    gsap.registerPlugin(ScrollTrigger);
+    requestAnimationFrame(animation);
 
-    // gsap.to(slider.current, {
-    //   scrollTrigger: {
-    //     trigger: document.documentElement,
-    //     start: 0,
-    //     end: window.innerHeight,
-    //     scrub: 0.25,
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    //     onUpdate: (e) => (direction = e.direction * -1),
-    //   },
-    //   x: "-=300px",
-    // });
+    gsap.to(slider.current, {
+      scrollTrigger: {
+        trigger: document.documentElement,
+        start: 0,
+        end: window.innerHeight,
+        scrub: 0.25,
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        onUpdate: (e) => (direction = e.direction * -1),
+      },
+      x: "-=300px",
+    });
   }, []);
 
   const animation = () => {
@@ -90,9 +90,9 @@ const Drop = () => {
   };
 
   return (
-    <section className="min-h-screen relative bg-black">
-      {/* <CreateButton /> */}
-      {/* <div className="w-full text-white uppercase overflow-hidden relative text-[240px] font-bold list-none flex gap-x-12">
+    <section className="min-h-screen relative bg-[#2b2b2b]">
+      <CreateButton />
+      <div className="w-full text-white uppercase overflow-hidden relative text-[240px] font-bold list-none flex gap-x-12">
         <h1 ref={firstText} className="m-0">
           Abortion
         </h1>
@@ -105,7 +105,7 @@ const Drop = () => {
         <h1 ref={fourthText} className="absolute left-[300%]">
           Abortion
         </h1>
-      </div> */}
+      </div>
       <Slider />
     </section>
   );
