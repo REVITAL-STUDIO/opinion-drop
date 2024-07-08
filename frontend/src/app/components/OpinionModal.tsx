@@ -2,12 +2,12 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { IoIosArrowDropdown } from "react-icons/io";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoPencil } from "react-icons/io5";
 import SpectrumBar from "./SpectrumBar";
 import RebuttalShort from "./RebuttalShort";
 import ProgressBar from "progressbar.js";
-
 import SurveyPrompt from "./SurveyPrompt";
+import InteractionModal from "./InteractionModal";
 
 interface OpinionModalProps {
   opinionData: {
@@ -21,27 +21,76 @@ interface OpinionModalProps {
   closeModal: () => void;
 }
 
+interface Highlight {
+  id: string;
+  container: HTMLElement;
+  text: string;
+}
+
 const OpinionModal: React.FC<OpinionModalProps> = ({
   opinionData,
   closeModal,
 }) => {
-  const [selectedOpinion, setSelectedOpinion] = useState(null);
   const [selectedTab, setSelectedTab] = useState("Opinion");
-  const [hideOpinion, setHideOpinion] = useState(true);
-  const [selectedText, setSelectedText] = useState("");
+  const [highlightedText, setHighlightedText] = useState("");
+  const [highlightContainer, setHighlightContainer] = useState<HTMLElement | null>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [textContent, setTextContent] = useState(opinionData.textContent);
   const [highlightEnabled, setHighlightEnabled] = useState(true);
+  const [showInteractionModal, setShowInteractionModal] = useState(false);
+  const [interactionType, setInteractionType] = useState<"emoji" | "comment" | null>(null);
+  const [highlights, setHighlights] = useState<Highlight[]>([]);
+  const [currentHighlightId, setCurrentHighlightId] = useState<string | null>(null);
+
+  const generateHighlightId = () => `highlight-${Math.random().toString(36).substr(2, 9)}`;
+
+  const closeInteractionModal = () => {
+    setShowInteractionModal(false);
+  }
+  const addEmojiToHighlight = (emoji: string) => {
+    if (currentHighlightId) {
+      setHighlights((prevHighlights) =>
+        prevHighlights.map((highlight) =>
+          highlight.id === currentHighlightId ? { ...highlight, container: updateHighlightContainer(highlight.container, emoji, "emoji") } : highlight
+        )
+      );
+      setShowInteractionModal(false);
+    }
+  };
+
+  const addCommentToHighlight = (comment: string) => {
+    if (currentHighlightId) {
+      setHighlights((prevHighlights) =>
+        prevHighlights.map((highlight) =>
+          highlight.id === currentHighlightId ? { ...highlight, container: updateHighlightContainer(highlight.container, comment, "comment") } : highlight
+        )
+      );
+      setShowInteractionModal(false);
+    }
+  };
+
+  const updateHighlightContainer = (container: HTMLElement, content: string, type: "emoji" | "comment") => {
+    const existingEmoji = container.querySelector('.emoji');
+    const existingComment = container.querySelector('.comment');
+    if (existingComment) existingComment.remove();
+    if (existingEmoji) existingEmoji.remove();
+
+    const newElement = document.createElement("span");
+    newElement.className = type;
+    newElement.textContent = content;
+    container.appendChild(newElement);
+
+    return container;
+  };
 
   const handleTextSelect = () => {
-
     if (!highlightEnabled) return;
     const opinionText = document.querySelector('.opinion-text');
-
     const selection = window.getSelection();
     const selectedText = selection?.toString();
-    if(selection && !opinionText?.contains(selection.anchorNode)) return;
+    if (selection && !opinionText?.contains(selection.anchorNode)) return;
     if (selectedText) {
+      setShowInteractionModal(true);
+      setHighlightedText(selectedText);
       const range = selection?.getRangeAt(0);
       const container = document.createElement("span");
       container.style.position = "relative";
@@ -57,17 +106,33 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       closeButton.className = "highlight-close-button";
       closeButton.textContent = "✕";
 
-      // Ensure the close button click event works
       closeButton.addEventListener('click', (event) => {
-        event.stopPropagation(); // Prevents the click from bubbling up to other elements
+        event.stopPropagation();
+        setShowInteractionModal(false);
+        setHighlightContainer(null);
         const parent = container.parentNode;
         if (parent) {
           parent.replaceChild(document.createTextNode(selectedText), container);
         }
       });
 
+      const editButton = document.createElement("button");
+      editButton.className = "highlight-edit-button";
+      editButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+        <path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/>
+      </svg>
+    `;
+      editButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        setCurrentHighlightId(highlightId);
+        setShowInteractionModal(true);
+      });
+
       container.appendChild(highlightedText);
       container.appendChild(closeButton);
+      container.appendChild(editButton);
+      setHighlightContainer(container);
 
       // Remove the selected text and insert the container in its place
       range?.deleteContents();
@@ -76,23 +141,22 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       // Move the cursor after the inserted container
       range?.setStartAfter(container);
       selection?.removeAllRanges();
-      if(range){
-      selection?.addRange(range);
+      if (range) {
+        selection?.addRange(range);
       }
+
+      const highlightId = generateHighlightId();
+      setCurrentHighlightId(highlightId);
+      setHighlights((prev) => [...prev, { id: highlightId, container, text: selectedText }]);
     }
   };
 
-  
   useEffect(() => {
     document.addEventListener("mouseup", handleTextSelect);
     return () => {
       document.removeEventListener("mouseup", handleTextSelect);
     };
   }, [highlightEnabled]);
-
-  //Progress bar
-  const containerRef = useRef(null);
-
 
   return (
     <div className="z-30 absolute right-[1.5%] top-[1.5%] w-[60%] h-[800px] bg-white p-6 shadow-lg rounded-md">
@@ -155,7 +219,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         {/* Opinion Content */}
         {selectedTab == "Opinion" && (
           <div>
-            <div className="relative z-10 mx-4 px-4">
+            <div className="relative z-10 mx-4 px-4 mt-6">
               <p className="opinion-text text-sm indent-3">
                 {opinionData.textContent}
               </p>
@@ -199,6 +263,15 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           </div>
         )}
       </div>
+      {/* Interaction Modal */}
+      {showInteractionModal && (
+        <InteractionModal
+          highlightedText={highlightedText}
+          onClose={closeInteractionModal}
+          onAddEmoji={addEmojiToHighlight}
+          onAddComment={addCommentToHighlight}
+        />
+      )}
     </div>
   );
 };
