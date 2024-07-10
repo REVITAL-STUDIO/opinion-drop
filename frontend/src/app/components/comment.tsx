@@ -13,7 +13,7 @@ interface CommentProps {
 const Comment: React.FC<CommentProps> = ({ comment }) => {
     return (
         <div className="h-[14rem] relative border-b-[3px]  border-[#676767] overflow-visible w-[85%]">
-            <div className=" -ml-[5%] flex items-center gap-4">
+            <div className=" -ml-[4%] flex items-center gap-4">
                 <div className="w-[4rem] h-[4rem] rounded-full bg-gray-300 flex items-center justify-center">
                     <img
                         src="/path/to/profile/pic.jpg"
@@ -27,8 +27,8 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
                 </div>
             </div>
             <p className="absolute bottom-[20%] ml-[3%] w-[90%] text-[0.9rem]">
-                I completely agree with your viewpoint. It’s refreshing to see someone articulate
-                the nuances of this issue so well. However, I think it’s also important to consider
+                I completely agree with your viewpoint. It&apos;s refreshing to see someone articulate
+                the nuances of this issue so well. However, I think it&apos;s also important to consider
                 the historical context and how it has shaped the current situation. For instance,
                 if we look back at the legislative changes over...
             </p>

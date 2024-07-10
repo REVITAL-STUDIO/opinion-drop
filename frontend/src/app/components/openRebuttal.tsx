@@ -17,7 +17,7 @@ interface Highlight {
 }
 
 interface OpenRebuttalProps {
-  opinionData: {
+  opinionData?: {
     id: number;
     author: string;
     title: string;
@@ -25,7 +25,7 @@ interface OpenRebuttalProps {
     backgroundImage: string;
     profilePicture?: string;
   };
-  closeModal: () => void;
+  closeModal?: () => void;
 }
 
 const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
