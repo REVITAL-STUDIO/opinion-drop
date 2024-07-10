@@ -87,3 +87,4 @@ const RebuttalShort: React.FC<RebuttalShortProps> = ({
 };
 
 export default RebuttalShort;
+

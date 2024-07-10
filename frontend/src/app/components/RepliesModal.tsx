@@ -12,6 +12,8 @@ import { MdFlag } from "react-icons/md";
 import ReplyShort from "./ReplyShort";
 import { IoClose } from "react-icons/io5";
 import SurveyPrompt from "./SurveyPrompt";
+import Comment from "./comment";
+import Image from "next/image";
 
 interface RepliesModalProps {
   closeModal: () => void;
@@ -50,19 +52,27 @@ const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
 
   return (
     <div
-      className="z-50 fixed bottom-0 left-0 right-0 bg-black text-white p-4 shadow-lg transition-transform"
-      style={{ height: `${currentHeight + 50}px`, maxHeight: `90vh` }}
+      className="z-50 fixed bottom-0 left-0 right-0 bg-[#1E1E1E] text-white px-4 shadow-lg transition-transform"
+      style={{ height: `${currentHeight + 50}px`, maxHeight: `100vh` }}
     >
+      <div className="absolute top-4 right-4">
+        <Image
+          src="/images/opinion-drop-logo.png"
+          alt="Logo"
+          width={130}
+          height={130}
+        />
+      </div>
       <button
-        className="top-0 w-fit h-fit  cursor-pointer flex items-center justify-center gap-x-2 font-semibold"
+        className="top-0 w-full h-[3.5rem]  cursor-pointer flex items-center justify-left gap-x-2 font-semibold "
         onMouseDown={startDragging}
       >
         <IoIosArrowUp className="text-white w-8 h-8 " />
         More
       </button>
-      <div className="mt-[4%] px-[4rem] w-full flex justify-between min-h-screen">
-        <div className="w-[40%] border-r-[1px] border-white">
-          <h2 className="text-2xl font-normal mb-[4rem]">Analytics</h2>
+      <h2 className="text-4xl font-bold mb-[2%] relative left-[24%] mt-[3%]">DISCUSSION</h2>
+      <div className="mt-[4%] px-[4rem] w-full flex gap-[8%] min-h-screen">
+        <div className="w-[25%] mt-[5%]">
           <div className="flex flex-col gap-8">
             <div className="flex gap-[3rem] items-center">
               <IoEyeOutline className="w-[3.5rem] h-[3.5rem]" />
@@ -82,11 +92,25 @@ const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
             </div>
           </div>
         </div>
-        <div className="w-[55%]">
-          <h2 className="text-2xl font-normal mb-[4rem]">Replies</h2>
+        <div className="w-[80%]  overflow-x-visible">
           {/* Replies shorts */}
-          <div className="flex flex-col gap-8  overflow-y-auto custom-scrollbar p-4">
-            <ReplyShort />
+          <div className="w-[1000px] h-[420px] overflow-auto pt-[1rem] pb-[3rem] pl-[3rem]">
+            <div className="relative flex flex-col gap-8  overflow-visible w-full border-l-[2px] border-[#676767] ">
+              <Comment />
+              <Comment />
+              <Comment />
+              <Comment />
+            </div>
+          </div>
+          <div className="relative mt-2">
+            <textarea
+              className="w-full h-[80px] p-2 border border-[#676767] rounded-md bg-transparent text-white placeholder-white"
+              placeholder="Write your comment here..."
+            />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="absolute top-6 right-6 text-white size-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+
           </div>
         </div>
       </div>
