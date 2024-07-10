@@ -18,11 +18,9 @@ interface FileExtended extends File {
 const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
   const [selectedFiles, setSelectedFiles] = useState<FileExtended[]>([]);
 
-
   const handleFilesSelected = (files: File[]) => {
     setSelectedFiles(files);
   };
-  
 
   const [formData, setFormData] = useState({
     title: "",
@@ -109,18 +107,12 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
                 </h1>
                 <Icon icon="noto:fountain-pen" className="w-8 h-8" />
               </div>
-              <div className="p-4 rounded-full border flex items-center gap-x-4 z-40">
-                <span>Select a Category</span>
-                <button className="w-8 h-8 justify-center items-center">
-                  <Icon className="w-6 h-6" icon="oui:arrow-down" />
-                </button>
-              </div>
             </div>
             <div className="flex gap-x-12 w-full ">
               <div className="w-1/2 mx-auto my-[2%] z-40">
                 <label className="text-white">Drop Your Cover Here</label>
                 <div className="w-full h-4/5  mt-4 flex justify-center items-center">
-                <FileUpload onFilesSelected={handleFilesSelected} />
+                  <FileUpload onFilesSelected={handleFilesSelected} />
                 </div>
               </div>
               <form

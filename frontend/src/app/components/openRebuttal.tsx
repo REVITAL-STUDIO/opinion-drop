@@ -216,29 +216,11 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
     };
   }, [highlightEnabled]);
 
-  return (
-    <div className="z-30 absolute right-[1.5%] top-[1.5%] w-[60%] h-[800px] bg-white p-6 shadow-lg rounded-md">
-      {/* Survey Container */}
-      <div
-        className={`absolute inset-x-0 bottom-0 left-0 h-[90%] bg-opacity-95 bg-[#0e0e0e] z-30 flex justify-center shadow-lg rounded-b-md ${
-          hideOpinion ? "" : "invisible"
-        }`}
-      >
-        <div className="absolute -top-[5rem] left-0 w-full h-[5rem] bg-gradient-to-t from-[#222222] to-transparent z-40"></div>
+  
 
-        <div className="p-6 flex-col text-white">
-          <h3 className="text-6xl w-1/2 font-black my-4 p-4">Tell Us..</h3>
-          <SurveyPrompt prompt="Life begins at conception, and abortion is morally equivalent to taking an innocent human life." />
-          <SurveyPrompt prompt="Some religions grant exceptions for abortion in cases of rape, incest, or when the mother's life is in danger, while others oppose it under any circumstances." />
-          <SurveyPrompt prompt="Abortion should be a private matter between a woman and her healthcare provider." />
-          <button
-            onClick={handleButtonClick}
-            className="shadow-lg rounded-full my-4 text-white w-20 h-20 hover:scale-95 ease-in-out duration-200 bg-green-500 bottom-4 flex items-center justify-center"
-          >
-            <FontAwesomeIcon icon={faPaperPlane} className="w-8 h-8" />
-          </button>
-        </div>
-      </div>
+  return (
+    <div className="z-30  w-[60%] h-[800px] bg-white p-6 shadow-lg rounded-md">
+      {/* Survey Container */}
 
       <div className="w-full">
         <div className="w-full flex justify-evenly relative items-center p-4">
@@ -248,7 +230,7 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
             </h2>
             <button
               onClick={openReplies}
-              className="absolute bottom-6 font-bold px-4 py-2 border border-black rounded-full text-black left-1/2 flex items-center gap-x-2"
+              className="absolute bottom-6  font-bold px-4 py-2 border border-black rounded-full text-black left-3/4 flex items-center gap-x-2"
             >
               Reply
               <IoIosArrowDropdown />
@@ -299,13 +281,53 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
 
         <div className="flex-1 max-h-[400px] custom-scrollbar">
           {/* Opinion Content */}
-          {selectedTab === "Opinion" && (
-            <div>
-              <div className="relative mx-4 px-4">
-                <p className="opinion-text text-sm indent-3">Alice Johnson </p>
-              </div>
+          <div>
+            <div className="relative mx-4 px-4">
+              <p className="opinion-text text-lg font-bold indent-3">
+                Alice Johnson{" "}
+              </p>
             </div>
-          )}
+          </div>
+        </div>
+
+        <div className="max-h-[300px] my-4 p-8 text-sm overflow-y-auto">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum. <br></br>
+            <br></br>"Sed ut perspiciatis unde omnis iste natus error sit
+            voluptatem accusantium doloremque laudantium, totam rem aperiam,
+            eaque ipsa quae ab illo inventore veritatis et quasi architecto
+            beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
+            voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
+            magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
+            quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
+            adipisci velit, sed quia non numquam eius modi tempora incidunt ut
+            labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad
+            minima veniam, quis nostrum exercitationem ullam corporis suscipit
+            laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
+            vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
+            molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas
+            nulla pariatur?"<br></br>
+            <br></br>"Sed ut perspiciatis unde omnis iste natus error sit
+            voluptatem accusantium doloremque laudantium, totam rem aperiam,
+            eaque ipsa quae ab illo inventore veritatis et quasi architecto
+            beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
+            voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
+            magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
+            quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
+            adipisci velit, sed quia non numquam eius modi tempora incidunt ut
+            labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad
+            minima veniam, quis nostrum exercitationem ullam corporis suscipit
+            laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
+            vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
+            molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas
+            nulla pariatur?"
+          </p>
         </div>
       </div>
 

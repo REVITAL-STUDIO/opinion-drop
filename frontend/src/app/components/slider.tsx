@@ -113,8 +113,23 @@ function Slider() {
     },
   ];
 
+  useEffect(() => {
+    // If propertyInfo is open, prevent scrolling by adding a class to the body
+    if (selectedOpinion) {
+      document.body.style.overflow = "hidden";
+    } else {
+      // If propertyInfo is closed, allow scrolling by removing the class
+      document.body.style.overflow = "auto";
+    }
+
+    // Cleanup function to reset body overflow when the component unmounts
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedOpinion]);
+
   return (
-    <section className="relative flex flex-col justify-center items-center p-4 ">
+    <section className="relative flex flex-col justify-center items-center p-4 w-fit">
       <div className="absolute bottom-[3rem] right-[8rem]">
         <CreateButton />
       </div>
@@ -142,19 +157,15 @@ function Slider() {
         >
           {opinions.map((opinion, index) => (
             <SwiperSlide key={index} className="swiper-slide ">
-              {/* Ensure SwiperSlide has a defined size */}
               <div className="w-full h-full relative">
-                {/* This div acts as a container for absolutely positioned elements */}
                 <div className="absolute inset-0 w-full h-full">
-                  {/* The actual image, styled to cover its parent container */}
                   <Image
-                    src={opinion.backgroundImage} // Make sure info.images is correctly set
+                    src={opinion.backgroundImage} 
                     layout="fill"
                     alt="slider"
-                    className="object-cover" // Additional styling as needed
+                    className="object-cover" 
                   />
                 </div>
-                {/* Other content or overlays can be placed here */}
                 <div className="bg-black/40 w-full h-full absolute uppercase shadow-2xl">
                   <div
                     key={index}
@@ -166,7 +177,6 @@ function Slider() {
                     <h1 className="text-white my-1 text-[20px] px-4 font-black">
                       {opinion.title}
                     </h1>
-                    {/* <p className="text-xs text-white">{info.description}</p> */}
                     <div className="flex justify-between items-center">
                       <button
                         onClick={() => {

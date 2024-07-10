@@ -55,14 +55,7 @@ const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
       className="z-50 fixed bottom-0 left-0 right-0 bg-[#1E1E1E] text-white px-4 shadow-lg transition-transform"
       style={{ height: `${currentHeight + 50}px`, maxHeight: `100vh` }}
     >
-      <div className="absolute top-4 right-4">
-        <Image
-          src="/images/opinion-drop-logo.png"
-          alt="Logo"
-          width={130}
-          height={130}
-        />
-      </div>
+      
       <button
         className="top-0 w-full h-[3.5rem]  cursor-pointer flex items-center justify-left gap-x-2 font-semibold "
         onMouseDown={startDragging}
