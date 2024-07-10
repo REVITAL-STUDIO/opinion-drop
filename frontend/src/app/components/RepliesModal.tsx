@@ -85,7 +85,7 @@ const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
         <div className="w-[55%]">
           <h2 className="text-2xl font-normal mb-[4rem]">Replies</h2>
           {/* Replies shorts */}
-          <div className="flex flex-col gap-8 max-h-[80%] overflow-y-auto custom-scrollbar p-4">
+          <div className="flex flex-col gap-8  overflow-y-auto custom-scrollbar p-4">
             <ReplyShort />
           </div>
         </div>

@@ -22,7 +22,7 @@ const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
     <div className="z-30 absolute left-[1.5%] top-[1.5%] h-[30rem] w-[27%] bg-black/50 text-white p-4 shadow-lg">
       <div className="absolute inset-0 w-full h-full -z-10">
         <Image
-          src={opinionData.backgroundImage} 
+          src={opinionData.backgroundImage}
           layout="fill"
           alt="slider"
           className="object-cover"
@@ -48,27 +48,8 @@ const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
           fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus
           elit sed risus. Maecenas eget condimentum velit, sit amet feugiat
           lectus. Class aptent taciti sociosqu ad litora torquent per conubia
-          nostra, per inceptos himenaeos.....
+          nostra, per inceptos himenaeos<br></br>
         </p>
-      </div>
-      <div className="flex justify-between items-center">
-        <button className="px-8 py-4 my-4 text-sm text-white rounded-full border uppercase font-bold bg-[#A6E81B47] border-[#A6E81B]">
-          Join the Conversation
-        </button>
-        <div className="w-fit flex gap-x-4">
-          <button className="w-8 h-8">
-            <Icon
-              icon="ph:arrow-fat-up-light"
-              className="text-white w-6 h-6 hover:bg-white duration-300 ease-in-out"
-            />
-          </button>
-          <button className="w-8 h-8">
-            <Icon
-              icon="ph:arrow-fat-up-light"
-              className="text-white w-6 h-6 rotate-180"
-            />
-          </button>
-        </div>
       </div>
     </div>
   );

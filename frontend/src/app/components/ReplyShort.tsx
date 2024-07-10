@@ -21,17 +21,17 @@ const ReplyShort: React.FC<ReplyShortProps> = ({ reply }) => {
 
   return (
     <>
-      <div className="relative flex justify-between items-center px-8 py-4 bg-white text-black rounded-xl w-[100%] ">
+      <div className="relative flex justify-between items-center px-8 py-4  text-white rounded-xl w-[100%] ">
         <div className="flex items-center gap-8">
-          <div className="w-[2rem] h-[2rem] rounded-full bg-gray-300 flex items-center justify-center drop-shadow-lg">
+          <div className="w-[5rem] h-[5rem] rounded-full flex items-center justify-center drop-shadow-lg">
             <img
-              src="/path/to/profile/pic.jpg"
+              src="/Images/pexels-photo-20863631.webp"
               alt="Profile"
-              className="w-full h-full rounded-full object-cover"
+              className="w-[100%] h-[100%] rounded-full object-cover"
             />
           </div>
           <div className="flex flex-col gap-2">
-            <h1 className="text-xl">John Doe</h1>
+            <h1 className="text-xl">Stacy Griffin</h1>
             <p className="truncate text-sm max-w-[20rem]">
               I don&apos;t know whether to believe this or
             </p>
@@ -51,9 +51,9 @@ const ReplyShort: React.FC<ReplyShortProps> = ({ reply }) => {
         </div>
         <button
           onClick={openReplyModal}
-          className="absolute -bottom-4 -right-4 w-[3rem] font-semibold h-[3rem] bg-[#F2F2F2] shadow-xl hover:scale-95 duration-150 ease-in-out rounded-full flex justify-center items-center"
+          className="absolute -bottom-4 -right-4 p-4 gap-x-2 font-semibold  bg-[#fff] text-black shadow-xl hover:scale-95 duration-150 ease-in-out rounded-full flex justify-center items-center"
         >
-          100
+          <span className="font-normal">+100</span> comments
         </button>
       </div>
       {openReplies && <ShowReplies />}
