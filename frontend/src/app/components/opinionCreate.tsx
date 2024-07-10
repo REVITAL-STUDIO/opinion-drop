@@ -5,12 +5,25 @@ import { useState } from "react";
 import Image from "next/image";
 import EssayPrompt from "./essayPrompt";
 import { motion, AnimatePresence } from "framer-motion";
+import FileUpload from "./FileUpload";
 
 interface OpinionCreateProps {
   toggleCreate: () => void;
 }
 
+interface FileExtended extends File {
+  url?: string;
+}
+
 const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
+  const [selectedFiles, setSelectedFiles] = useState<FileExtended[]>([]);
+
+
+  const handleFilesSelected = (files: File[]) => {
+    setSelectedFiles(files);
+  };
+  
+
   const [formData, setFormData] = useState({
     title: "",
     textContent: "",
@@ -92,7 +105,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
             <div className="flex  gap-x-4 justify-between items-center z-10 text-white">
               <div className="gap-x-4 flex my-4">
                 <h1 className="text-3xl font-semibold text-white">
-                  Create An Opinion
+                  Voice An Opinion
                 </h1>
                 <Icon icon="noto:fountain-pen" className="w-8 h-8" />
               </div>
@@ -106,10 +119,8 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
             <div className="flex gap-x-12 w-full ">
               <div className="w-1/2 mx-auto my-[2%] z-40">
                 <label className="text-white">Drop Your Cover Here</label>
-                <div className="w-full h-4/5 border border-dashed mt-4 flex justify-center items-center">
-                  <button className="w-32 h-32 flex justify-center items-center rounded-full border-2 text-5xl  border-white border-dashed shadow-lg text-white">
-                    +
-                  </button>
+                <div className="w-full h-4/5  mt-4 flex justify-center items-center">
+                <FileUpload onFilesSelected={handleFilesSelected} />
                 </div>
               </div>
               <form
