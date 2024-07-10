@@ -11,10 +11,10 @@ const CreateButton = () => {
   };
 
   return (
-    <div className="w-full p-[4%] mb-[4%]">
+    <div className="p-[4%] mb-[4%]">
       <button
         onClick={toggleCreate}
-        className="px-8 py-4 w-1/4 text-black bg-white shadow-lg float-right relative rounded-full text-lg border border-black"
+        className="w-[14rem] px-8 py-4 text-black bg-white shadow-lg float-right relative rounded-full text-lg border border-black"
       >
         create +
       </button>

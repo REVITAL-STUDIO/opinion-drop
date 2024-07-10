@@ -10,7 +10,7 @@ import Image from "next/image";
 
 const Hero = () => {
   return (
-    <section className="w-full bg-[url('/Images/OD-Mic-Background.jpg')] min-h-[850px] bg-cover h-screen p-4">
+    <section className="w-full bg-[url('/Images/OD-Mic-Background.jpg')] min-h-[850px] bg-cover p-4">
       <div className="w-full flex justify-between items-center text-white">
         <ul className="flex justify-center font-black items-center gap-x-12">
           <button className="">

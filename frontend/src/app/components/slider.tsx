@@ -13,6 +13,7 @@ import { arrowBackOutline, arrowForwardOutline } from "ionicons/icons";
 import DetailsModal from "../components/DetailsModal";
 import OpinionModal from "../components/OpinionModal";
 import RepliesModal from "./RepliesModal";
+import CreateButton from "./createButton";
 interface Opinion {
   id: number;
   author: string;
@@ -113,7 +114,10 @@ function Slider() {
   ];
 
   return (
-    <section className="relative flex justify-center items-center  p-4 ">
+    <section className="relative flex flex-col justify-center items-center p-4 ">
+      <div className="absolute bottom-[3rem] right-[8rem]">
+        <CreateButton />
+      </div>
       <div className="container border-2 border-dashed my-4 rounded-md border-green-500">
         <Swiper
           effect={"coverflow"}
