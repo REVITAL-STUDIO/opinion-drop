@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { UserService } from '../services/UserService';
-import { validate, UserSchemaType } from '../utils/validation/schemas/UserSchema'; // Adjust the path as per your file structure
+import { validate, UserSchemaType } from '../utils/validation/schemas/UserSchema'; 
 
 
 export class UserController {

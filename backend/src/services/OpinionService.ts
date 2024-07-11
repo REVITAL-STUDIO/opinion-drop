@@ -1,7 +1,7 @@
 import { Opinion } from '../models/Opinion';
 import { OpinionDAO } from '../data-access/OpinionDAO';
 import pool from '../data-access/dbconnection';
-
+import { UserOpinion } from '../utils/dto';
 export class OpinionService {
     private opinionDAO: OpinionDAO;
 
@@ -16,6 +16,7 @@ export class OpinionService {
         title: string,
         textContent: string,
         backgroundImage: string | null,
+        parentOpinionId: number | null,
         images: string[] | null,
         videos: string[] | null,
         documents: string[] | null,
@@ -28,6 +29,7 @@ export class OpinionService {
                 opinionData.title,
                 opinionData.textContent,
                 opinionData.backgroundImage,
+                opinionData.parentOpinionId,
                 opinionData.images ?? null,
                 opinionData.videos?? null,
                 opinionData.documents?? null,
@@ -41,7 +43,7 @@ export class OpinionService {
         }
     }
 
-    async getOpinion(opinionId: number): Promise<Opinion | null> {
+    async getOpinion(opinionId: number): Promise<UserOpinion | null> {
         try {
             return await this.opinionDAO.getOpinion(opinionId);
         } catch (error) {
@@ -50,7 +52,7 @@ export class OpinionService {
         }
     }
 
-    async getOpinions(): Promise<Opinion[]> {
+    async getOpinions(): Promise<UserOpinion[]> {
         try {
             return await this.opinionDAO.getOpinions();
         } catch (error) {
@@ -66,6 +68,7 @@ export class OpinionService {
         title: string,
         textContent: string,
         backgroundImage: string | null,
+        parentOpinionId: number | null,
         images: string[] | null,
         videos: string[] | null,
         documents: string[] | null,
@@ -79,6 +82,7 @@ export class OpinionService {
                 opinionData.title,
                 opinionData.textContent,
                 opinionData.backgroundImage,
+                opinionData.parentOpinionId,
                 opinionData.images ?? null,
                 opinionData.videos?? null,
                 opinionData.documents?? null,

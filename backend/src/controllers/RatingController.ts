@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { RatingService } from '../services/RatingService';
-import { validate, RatingSchemaType } from '../utils/validation/schemas/RatingSchema'; // Adjust the path as per your file structure
+import { validate, RatingSchemaType } from '../utils/validation/schemas/RatingSchema'; 
 
 
 export class RatingController {

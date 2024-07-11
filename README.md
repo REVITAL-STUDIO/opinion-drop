@@ -1,5 +1,7 @@
 # Opinion Drop Application
 
+### platform designed to foster thoughtful discussions and diverse perspectives on various topics.
+
 ## Frontend
 
 ### Running the Frontend App

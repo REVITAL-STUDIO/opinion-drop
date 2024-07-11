@@ -1,5 +1,6 @@
 import { Pool, PoolClient, QueryResult } from 'pg';
 import { Opinion } from '../models/Opinion';
+import { UserComment, UserOpinion } from '../utils/dto';
 
 export class OpinionDAO {
     private pool: Pool;
@@ -38,8 +39,15 @@ export class OpinionDAO {
         }
     }
 
-    async getOpinion(opinionId: number): Promise<Opinion | null> {
-        const query = "SELECT * FROM opinions WHERE opinion_id = $1"
+
+    async getOpinion(opinionId: number): Promise<UserOpinion | null> {
+        const query = `
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+        users.username as author, users.profile_picture as authorProfileImage
+        FROM opinions
+        JOIN users ON opinions.userId = users.user_id
+        WHERE opinions.id = $1
+        `;
 
 
         let client: PoolClient | undefined;
@@ -48,24 +56,12 @@ export class OpinionDAO {
             client = await this.pool.connect();
             const result: QueryResult = await client.query(query, [opinionId]);
             if (result.rows.length == 0) {
-                return null; 
+                return null;
             }
-            const opinionData = result.rows[0];
-            const opinion = new Opinion(
-                opinionData.userId,
-                opinionData.topicId,
-                opinionData.title,
-                opinionData.text_content,
-                opinionData.background_image,
-                opinionData.images,
-                opinionData.videos,
-                opinionData.documents,
-                opinionData.audios,
-                opinionData.opinion_id,
-                opinionData.created_at,
-                opinionData.updated_at,
-            );
-            return opinion;
+            const opinionData = result.rows[0] as UserOpinion;
+
+
+            return opinionData;
         } catch (error) {
             console.error('Error executing get opinion query:', error);
             throw new Error(`Error retrieving opinion: ${error}`);
@@ -75,32 +71,24 @@ export class OpinionDAO {
         }
     }
 
-    async getOpinions(): Promise<Opinion[]> {
-        const query = "SELECT * FROM opinions"
-
+    async getOpinions(): Promise<UserOpinion[]> {
+        const query = `
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+               users.username as author, users.profile_picture as authorProfileImage
+        FROM opinions
+        JOIN users ON opinions.userId = users.user_id
+        WHERE parent_opinion_id IS NULL
+    `;
         let client: PoolClient | undefined;
 
         try {
             client = await this.pool.connect();
             const result: QueryResult = await client.query(query);
 
-            const opinions: Opinion[] = [];
+            const opinions: UserOpinion[] = [];
             for (const row of result.rows) {
-                const opinion = new Opinion(
-                row.userId,
-                row.topicId,
-                row.title,
-                row.text_content,
-                row.background_image,
-                row.images,
-                row.videos,
-                row.documents,
-                row.audios,
-                row.opinion_id,
-                row.created_at,
-                row.updated_at,
-            );
-                opinions.push(opinion);
+
+                opinions.push(row as UserOpinion);
             }
 
             return opinions;
@@ -113,21 +101,52 @@ export class OpinionDAO {
         }
     }
 
+    
+    async getRebuttals(): Promise<UserOpinion[]> {
+        const query = `
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+               users.username as author, users.profile_picture as authorProfileImage
+        FROM opinions
+        JOIN users ON opinions.userId = users.user_id
+        WHERE parent_opinion_id IS NOT NULL
+    `;
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result: QueryResult = await client.query(query);
+
+            const opinions: UserOpinion[] = [];
+            for (const row of result.rows) {
+
+                opinions.push(row as UserOpinion);
+            }
+
+            return opinions;
+        } catch (error) {
+            console.error('Error executing get rebuttals query:', error);
+            throw new Error(`Error retrieving rebuttals: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
     async updateOpinion(opinion: Opinion): Promise<void> {
         const query = "UPDATE opinions SET user_id = $1, topic_id = $2, title = $3, text_content = $4, images = $5, videos = $6, documents = $7, audios = $8, background_image = $9 WHERE opinion_id = $10"
         const opinionData = opinion.getOpinionData();
 
         const values = [
-                opinionData.userId,
-                opinionData.topicId,
-                opinionData.title,
-                opinionData.textContent,
-                opinionData.images,
-                opinionData.videos,
-                opinionData.documents,
-                opinionData.audios,
-                opinionData.backgroundImage,
-                opinionData.opinionId,
+            opinionData.userId,
+            opinionData.topicId,
+            opinionData.title,
+            opinionData.textContent,
+            opinionData.images,
+            opinionData.videos,
+            opinionData.documents,
+            opinionData.audios,
+            opinionData.backgroundImage,
+            opinionData.opinionId,
 
         ];
 
@@ -136,7 +155,7 @@ export class OpinionDAO {
         try {
             client = await this.pool.connect();
             const resp = await client.query(query, values);
-            if (resp.rowCount == 0){
+            if (resp.rowCount == 0) {
                 throw new Error(`Opinion with ID ${opinionData.opinionId} does not exist.`);
             }
         } catch (error) {

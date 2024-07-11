@@ -1,6 +1,7 @@
 import { Comment } from '../models/Comment';
 import { CommentDAO } from '../data-access/CommentDAO';
 import pool from '../data-access/dbconnection';
+import { UserComment } from '../utils/dto';
 
 export class CommentService {
     private commentDAO: CommentDAO;
@@ -30,7 +31,7 @@ export class CommentService {
         }
     }
 
-    async getComment(commentId: number): Promise<Comment | null> {
+    async getComment(commentId: number): Promise<UserComment | null> {
         try {
             return await this.commentDAO.getComment(commentId);
         } catch (error) {

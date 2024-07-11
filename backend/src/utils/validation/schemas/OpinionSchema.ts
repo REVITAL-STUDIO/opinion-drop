@@ -12,6 +12,7 @@ export const opinionSchema = Type.Object({
     title: Type.String(),
     textContent: Type.String(),
     backgroundImage: Type.Union([Type.Null(), Type.String()]),
+    parentOpinionId: Type.Union([Type.Null(), Type.Integer()]),
     images: Type.Union([Type.Null(), Type.Array(Type.String())]),
     videos: Type.Union([Type.Null(), Type.Array(Type.String())]),
     documents: Type.Union([Type.Null(), Type.Array(Type.String())]),

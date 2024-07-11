@@ -23,6 +23,7 @@ CREATE TABLE opinions (
     title TEXT NOT NULL,
     text_content TEXT NOT NULL,
     background_image TEXT,
+    parent_opinion_id INT,
     images TEXT[],
     videos TEXT[],
     documents TEXT[],
@@ -38,6 +39,7 @@ CREATE TABLE comments (
     opinion_id INTEGER NOT NULL,
     parent_comment_id INTEGER,
     content TEXT NOT NULL,
+    likes INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );

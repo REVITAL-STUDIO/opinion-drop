@@ -10,6 +10,7 @@ export const commentSchema = Type.Object({
     userId: Type.Integer(),
     opinionId: Type.Integer(),
     parentCommentId: Type.Union([Type.Null(), Type.Integer()]),
+    likes: Type.Optional(Type.Integer()), 
     content: Type.String(),
 
 });

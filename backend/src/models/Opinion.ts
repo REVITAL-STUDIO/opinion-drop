@@ -6,6 +6,7 @@ export class Opinion {
     private title: string;
     private textContent: string;
     private backgroundImage: string | null;
+    private parentOpinionId: number | null;
     private images: string[] | null;
     private videos: string[] | null;
     private documents: string[] | null;
@@ -14,13 +15,14 @@ export class Opinion {
     private updatedAt!: Date;
 
 
-    constructor(userId: number, topicId: number, title: string, textContent: string, backgroundImage: string | null, images: string[] | null, videos: string[] | null, documents: string[] | null, audios: string[] | null, opinionId?: number, createdAt?: Date, updatedAt?: Date) {
+    constructor(userId: number, topicId: number, title: string, textContent: string, backgroundImage: string | null, parentOpinionId: number | null, images: string[] | null, videos: string[] | null, documents: string[] | null, audios: string[] | null, opinionId?: number, createdAt?: Date, updatedAt?: Date) {
 
         this.userId = userId;
         this.topicId = topicId;
         this.title = title;
         this.textContent = textContent;
         this.backgroundImage = backgroundImage;
+        this.parentOpinionId = parentOpinionId;
         this.images = images;
         this.videos = videos;
         this.documents = documents;
@@ -37,6 +39,7 @@ export class Opinion {
             title: this.title,
             textContent: this.textContent,
             backgroundImage: this.backgroundImage,
+            parentOpinnionId: this.parentOpinionId,
             images: this.images,
             videos: this.videos,
             documents: this.documents,

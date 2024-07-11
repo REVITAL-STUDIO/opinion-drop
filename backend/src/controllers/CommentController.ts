@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { CommentService } from '../services/CommentService';
-import { validate, CommentSchemaType } from '../utils/validation/schemas/CommentSchema'; // Adjust the path as per your file structure
+import { validate, CommentSchemaType } from '../utils/validation/schemas/CommentSchema'; 
 
 
 export class CommentController {

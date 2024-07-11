@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { TopicService } from '../services/TopicService';
-import { validate, TopicSchemaType } from '../utils/validation/schemas/TopicSchema'; // Adjust the path as per your file structure
+import { validate, TopicSchemaType } from '../utils/validation/schemas/TopicSchema'; 
 
 
 export class TopicController {

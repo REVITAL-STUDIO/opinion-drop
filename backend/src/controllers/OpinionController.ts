@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { OpinionService } from '../services/OpinionService';
-import { validate, OpinionSchemaType } from '../utils/validation/schemas/OpinionSchema'; // Adjust the path as per your file structure
+import { validate, OpinionSchemaType } from '../utils/validation/schemas/OpinionSchema';
 
 
 export class OpinionController {
