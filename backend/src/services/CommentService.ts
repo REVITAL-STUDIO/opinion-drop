@@ -1,7 +1,7 @@
 import { Comment } from '../models/Comment';
 import { CommentDAO } from '../data-access/CommentDAO';
 import pool from '../data-access/dbconnection';
-import { UserComment } from '../utils/dto';
+import { UserComment } from '../utils/types/dto';
 
 export class CommentService {
     private commentDAO: CommentDAO;
@@ -12,7 +12,7 @@ export class CommentService {
     
 
     async createComment(commentData: {
-        userId: number,
+        userId: string,
         opinionId: number,
         parentCommentId: number | null,
         content: string,
@@ -42,7 +42,7 @@ export class CommentService {
 
     async updateComment(commentData: {
         commentId?: number,
-        userId: number,
+        userId: string,
         opinionId: number,
         parentCommentId: number | null,
         content: string,

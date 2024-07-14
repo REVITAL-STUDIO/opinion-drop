@@ -9,10 +9,9 @@ const ajv = addFormats(new Ajv({ allErrors: true }), [
 
 // Define the user schema using TypeBox
 export const userSchema = Type.Object({
-  userId: Type.Optional(Type.Number()),
+  userId:Type.Number(),
   username: Type.String(),
   email: Type.String({ format: 'email' }), 
-  passwordHash: Type.String(),
   bio: Type.Union([Type.Null(), Type.String()]),
   profilePicture: Type.Union([Type.Null(), Type.String()]),
   politicalAlignment: Type.Union([Type.Null(), Type.String()]),
