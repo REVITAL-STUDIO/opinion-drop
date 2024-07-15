@@ -20,7 +20,7 @@ app.use('/api', router);
 
 
 // Starting node server
-const PORT = process.env.APP_SERVER_PORT || 3000;
+const PORT = process.env.APP_SERVER_PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

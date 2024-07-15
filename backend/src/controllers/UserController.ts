@@ -43,11 +43,11 @@ export class UserController {
 
             const existingUser = await this.userService.findUserByEmail(email);
             if (!existingUser) {
-                const userId = await this.userService.createUser(uid, email);
-                return res.status(201).json({ userId });
+                const username = await this.userService.createUser(uid, email);
+                return res.status(201).json({ username });
             }
 
-            return res.status(200).json({ message: "User already exists." });
+            return res.status(200).json({ message: "User already exists.",  user: existingUser });
         } catch (error) {
             return res.status(500).send("Error registering user");
         }
@@ -66,8 +66,8 @@ export class UserController {
             
             const existingUser = await this.userService.findUserByEmail(email);
             if (!existingUser) {
-                const userId = await this.userService.createUser(uid, email);
-                return res.status(201).json({ userId, message: "User created." });
+                const username = await this.userService.createUser(uid, email);
+                return res.status(201).json({ message: "User created.", user: existingUser  });
             }
     
             return res.status(200).json({ user: existingUser.getUserData, message: "User already exists." });

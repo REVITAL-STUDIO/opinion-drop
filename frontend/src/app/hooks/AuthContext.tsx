@@ -1,11 +1,16 @@
+'use client'
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '../firebase/firebase-config';
+import { auth, initializeFirebase } from '../firebase/firebase-config';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
 import Cookies from 'js-cookie';
 
+interface ExtendedUser extends User {
+    username?: string;
+}
+
 interface AuthContextType {
-    currentUser: User | null;
+    currentUser: ExtendedUser | null;
     loading: boolean;
     login: (email: string, password: string) => Promise<void>;
     signup: (email: string, password: string) => Promise<void>;
@@ -18,19 +23,28 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [accessToken, setAccessToken] = useState<string | null>(Cookies.get('accessToken') || null);
 
     const login = async (email: string, password: string) => {
+        if (!auth) return;
         try {
             const result = await signInWithEmailAndPassword(auth, email, password);
             const user = result.user;
             const idToken = await user.getIdToken();
             console.log('ID Token:', idToken);
 
-            const response = await fetch('/users/login', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,9 +58,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             setAccessToken(idToken);
             Cookies.set('accessToken', idToken, { secure: true, sameSite: 'Strict' });
+            
+            const data = await response.json();
+            const { username } = data.user;
+            const extendedUser = { ...user, username } as ExtendedUser;
 
-            setCurrentUser(user);
-
+        setCurrentUser(extendedUser);
         } catch (error) {
             console.error('Error signing in with email and password:', error);
             throw error;
@@ -54,13 +71,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const signup = async (email: string, password: string) => {
+        if (!auth) return;
         try {
             const result = await createUserWithEmailAndPassword(auth, email, password);
             const user = result.user;
             const idToken = await user.getIdToken();
             console.log('ID Token:', idToken);
 
-            const response = await fetch('/users/register/credentials', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users/register/credentials`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,13 +101,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const signInWithGoogle = async () => {
+        if (!auth) return;
         try {
             const result = await signInWithPopup(auth, new GoogleAuthProvider());
             const user = result.user;
             const idToken = await user.getIdToken();
             console.log('ID Token:', idToken);
 
-            const response = await fetch('/users/register/provider', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users/register/provider`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -112,13 +131,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const signInWithFacebook = async () => {
+        if (!auth) return;
         try {
             const result = await signInWithPopup(auth, new FacebookAuthProvider());
             const user = result.user;
             const idToken = await user.getIdToken();
             console.log('ID Token:', idToken);
 
-            const response = await fetch('/users/register/provider', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/api/users/register/provider`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -142,6 +162,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 
     const logout = async () => {
+        if (!auth) return;
         try {
             await auth.signOut();
             setCurrentUser(null);
@@ -154,6 +175,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     useEffect(() => {
+        initializeFirebase();
+        if (!auth) return;
+        console.log("app server ", process.env.NEXT_PUBLIC_APP_SERVER_URL)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
             setLoading(false);
@@ -176,10 +200,3 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 };
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
-};

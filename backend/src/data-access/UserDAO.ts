@@ -34,18 +34,18 @@ export class UserDAO {
     //     }
     // }
 
-    async createUser(firebaseUUID: string, email: string): Promise<number | null> {
-        const query = "INSERT INTO users (user_id, email) VALUES ($1, $2) RETURNING user_id"
+    async createUser(firebaseUUID: string, email: string): Promise<string | null> {
+        const query = "INSERT INTO users (user_id, username, email) VALUES ($1, $2, $3) RETURNING username"
 
-
+        const userName = await this.generateUniqueUsername();
         let client: PoolClient | undefined;
 
         try {
             client = await this.pool.connect();
-            const result: QueryResult = await client.query(query, [firebaseUUID, email]);
-           
-            
-            return result.rows[0].user_id;;
+            const result: QueryResult = await client.query(query, [firebaseUUID, userName, email]);
+
+
+            return result.rows[0].user_id;
         } catch (error) {
             console.error('Error creating user:', error);
             throw new Error(`Error creating user: ${error}`);
@@ -64,12 +64,12 @@ export class UserDAO {
         try {
             client = await this.pool.connect();
             const result: QueryResult = await client.query(query, [email]);
-           
-            
+
+
             if (result.rows.length > 0) {
-                return result.rows[0]; // Return the user object
+                return result.rows[0]; 
             }
-            return null; //if no user found
+            return null; 
 
         } catch (error) {
             console.error('Error retrieving user by email:', error);
@@ -136,7 +136,7 @@ export class UserDAO {
         try {
             client = await this.pool.connect();
             const resp = await client.query(query, values);
-            if (resp.rowCount == 0){
+            if (resp.rowCount == 0) {
                 throw new Error(`User with ID ${userData.userId} does not exist.`);
             }
         } catch (error) {
@@ -164,5 +164,22 @@ export class UserDAO {
 
         }
     }
+
+    private generateRandomNumber = () => Math.floor(Math.random() * 10000);
+
+    private generateUniqueUsername = async () => {
+        let isUnique = false;
+        let username = '';
+
+        while (!isUnique) {
+            username = `anonymous${this.generateRandomNumber()}`;
+            const res = await this.pool.query('SELECT 1 FROM users WHERE username = $1', [username]);
+            if (res.rowCount === 0) {
+                isUnique = true;
+            }
+        }
+
+        return username;
+    };
 
 }
