@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Confirmation from "./confirmaton";
+import TextEditor from "./textEditor";
 
 const EssayPrompt = () => {
   const [confirmation, setConfirmation] = useState(false);
@@ -60,60 +61,11 @@ const EssayPrompt = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="bg-gradient-to-t relative from-stone-500 to-stone-700 w-3/4 p-8 rounded-lg shadow-xl"
-          initial={{ x: 0, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: "-100%", opacity: 0 }}
+          className="bg-gradient-to-t relative w-3/4 p-8 rounded-lg shadow-xl "
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <div className="text-4xl h-[650px] text-white">
-            <h2 className="font-bold">Essay Prompt</h2>
-            <textarea
-              id="description"
-              rows={4}
-              maxLength={2000}
-              className="shadow  placeholder:text-white/75 placeholder:text-xl bg-transparent border-white appearance-none border border-dashed rounded w-full h-[400px] mt-[2%] overflow-y-scroll  py-2 px-3 text-white text-sm leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Speak your mind... Let Your Voice Echo"
-              onChange={handleChange}
-            />
-            <div className="w-full flex gap-x-4 mt-4">
-              <input
-                type="checkbox"
-                className="border-gray-300 rounded h-4 w-4"
-              />
-
-              <div className="flex flex-col">
-                <h1 className="text-white text-xl font-medium leading-none">
-                  Media Bias
-                </h1>
-                <p className="text-xs text-white mt-2 leading-4">
-                  I am aware of the subject of media bias and it&apos;s impact of
-                  public perception.
-                </p>
-              </div>
-            </div>
-            <div className="w-full flex gap-x-4 mt-4">
-              <input
-                type="checkbox"
-                className="border-gray-300 rounded h-4 w-4"
-              />
-
-              <div className="flex flex-col">
-                <h1 className="text-white text-xl font-medium leading-none">
-                  Credibility
-                </h1>
-                <p className="text-xs text-white mt-2 leading-4">
-                  I have confirmed that I have cited my sources and provided
-                  accurate information to support my claims.
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={toggleConfirmation}
-              className="w-1/4 hover:bg-orange-500 duration-200 ease rounded-full shadow-lg font-bold p-4 text-base flex justify-center items-center my-4 border border-dashed"
-            >
-              Drop Opinion
-            </button>
+          <div className="text-4xl h-screen w-full text-white mx-auto">
+            <TextEditor />
           </div>
         </motion.div>
       )}

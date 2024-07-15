@@ -5,13 +5,7 @@
 /* Swiper */
 /*News cycle*/
 
-.container {
-  max-width: 90%;
-  padding: 4rem 1rem;
-  margin: 0 auto;
-}
-
-.swiper_container {
+/* .swiper_container {
   height: 35rem;
   padding: 4rem 0;
   position: relative;
@@ -103,17 +97,17 @@
 
 .slider-controler .slider-arrow ion-icon {
   font-size: 0.6rem;
-}
+} */
 
 /* .slider-controler .slider-arrow::after {
   content: '';
-} 
+}
 
 /* .swiper-pagination {
   position: relative;
   width: 15rem !important;
   bottom: 1rem;
-} 
+}
 
 /* .swiper-pagination .swiper-pagination-bullet {
   filter: drop-shadow(0px 8px 24px rgba(18, 28, 53, 0.1));
@@ -251,31 +245,27 @@ span:hover .overlay-container {
   border-radius: 10px; /* Rounded corners of the track */
 }
 
-.progress {
+.progress{
   position: relative;
   margin: 4px;
-  float: left;
+  float:left;
   text-align: center;
 }
-.barOverflow {
-  /* Wraps the rotating .bar */
+.barOverflow{ /* Wraps the rotating .bar */
   position: relative;
   overflow: hidden; /* Comment this line to understand the trick */
-  width: 135px;
-  height: 90px; /* Half circle (overflow) */
+  width: 90px; height: 45px; /* Half circle (overflow) */
   margin-bottom: -14px; /* bring the numbers up */
 }
-.bar {
+.bar{
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 135px;
-  height: 135px; /* full circle! */
-  border-radius: 75%;
+  top: 0; left: 0;
+  width: 90px; height: 90px; /* full circle! */
+  border-radius: 50%;
   box-sizing: border-box;
-  border: 10px solid #eee; /* half gray, */
-  border-bottom-color: #5e8310; /* half azure */
-  border-right-color: #5e8310;
+  border: 10px solid #eee;     /* half gray, */
+  border-bottom-color: rgb(148, 34, 148);  /* half azure */
+  border-right-color: rgb(148, 34, 148);
 }
 
 .arrow {
@@ -342,4 +332,72 @@ span:hover .overlay-container {
     rgba(56, 173, 255, 0.5) 74%,
     rgba(56, 173, 255, 0) 98%
   );
+}
+
+.container {
+  margin: 0 auto;
+  width: 250px;
+  height: 250px;
+  position: relative;
+  perspective: 1000px;
+}
+.carousel {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+.item {
+  display: block;
+  position: absolute;
+  background: #000;
+  width: 250px;
+  height: 300px;
+  line-height: 200px;
+  font-size: 5em;
+  text-align: center;
+  color: #fff;
+  opacity: 0.99;
+  border-radius: 10px;
+}
+
+.next,
+.prev {
+  background-color: #000000b2;
+  color: #fff;
+  position: absolute;
+  bottom: 35%;
+  padding: 1em;
+  cursor: pointer;
+  border-radius: 100%;
+  border: 1px solid #fff;
+}
+
+/* .next:hover,
+.prev:hover {
+  color: #000;
+} */
+.next:active,
+.prev:active {
+  box-shadow: 0 1px 0 #999;
+}
+.next {
+  right: 30em;
+}
+.prev {
+  left: 30em;
+}
+
+.text-editor .ql-container {
+  min-height: 200px;
+  font-family: "Inter", sans-serif;
+}
+
+.text-editor .ql-toolbar {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.text-editor .ql-container {
+  border-radius: 0 0 0.5rem 0.5rem;
 }

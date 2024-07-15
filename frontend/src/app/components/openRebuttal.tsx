@@ -259,21 +259,7 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
             )}
           </div>
 
-          <div className="w-[40%] flex justify-center items-center relative">
-            <div className="progress">
-              <div className="barOverflow">
-                <div className="bar"></div>
-              </div>
-              <div className="w-full flex flex-col items-center absolute top-1/2">
-                <span className="text-sm font-bold w-1/2">
-                  Attention Currency
-                </span>
-                <div className="flex items-center">
-                  <span className="text-3xl font-black flex">100</span>%
-                </div>
-              </div>
-            </div>
-          </div>
+          
 
           <div className="mx-4 flex absolute top-4 right-24 gap-x-4 mt-4">
             <button className="p-4 rounded-full border-red-500 border hover:bg-red-600 text-red-600 hover:text-white ease-in-out transition duration-200">
