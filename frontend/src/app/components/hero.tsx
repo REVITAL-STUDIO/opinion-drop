@@ -17,7 +17,7 @@ import Engagement from "./engagement";
 const Hero = () => {
   return (
     <section className="w-full bg-black min-h-screen bg-cover bg-center p-4">
-      <div className="w-[90%] flex justify-between items-center mx-auto text-white">
+      <div className="w-[90%] justify-between items-center mx-auto hidden text-white">
         <div className="w-1/2 flex flex-col my-4">
           <div className="flex gap-x-4">
             <button className="p-4 rounded-full border mb-4 w-fit">

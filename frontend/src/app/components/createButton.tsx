@@ -10,20 +10,19 @@ const CreateButton = () => {
     setOpenCreateOpinion((open) => !open);
   };
 
-  useEffect(() => {
-    // If propertyInfo is open, prevent scrolling by adding a class to the body
-    if (openCreateOpinion) {
-      document.body.style.overflow = "hidden";
-    } else {
-      // If propertyInfo is closed, allow scrolling by removing the class
-      document.body.style.overflow = "auto";
-    }
-
-    // Cleanup function to reset body overflow when the component unmounts
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [openCreateOpinion]);
+  // useEffect(() => {
+  //   if (typeof document !== 'undefined') {
+  //     if (openCreateOpinion) {
+  //       document.body.style.overflow = 'hidden';
+  //     } else {
+  //       document.body.style.overflow = 'auto';
+  //     }
+  
+  //     return () => {
+  //       document.body.style.overflow = 'auto';
+  //     };
+  //   }
+  // }, [openCreateOpinion]);
 
   return (
     <div className="my-4 absolute right-24 top-0">

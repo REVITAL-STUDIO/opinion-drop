@@ -221,10 +221,12 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   };
 
   useEffect(() => {
-    document.addEventListener("mouseup", handleTextSelect);
-    return () => {
-      document.removeEventListener("mouseup", handleTextSelect);
-    };
+    if (typeof document !== "undefined") {
+      document.addEventListener("mouseup", handleTextSelect);
+      return () => {
+        document.removeEventListener("mouseup", handleTextSelect);
+      };
+    }
   }, [highlightEnabled]);
 
   const closeDiscussionModal = () => {
@@ -232,7 +234,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   };
 
   return (
-    <div className="z-30 absolute right-[1.5%] top-[1.5%] w-[60%] h-[800px] bg-white p-6 shadow-lg rounded-md">
+    <div className="z-30 absolute right-[4%] top-[1.5%] w-[50%] h-[800px] bg-white p-6 shadow-lg rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <IoClose onClick={closeModal} className="cursor-pointer z-100" />
         <a
@@ -258,20 +260,20 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       </div>
       {/* Survey Container */}
       <div
-        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]   bg-opacity-95  bg-[#0e0e0e] z-30 flex justify-center shadow-lg rounded-b-md ${
+        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]   bg-opacity-95  bg-[#fff] z-30 flex justify-center shadow-lg rounded-b-md ${
           hideOpinion ? "" : "invisible"
         }`}
       >
-        <div className="absolute -top-[5rem] left-0 w-full h-[5rem]  bg-gradient-to-t from-[#222222] to-transparent z-40"></div>
+        <div className="absolute -top-[5rem] left-0 w-full h-[5rem]  bg-gradient-to-t from-[#fff] to-transparent z-40"></div>
 
-        <div className="p-6 flex-col text-white ">
+        <div className="p-6 flex-col text-black ">
           <h3 className="text-6xl w-1/2 font-black my-4 p-4">Tell Us..</h3>
           <SurveyPrompt prompt="Life begins at conception, and abortion is morally equivalent to taking an innocent human life." />
           <SurveyPrompt prompt="Some religions grant exceptions for abortion in cases of rape, incest, or when the mothers life is in danger, while others oppose it under any circumstances." />
           <SurveyPrompt prompt="Abortion should be a private matter between a woman and her healthcare provider." />
           <button
             onClick={handleButtonClick}
-            className="shadow-lg rounded-full my-4 text-white w-20 h-20 hover:scale-95 ease-in-out duration-200 bg-green-500 bottom-4 flex items-center justify-center"
+            className="shadow-lg rounded-full  text-white w-20 h-20 hover:scale-95 ease-in-out duration-200 bg-green-500 bottom-4 flex items-center justify-center"
           >
             <FontAwesomeIcon icon={faPaperPlane} className="w-8 h-8" />
           </button>
@@ -285,10 +287,10 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         </div>
       )}
 
-      <div className="w-full  ">
+      <div className="w-full  overflow-y-auto">
         <div className="w-full flex justify-evenly relative items-center  p-4">
-          <div className="relative w-[60%] flex">
-            <h2 className="text-7xl leadin`g-tight- mb-4 w-5/6 font-black px-4">
+          <div className="relative w-[100%] flex">
+            <h2 className="text-5xl leading-tight mb-4 w-4/6 font-black px-4">
               {opinionData.title.toUpperCase()}
             </h2>
             <button
@@ -301,48 +303,23 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             {replyMenu && (
               <section className="absolute top-full left-1/3 gap-y-4 w-1/2 max-h-40 z-10 bg-[#2b2b2b] shadow-lg text-white ">
                 <button className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out   duration-200 transition border-b">
-                  Rebuttal
+                  State It
                   <p className="text-gray-500  text-xs">
-                    Give them a fierce second opinion
+                    Support this Claim.. Better yet, add on
                   </p>
                 </button>
                 <button className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out   duration-200 transition border-b">
-                  Engage
+                  Debate it
                   <p className="text-gray-500 text-xs">
-                    Support this Claim.. Better yet, add on
+                    Give them a fierce second opinion
                   </p>
                 </button>
               </section>
             )}
           </div>
-
-          <div className="w-[40%] flex justify-center items-center relative">
-            <div className="progress">
-              <div className="barOverflow">
-                <div className="bar"></div>
-              </div>
-              <div className="w-full flex flex-col items-center absolute top-1/2">
-                <span className="text-sm font-bold w-1/2">
-                  Attention Currency
-                </span>
-                <div className="flex items-center">
-                  <span className="text-3xl font-black flex">100</span>%
-                </div>
-              </div>
-            </div>{" "}
-          </div>
-
-          <div className=" mx-4 flex absolute top-4  right-24 gap-x-4 mt-4">
-            <button className="p-4 rounded-full border-red-500 border hover:bg-red-600 text-red-600 hover:text-white ease-in-out transition duration-200">
-              <FontAwesomeIcon icon={faFlag} className="w-6 h-6  " />
-            </button>
-            <button className="p-4 rounded-full border-gray-700 hover:bg-[#2b2b2b] ease-in-out transition duration-200 hover:text-white border">
-              <FontAwesomeIcon icon={faThumbsUp} className="w-6 h-6" />
-            </button>
-          </div>
         </div>
 
-        <div className="flex-1 max-h-[400px] custom-scrollbar">
+        <div className="flex-1  custom-scrollbar ">
           {/* Opinion Content */}
           {selectedTab == "Opinion" && (
             <div>
@@ -351,13 +328,21 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                   {opinionData.textContent}
                 </p>
               </div>
+              {/* Rate it */}
+              <div className="w-[90%] mx-auto my-4 bg-[#2b2b2b] p-4 rounded-xl text-white">
+                <h2 className="text-5xl my-4 font-semibold">Rate it!</h2>
+                <div className="w-full my-4"> 
+                  <h1 className="mb-4">Does this essay belong in this topic?</h1>
+                  <div className="p-4 bg-white rounded-full shadow-lg"></div>
+                </div>
+              </div>
             </div>
           )}
         </div>
         {/* Discussion Content */}
 
         {selectedTab == "Rebuttal" && (
-          <div className="flex flex-col items-center gap-y-2 max-h-[300px] overflow-y-auto relative">
+          <div className="flex flex-col items-center gap-y-2 max-h-[500px] overflow-y-auto relative">
             <RebuttalShort openDiscussionModal={openDiscussionModal} />
             {openDiscussion && (
               <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 ">
