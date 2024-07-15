@@ -26,10 +26,10 @@ const CreateButton = () => {
   }, [openCreateOpinion]);
 
   return (
-    <div className="p-[4%] mb-[4%]">
+    <div className="my-4 absolute right-24 top-0">
       <button
         onClick={toggleCreate}
-        className="w-[14rem] px-8 py-4 text-black bg-white shadow-lg float-right relative rounded-full text-lg border border-black"
+        className="w-32 p-4 text-black bg-white shadow-lg float-right relative rounded-full text-sm border-black"
       >
         create +
       </button>
