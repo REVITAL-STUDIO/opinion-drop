@@ -1,6 +1,6 @@
 import { Pool, PoolClient, QueryResult } from 'pg';
 import { Opinion } from '../models/Opinion';
-import { UserComment, UserOpinion } from '../utils/types/dto';
+import { UserComment, UserOpinion } from '../utils/dto';
 
 export class OpinionDAO {
     private pool: Pool;

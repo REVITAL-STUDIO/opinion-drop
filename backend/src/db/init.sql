@@ -4,9 +4,10 @@
 -- creating Tables
 
 CREATE TABLE users (
-    user_id TEXT PRIMARY KEY,
+    user_id SERIAL PRIMARY KEY,
     username TEXT NOT NULL,
     email TEXT NOT NULL,
+    password_hash TEXT NOT NULL,
     bio TEXT,
     profile_picture TEXT,
     political_alignment TEXT DEFAULT 'Moderate',
@@ -17,7 +18,7 @@ CREATE TABLE users (
 
 CREATE TABLE opinions (
     opinion_id SERIAL PRIMARY KEY,
-    user_id TEXT NOT NULL,
+    user_id INTEGER NOT NULL,
     topic_id INTEGER NOT NULL,
     title TEXT NOT NULL,
     text_content TEXT NOT NULL,
@@ -34,7 +35,7 @@ CREATE TABLE opinions (
 
 CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY,
-    user_id TEXT NOT NULL,
+    user_id INTEGER NOT NULL,
     opinion_id INTEGER NOT NULL,
     parent_comment_id INTEGER,
     content TEXT NOT NULL,
@@ -46,7 +47,7 @@ CREATE TABLE comments (
 
 CREATE TABLE ratings (
     rating_id SERIAL PRIMARY KEY,
-    user_id TEXT NOT NULL,
+    user_id INTEGER NOT NULL,
     opinion_id INTEGER NOT NULL,
     value INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -70,7 +71,7 @@ CREATE TABLE topics (
 
 -- Opinions table constraints
 ALTER TABLE opinions
-ADD CONSTRAINT fk_user_id
+ADD CONSTRAINT fk_opinion_user_id
 FOREIGN KEY (user_id)
 REFERENCES users (user_id)
 ON DELETE CASCADE;  
@@ -106,7 +107,7 @@ ON DELETE CASCADE;  -- Delete child comments if parent comment is deleted
 
 -- Ratings  table constraints
 ALTER TABLE ratings
-ADD CONSTRAINT fk_user_id
+ADD CONSTRAINT fk_rating_user_id
 FOREIGN KEY (user_id)
 REFERENCES users (user_id)
 ON DELETE CASCADE;  -- Delete ratings if referenced user is deleted

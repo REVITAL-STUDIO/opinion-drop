@@ -1,7 +1,7 @@
 export class Opinion {
 
     private opinionId!: number;
-    private userId: string;
+    private userId: number;
     private topicId: number;
     private title: string;
     private textContent: string;
@@ -15,7 +15,7 @@ export class Opinion {
     private updatedAt!: Date;
 
 
-    constructor(userId: string, topicId: number, title: string, textContent: string, backgroundImage: string | null, parentOpinionId: number | null, images: string[] | null, videos: string[] | null, documents: string[] | null, audios: string[] | null, opinionId?: number, createdAt?: Date, updatedAt?: Date) {
+    constructor(userId: number, topicId: number, title: string, textContent: string, backgroundImage: string | null, parentOpinionId: number | null, images: string[] | null, videos: string[] | null, documents: string[] | null, audios: string[] | null, opinionId?: number, createdAt?: Date, updatedAt?: Date) {
 
         this.userId = userId;
         this.topicId = topicId;

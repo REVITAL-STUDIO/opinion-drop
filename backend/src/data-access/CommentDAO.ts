@@ -1,6 +1,5 @@
 import { Pool, PoolClient, QueryResult } from 'pg';
 import { Comment } from '../models/Comment';
-import { UserComment } from '../utils/types/dto';
 
 export class CommentDAO {
     private pool: Pool;
@@ -35,20 +34,9 @@ export class CommentDAO {
         }
     }
 
-    async getComment(commentId: number): Promise<UserComment | null> {
-        const query = `
-        SELECT
-          comments.comment_id as id,
-          users.username as author,
-          comments.content,
-          users.profile_picture as authorProfilePicture,
-          comments.parent_comment_id as parentCommentId,
-          comments.created_at as createdAt,
-          comments.updated_at as updatedAt
-        FROM comments
-        JOIN users ON comments.user_id = users.user_id
-        WHERE comments.comment_id = $1
-      `;
+    async getComment(commentId: number): Promise<Comment | null> {
+        const query = "SELECT * FROM comments WHERE comment_id = $1"
+
 
         let client: PoolClient | undefined;
 
@@ -58,47 +46,20 @@ export class CommentDAO {
             if (result.rows.length == 0) {
                 return null; 
             }
-            const commentData = result.rows[0] as UserComment;
-
-            return commentData;
+            const commentData = result.rows[0];
+            const comment = new Comment(
+                commentData.userId,
+                commentData.opinion_id,
+                commentData.content,
+                commentData.parent_comment_id,
+                commentData.comment_id,
+                commentData.created_at,
+                commentData.updated_at,
+            );
+            return comment;
         } catch (error) {
             console.error('Error executing get comment query:', error);
             throw new Error(`Error retrieving comment: ${error}`);
-        } finally {
-            client && client.release();
-
-        }
-    }
-
-    async getComments(): Promise<UserComment[]> {
-        const query = `
-        SELECT
-        comments.comment_id as id,
-        users.username as author,
-        comments.content,
-        users.profile_picture as authorProfilePicture,
-        comments.parent_comment_id as parentCommentId,
-        comments.created_at as createdAt,
-        comments.updated_at as updatedAt
-      FROM comments
-      JOIN users ON comments.user_id = users.user_id
-    `;
-        let client: PoolClient | undefined;
-
-        try {
-            client = await this.pool.connect();
-            const result: QueryResult = await client.query(query);
-
-            const comments: UserComment[] = [];
-            for (const row of result.rows) {
-
-                comments.push(row as UserComment);
-            }
-
-            return comments;
-        } catch (error) {
-            console.error('Error executing get comments query:', error);
-            throw new Error(`Error retrieving comments: ${error}`);
         } finally {
             client && client.release();
 

@@ -1,7 +1,7 @@
 import { Opinion } from '../models/Opinion';
 import { OpinionDAO } from '../data-access/OpinionDAO';
 import pool from '../data-access/dbconnection';
-import { UserOpinion } from '../utils/types/dto';
+import { UserOpinion } from '../utils/dto';
 export class OpinionService {
     private opinionDAO: OpinionDAO;
 
@@ -11,7 +11,7 @@ export class OpinionService {
     
 
     async createOpinion(opinionData: {
-        userId: string,
+        userId: number,
         topicId: number,
         title: string,
         textContent: string,
@@ -63,7 +63,7 @@ export class OpinionService {
 
     async updateOpinion(opinionData: {
         opinionId?: number
-        userId: string,
+        userId: number,
         topicId: number,
         title: string,
         textContent: string,

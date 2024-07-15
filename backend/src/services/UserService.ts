@@ -10,38 +10,29 @@ export class UserService {
     }
     
 
-    // async createUser(userData: {
-    //     username: string,
-    //     email: string,
-    //     passwordHash: string,
-    //     bio: string | null,
-    //     profilePicture: string | null,
-    //     politicalAlignment: string | null,
-    // }): Promise<void> {
-    //     try {
-    //         const newUser = new User(
-    //             userData.username,
-    //             userData.email,
-    //             userData.passwordHash,
-    //             userData.bio,
-    //             userData.profilePicture,
-    //             userData.politicalAlignment
-    //         );
-    //         await this.userDAO.createUser(newUser);
-    //     } catch (error) {
-    //         console.error('Error in UserService createUser:', error);
-    //         throw new Error('Error creating user');
-    //     }
-    // }
-
-    async createUser(firebaseUUID: string, email: string) {
-        return this.userDAO.createUser(firebaseUUID, email);
+    async createUser(userData: {
+        username: string,
+        email: string,
+        passwordHash: string,
+        bio: string | null,
+        profilePicture: string | null,
+        politicalAlignment: string | null,
+    }): Promise<void> {
+        try {
+            const newUser = new User(
+                userData.username,
+                userData.email,
+                userData.passwordHash,
+                userData.bio,
+                userData.profilePicture,
+                userData.politicalAlignment
+            );
+            await this.userDAO.createUser(newUser);
+        } catch (error) {
+            console.error('Error in UserService createUser:', error);
+            throw new Error('Error creating user');
+        }
     }
-
-    async findUserByEmail(email: string) {
-        return this.userDAO.findUserByEmail(email);
-    }
-
 
     async getUser(userId: number): Promise<User | null> {
         try {
@@ -53,21 +44,23 @@ export class UserService {
     }
 
     async updateUser(userData: {
-        userId: number,
+        userId?: number,
         username: string,
         email: string,
+        passwordHash: string,
         bio: string | null,
         profilePicture: string | null,
         politicalAlignment: string | null,
     }): Promise<void> {
         try {        
             const updatedUser = new User(
-                userData.userId,
                 userData.username,
                 userData.email,
+                userData.passwordHash,
                 userData.bio,
                 userData.profilePicture,
                 userData.politicalAlignment,
+                userData.userId
             );
             await this.userDAO.updateUser(updatedUser);
         } catch (error) {

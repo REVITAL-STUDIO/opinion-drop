@@ -7,7 +7,7 @@ const ajv = addFormats(new Ajv({ allErrors: true }), [
 
 export const opinionSchema = Type.Object({
     opinionId: Type.Optional(Type.Integer()), 
-    userId: Type.String(),
+    userId: Type.Integer(),
     topicId: Type.Integer(),
     title: Type.String(),
     textContent: Type.String(),

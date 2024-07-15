@@ -7,7 +7,7 @@ const ajv = addFormats(new Ajv({ allErrors: true }), [
 
 export const commentSchema = Type.Object({
     commentId: Type.Optional(Type.Integer()), 
-    userId: Type.String(),
+    userId: Type.Integer(),
     opinionId: Type.Integer(),
     parentCommentId: Type.Union([Type.Null(), Type.Integer()]),
     likes: Type.Optional(Type.Integer()), 
