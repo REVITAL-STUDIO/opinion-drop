@@ -1,10 +1,9 @@
-import Constants from "../utils/enums";
+import Constants from "../utils/types/enums";
 export class User {
 
-    private userId!: number;
+    private userId: number;
     private username: string;
     private email: string;
-    private passwordHash: string;
     private bio: string | null;
     private profilePicture: string | null;
     private politicalAlignment: string | null;
@@ -13,15 +12,14 @@ export class User {
 
 
 
-    constructor(username: string, email: string, passwordHash: string, bio: string | null, profilePicture: string | null, politicalAlignment: string | null, userId?: number, createdAt?: Date, updatedAt?: Date,) {
+    constructor(userId: number, username: string, email: string, bio: string | null, profilePicture: string | null, politicalAlignment: string | null, createdAt?: Date, updatedAt?: Date,) {
 
         this.username = username;
         this.email = email;
-        this.passwordHash = passwordHash;
         this.bio = bio ?? null;
         this.profilePicture = profilePicture ?? null;
         this.politicalAlignment = politicalAlignment ?? Constants.PoliticalAlignment.Moderate;
-        this.userId = userId ?? this.userId;
+        this.userId = userId;
         this.createdAt = createdAt ?? this.createdAt;
         this.updatedAt = updatedAt ?? this.updatedAt;
     }
@@ -31,7 +29,6 @@ export class User {
             userId: this.userId,
             username: this.username,
             email: this.email,
-            passwordHash: this.passwordHash,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
             bio: this.bio,

@@ -1,7 +1,7 @@
 export class Comment {
 
     private commentId!: number;
-    private userId: number;
+    private userId: string;
     private opinionId: number;
     private parentCommentId: number | null;
     private content: string;
@@ -10,7 +10,7 @@ export class Comment {
     private updatedAt!: Date;
 
 
-    constructor(userId: number, opinionId: number, content: string, parentCommentId: number | null, likes?: number, commentId?: number, createdAt?: Date, updatedAt?: Date, ) {
+    constructor(userId: string, opinionId: number, content: string, parentCommentId: number | null, likes?: number, commentId?: number, createdAt?: Date, updatedAt?: Date, ) {
 
         this.userId = userId;
         this.opinionId = opinionId;

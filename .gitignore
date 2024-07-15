@@ -2,3 +2,5 @@ dist/
 
 .env
 .yml
+
+backend/src/utils/firebase/serviceAccountKey.json
