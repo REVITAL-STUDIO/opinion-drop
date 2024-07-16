@@ -244,13 +244,13 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
             {replyMenu && (
               <section className="absolute top-full left-1/3 gap-y-4 w-1/2 max-h-40 z-10 bg-[#2b2b2b] shadow-lg text-white">
                 <button className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out duration-200 transition border-b">
-                  Rebuttal
+                  State it
                   <p className="text-gray-500 text-xs">
                     Give them a fierce second opinion
                   </p>
                 </button>
                 <button className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out duration-200 transition border-b">
-                  Engage
+                  Debate it
                   <p className="text-gray-500 text-xs">
                     Support this Claim.. Better yet, add on
                   </p>

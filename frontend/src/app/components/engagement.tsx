@@ -24,7 +24,7 @@ const Engagement = () => {
 
   return (
     <section className="w-full p-4 rounded-full my-4">
-      <div className=" w-1/4 bg-[#fff] relative mx-auto rounded-xl flex justify-center items-center">
+      <div className=" w-1/4 bg-[#fff]/90 relative mx-auto rounded-xl flex justify-center items-center">
         {/* Attention Currency */}
         <div className="w-1/2 flex flex-col justify-center items-center relative p-4">
           <span className="text-base text-black font-semibold ">

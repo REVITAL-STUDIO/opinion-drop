@@ -21,6 +21,10 @@ interface FileExtended extends File {
 
 const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
   const [selectedFiles, setSelectedFiles] = useState<FileExtended[]>([]);
+  const [selectedAffiliations, setSelectedAffiliations] = useState<string[]>(
+    []
+  );
+
   const affiliations = [
     { label: "Conservative", icon: faDemocrat },
     { label: "Liberal", icon: faRepublican },
@@ -84,7 +88,13 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createOpinion();
+
+    if (selectedFiles.length === 0) {
+      alert("Please drop a file to continue.");
+      return;
+    }
+
+    createOpinion(); // Call your createOpinion function or API request here
   };
 
   const [essay, openEssay] = useState(false);
@@ -100,15 +110,26 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
     setIsVisible(true);
   };
 
-  
+  const toggleAffiliation = (label: string) => {
+    if (selectedAffiliations.includes(label)) {
+      setSelectedAffiliations(
+        selectedAffiliations.filter((item) => item !== label)
+      );
+    } else {
+      setSelectedAffiliations([...selectedAffiliations, label]);
+    }
+  };
 
   return (
     <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-90 z-50">
       <button
         onClick={toggleCreate}
-        className="w-8 h-8  shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 p-4"
+        className="w-12 h-12  shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 "
       >
-        <FontAwesomeIcon icon={faXmark} className="w-8 h-8 text-white" />
+        <FontAwesomeIcon
+          icon={faXmark}
+          className="w-12 h-12 text-white text-xl"
+        />
       </button>
       <AnimatePresence>
         {isVisible && (
@@ -133,7 +154,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
               </div>
               <form
                 onSubmit={handleSubmit}
-                className="w-1/2 mx-auto rounded mt-[5%] z-40 "
+                className="w-1/2 mx-auto rounded mt-[5%] z-40"
               >
                 <div className="w-full flex gap-x-4">
                   <div className="mb-4">
@@ -187,7 +208,12 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
                     {affiliations.map((affiliation, index) => (
                       <button
                         key={index}
-                        className="p-4 rounded-full bg-[#efefef] text-sm text-black items-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex"
+                        onClick={() => toggleAffiliation(affiliation.label)}
+                        className={`p-4 rounded-full ${
+                          selectedAffiliations.includes(affiliation.label)
+                            ? "bg-purple-500 text-white"
+                            : "bg-[#efefef] text-black"
+                        } text-sm items-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex`}
                       >
                         {affiliation.label}
                         {affiliation.icon && (
@@ -202,8 +228,9 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
                 </div>
 
                 <button
-                  onClick={openEssayPrompt}
-                  className="relative inline-flex shadow-xl items-center justify-center p-4 px-6 py-3 overflow-hidden font-medium text-white bg-white w-full transition duration-300 ease-out rounded-full group"
+                  type="submit"
+                  className="relative inline-flex shadow-xl items-center justify-center py-6  overflow-hidden font-medium text-white bg-white w-full transition duration-300 ease-out rounded-full group"
+                  disabled={!selectedAffiliations.length} // Disable button if no affiliation is selected
                 >
                   <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#2b2b2b] group-hover:translate-x-0 ease">
                     <svg
@@ -224,7 +251,6 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
                   <span className="absolute flex items-center justify-center w-full h-full text-black transition-all duration-300 transform group-hover:translate-x-full ease">
                     Write Your Essay
                   </span>
-                  <span className="relative invisible">Button Text</span>
                 </button>
               </form>
               <div className="absolute inset-0 ">

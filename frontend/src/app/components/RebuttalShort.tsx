@@ -47,9 +47,9 @@ const RebuttalShort: React.FC<RebuttalShortProps> = ({
       {rebuttal.map((item, index) => (
         <div
           key={index}
-          className="flex justify-between items-center px-8 py-4 shadow-md text-black border-b border-black w-[95%] my-4"
+          className="flex justify-between items-center px-8 py-4 shadow-md text-black  w-[100%] my-4"
         >
-          <div className="flex items-center gap-4">
+          <div className="flex w-3/4 items-center gap-4">
             <div className="w-[3rem] h-[3rem] rounded-full bg-gray-300 flex items-center justify-center">
               <img
                 src="/path/to/profile/pic.jpg"
@@ -58,20 +58,12 @@ const RebuttalShort: React.FC<RebuttalShortProps> = ({
               />
             </div>
             <div className="flex flex-col">
-              <h1 className="text-lg font-semibold">{item.title}</h1>
+              <h1 className="text-base font-semibold">{item.title}</h1>
               <p className="text-sm font-normal">{item.name}</p>
             </div>
           </div>
-          <div className="w-1/3 flex gap-x-4 items-center ">
-            <div
-              className={
-                item.button === "Rebuttal"
-                  ? "border border-red-500 text-red-500  text-sm rounded-full px-4 py-2"
-                  : "border border-blue-500 text-blue-500  text-sm rounded-full px-4 py-2"
-              }
-            >
-              {item.button}
-            </div>
+          <div className="w-1/4 flex gap-x-4 items-center justify-center ">
+            
             <button
               onClick={openDiscussionModal}
               className="px-4 py-2 rounded-full bg-black text-white text-sm shadow-xl flex items-center justify-center gap-x-4 hover:scale-90 duration-200 ease-in-out transition"
