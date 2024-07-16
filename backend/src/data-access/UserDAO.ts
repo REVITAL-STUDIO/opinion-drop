@@ -34,9 +34,12 @@ export class UserDAO {
     //     }
     // }
 
-    async createUser(firebaseUUID: string, email: string): Promise<string | null> {
-        const query = "INSERT INTO users (user_id, username, email) VALUES ($1, $2, $3) RETURNING username"
-
+    async createUser(firebaseUUID: string, email: string): Promise<User | null> {
+        const query = `
+            INSERT INTO users (user_id, username, email)
+            VALUES ($1, $2, $3)
+            RETURNING *
+        `;
         const userName = await this.generateUniqueUsername();
         let client: PoolClient | undefined;
 
@@ -45,7 +48,21 @@ export class UserDAO {
             const result: QueryResult = await client.query(query, [firebaseUUID, userName, email]);
 
 
-            return result.rows[0].user_id;
+            if (result.rows.length > 0) {
+                const row = result.rows[0];
+                return new User(
+                    row.user_id,
+                    row.username,
+                    row.email,
+                    row.bio,
+                    row.profile_picture,
+                    row.political_alignment,
+                    row.created_at,
+                    row.updated_at
+                );
+            }
+
+            return null;
         } catch (error) {
             console.error('Error creating user:', error);
             throw new Error(`Error creating user: ${error}`);
@@ -67,7 +84,17 @@ export class UserDAO {
 
 
             if (result.rows.length > 0) {
-                return result.rows[0]; 
+                const row = result.rows[0];
+                return new User(
+                    row.user_id,
+                    row.username,
+                    row.email,
+                    row.bio,
+                    row.profile_picture,
+                    row.political_alignment,
+                    row.created_at,
+                    row.updated_at
+                );
             }
             return null; 
 
