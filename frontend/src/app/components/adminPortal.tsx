@@ -1,85 +1,18 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faAngleLeft,
-  faAngleRight,
-  faArrowUpFromBracket,
-  faPlus,
+  faArrowRightFromBracket,
+  faGears,
+  faHeart,
+  faPenFancy,
+  faUser,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-import Questions from "./questions";
-import DetailsModal from "./DetailsModal";
-import OpinionModal from "./OpinionModal";
-import RepliesModal from "./RepliesModal";
-import Engagement from "./engagement";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
+import React from "react";
 
-interface Opinion {
-  id: number;
-  author: string;
-  title: string;
-  textContent: string;
-  backgroundImage: string;
-  profilePicture?: string;
-}
-
-const Drop = () => {
-  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
-  const [showRepliesModal, setShowRepliesModal] = useState(true);
-  const [Opinions, setOpinions] = useState<Opinion[] | null>(null);
-
-  const closeModal = () => {
-    setSelectedOpinion(null);
-  };
-
-  const closeReplies = () => {
-    setShowRepliesModal(false);
-  };
-
-  const fetchTopics = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/topics`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!res.ok) {
-        throw new Error("Error retrieving topics");
-      }
-      const response = await res.json();
-      console.log("data: ", response.data);
-    } catch (error) {
-      console.log("Error Fetching Topics: ", error);
-    }
-  };
-
-  const fetchOpinions = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!res.ok) {
-        throw new Error("Error retrieving opinions");
-      }
-      const response = await res.json();
-      console.log("data: ", response.data);
-    } catch (error) {
-      console.log("Error Fetching Opinions: ", error);
-    }
-  };
-
-  const [currdeg, setCurrdeg] = useState(0);
+const AdminPortal = () => {
   const slides = [
     {
       id: 1,
@@ -132,92 +65,63 @@ const Drop = () => {
       `,
     },
   ];
-  const rotate = (direction: "next" | "prev") => {
-    if (direction === "next") {
-      setCurrdeg((prev) => prev - 60);
-    } else if (direction === "prev") {
-      setCurrdeg((prev) => prev + 60);
-    }
-  };
 
   return (
-    <section className="w-full min-h-[500px] flex flex-col justify-center items-center ">
-      <div className="container mb-[5%]">
-        <div
-          className="carousel"
-          style={{
-            transform: `rotateY(${currdeg}deg)`,
-          }}
-        >
-          {slides.map(
-            (slide, index) => (
-              // slide ? (
-              //   <div className="item ">
-              //     <button className="border w-[6rem] h-[6rem] rounded-full  shadow-md flex justify-center items-center text-black">
-              //       <FontAwesomeIcon icon={faPlus} className="w-[2rem] h-[2rem] text-white" />
-              //     </button>
-              //     <p className="text-sm mt-2 w-2/3 p-4">Be the first to share your opinion!</p>
-              //   </div>
-              // ) : (
-              <div
-                key={index}
-                className={`item ${slide.id} relative shadow-lg shadow-white/50 `}
-                style={{
-                  transform: `rotateY(${index * 60}deg) translateZ(250px)`,
-                }}
-              >
+    <section className="bg-gradient-to-b from-black via-blue-300 to-red-300 w-full h-screen flex">
+      <div className="w-1/6 h-full ">
+        <div className="p-4 flex justify-center items-center">
+          <Image
+            src="/Images/opinion-drop-logo.png"
+            alt="opinion drop logo"
+            width={150}
+            height={150}
+            className="mx-auto "
+          />
+        </div>
+        <div className="flex flex-col  text-white gap-y-4 p-4">
+          <button className="p-4 w-fit text-base text-left font-semibold hover:bg-purple-600 hover:text-white duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4">
+            <FontAwesomeIcon icon={faPenFancy} className="" /> Essays
+          </button>
+          <button className="p-4 w-fit text-base text-left font-semibold hover:bg-purple-600 hover:text-white duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4">
+            <FontAwesomeIcon icon={faHeart} className="" />
+            Liked
+          </button>
+          <button className="p-4 w-fit text-base text-left font-semibold hover:bg-purple-600 hover:text-white duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4">
+            <FontAwesomeIcon icon={faGears} className="" />
+            Settings
+          </button>
+          <button className="p-4 w-fit text-base text-left font-semibold text-red-500 duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4">
+            <FontAwesomeIcon icon={faArrowRightFromBracket} /> Log Out
+          </button>
+        </div>
+      </div>{" "}
+      <div className="w-5/6 h-full text-white">
+        {/* UserName */}
+        <div className="p-4  mt-[4%]  rounded-full w-fit">
+          <h1 className="text-3xl text-white border-b border-b-blue-500">
+            Welcome, <span className="font-bold">Vicki</span>
+          </h1>
+        </div>
+        <div className="mt-[4%] h-1/5 w-full  text-white p-4">
+          <h2 className="text-2xl font-semibold">Essays</h2>
+          <div className="my-4  h-3/4 flex gap-4">
+            {slides.map((slide, index) => (
+              <div key={index} className="py-[8%] border w-1/4 rounded-2xl relative overflow-hidden shadow-md">
                 <Image
                   src={slide.backgroundImage}
                   alt={slide.author}
                   fill
-                  className="absolute w-[100%] h-[100%] object-cover"
+                  className=" w-[100%] h-[100%] object-cover object-center brightness-75"
                 />
-                <div className="absolute inset-0 bg-black opacity-30"></div>
-
-                <div className="text-white text-[15px] font-black absolute bottom-[4rem] left-2 text-left line-clamp-3 leading-tight flex flex-col gap-2">
-                  <p className="text-[12px]">{slide.author}</p>
-                  <p className="text-[24px]">{slide.title}</p>
-                </div>
-                <button
-                  onClick={() => {
-                    setSelectedOpinion(slide);
-                  }}
-                  className="px-4 py-2 z-40 border shadow-lg bg-black text-white rounded-full text-xs absolute bottom-2 left-4 "
-                >
-                  View
-                </button>
-
-                {/* Custom content for each slide */}
+                <h2 className="font-semibold absolute px-4 text-lg">{slide.title}</h2>
               </div>
-            )
-            // )
-          )}
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="prev" onClick={() => rotate("prev")}>
-        <FontAwesomeIcon icon={faAngleLeft} className="w-5 h-5" />{" "}
-      </div>
-      <div className="next" onClick={() => rotate("next")}>
-        <FontAwesomeIcon icon={faAngleRight} className="w-5 h-5" />{" "}
-      </div>
-      <div>
-        {selectedOpinion && (
-          <>
-            <div
-              className="fixed inset-0 bg-gradient-to-tr from-blue-500/90 via-red-500/90 to-white/90 blur-xl bg-opacity-95 z-10"
-              onClick={closeModal}
-            ></div>
-            <DetailsModal opinionData={selectedOpinion} />
-            <OpinionModal
-              opinionData={selectedOpinion}
-              closeModal={closeModal}
-            />
-            {showRepliesModal && <RepliesModal closeModal={closeReplies} />}
-          </>
-        )}
+        
       </div>
     </section>
   );
 };
 
-export default Drop;
+export default AdminPortal;
