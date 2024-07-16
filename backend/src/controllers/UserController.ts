@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { UserService } from '../services/UserService';
-import { validate, UserSchemaType } from '../utils/validation/schemas/UserSchema'; 
+import { validate, UserSchemaType } from '../utils/validation/schemas/UserSchema';
 import admin from '../utils/firebase/firebaseAdmin';
 
 export class UserController {
@@ -43,34 +43,53 @@ export class UserController {
 
             const existingUser = await this.userService.findUserByEmail(email);
             if (!existingUser) {
-                const username = await this.userService.createUser(uid, email);
-                return res.status(201).json({ username });
+                const user = await this.userService.createUser(uid, email);
+                return res.status(201).json({
+                    status: 'success',
+                    message: 'user registerd!',
+                    data: {
+                        user: user
+                    }
+                });
             }
 
-            return res.status(200).json({ message: "User already exists.",  user: existingUser });
-        } catch (error) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'User already exists',
+                data: {
+                    user: existingUser
+                }
+            });
+        }
+        catch (error) {
             return res.status(500).send("Error registering user");
         }
     }
 
     async registerUserCredentials(req: Request, res: Response) {
         const { idToken } = req.body;
-    
+
         try {
             const decodedToken = await admin.auth().verifyIdToken(idToken);
             const { uid, email } = decodedToken;
-    
+
             if (!email) {
                 return res.status(400).send("Email is required");
             }
-            
+
             const existingUser = await this.userService.findUserByEmail(email);
             if (!existingUser) {
-                const username = await this.userService.createUser(uid, email);
-                return res.status(201).json({ message: "User created.", user: existingUser  });
+                const user = await this.userService.createUser(uid, email);
+                return res.status(201).json({
+                    status: 'success',
+                    message: 'user registerd!',
+                    data: {
+                        user: user
+                    }
+                });
             }
-    
-            return res.status(200).json({ user: existingUser.getUserData, message: "User already exists." });
+
+            return res.status(400).send("User with that email already exists");
         } catch (error) {
             return res.status(500).send("Error registering or signing in user");
         }
@@ -89,10 +108,16 @@ export class UserController {
 
             const existingUser = await this.userService.findUserByEmail(email);
             if (existingUser) {
-                return res.status(200).json({ message: "Login successful", user: existingUser });
+                return res.status(201).json({
+                    status: 'success',
+                    message: 'user exists!',
+                    data: {
+                        user: existingUser
+                    }
+                });
             }
 
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).send("User not found" );
         } catch (error) {
             console.error('Error logging in user:', error);
             return res.status(500).send("Error logging in user");

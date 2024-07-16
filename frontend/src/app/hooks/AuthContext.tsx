@@ -42,7 +42,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const result = await signInWithEmailAndPassword(auth, email, password);
             const user = result.user;
             const idToken = await user.getIdToken();
-            console.log('ID Token:', idToken);
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users/login`, {
                 method: 'POST',
@@ -58,12 +57,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             setAccessToken(idToken);
             Cookies.set('accessToken', idToken, { secure: true, sameSite: 'Strict' });
-            
-            const data = await response.json();
-            const { username } = data.user;
+
+            const res = await response.json();
+            const username = res.data.user.username;
             const extendedUser = { ...user, username } as ExtendedUser;
 
-        setCurrentUser(extendedUser);
+            setCurrentUser(extendedUser);
+            localStorage.setItem('username', username);
+
         } catch (error) {
             console.error('Error signing in with email and password:', error);
             throw error;
@@ -76,7 +77,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const result = await createUserWithEmailAndPassword(auth, email, password);
             const user = result.user;
             const idToken = await user.getIdToken();
-            console.log('ID Token:', idToken);
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users/register/credentials`, {
                 method: 'POST',
@@ -93,7 +93,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setAccessToken(idToken);
             Cookies.set('accessToken', idToken, { secure: true, sameSite: 'Strict' });
 
-            setCurrentUser(user);
+            const res = await response.json();
+            const username = res.data.user.username;
+            const extendedUser = { ...user, username } as ExtendedUser;
+
+            setCurrentUser(extendedUser);
+            localStorage.setItem('username', username);
         } catch (error) {
             console.error('Error signing up with email and password:', error);
             throw error;
@@ -106,7 +111,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const result = await signInWithPopup(auth, new GoogleAuthProvider());
             const user = result.user;
             const idToken = await user.getIdToken();
-            console.log('ID Token:', idToken);
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users/register/provider`, {
                 method: 'POST',
@@ -123,8 +127,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setAccessToken(idToken);
             Cookies.set('accessToken', idToken, { secure: true, sameSite: 'Strict' });
 
-            setCurrentUser(user);
 
+            const res = await response.json();
+            const username = res.data.user.username;
+            const extendedUser = { ...user, username } as ExtendedUser;
+
+            setCurrentUser(extendedUser);
+            localStorage.setItem('username', username);
         } catch (error) {
             console.error('Error signing in with Google:', error);
         }
@@ -136,7 +145,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const result = await signInWithPopup(auth, new FacebookAuthProvider());
             const user = result.user;
             const idToken = await user.getIdToken();
-            console.log('ID Token:', idToken);
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/api/users/register/provider`, {
                 method: 'POST',
@@ -153,8 +161,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setAccessToken(idToken);
             Cookies.set('accessToken', idToken, { secure: true, sameSite: 'Strict' });
 
-            setCurrentUser(user);
 
+            const res = await response.json();
+            const username = res.data.user.username;
+            const extendedUser = { ...user, username } as ExtendedUser;
+
+            setCurrentUser(extendedUser);
+            localStorage.setItem('username', username);
         } catch (error) {
             console.error('Error signing in with Facebook:', error);
         }
@@ -168,31 +181,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setCurrentUser(null);
             setAccessToken(null);
             Cookies.remove('accessToken'); // Remove token on logout
+            localStorage.removeItem('username');
         } catch (error) {
             console.error('Error logging out:', error);
             throw error;
         }
     };
-
     useEffect(() => {
         initializeFirebase();
         if (!auth) return;
-        console.log("app server ", process.env.NEXT_PUBLIC_APP_SERVER_URL)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setCurrentUser(user);
+            if (user) {
+                const username = localStorage.getItem('username');
+                const extendedUser = { ...user, username } as ExtendedUser;
+                setCurrentUser(extendedUser);
+            } else {
+                setCurrentUser(null);
+            }
             setLoading(false);
 
-            // Check for access token in cookies
             const token = Cookies.get('accessToken');
             if (token) {
                 setAccessToken(token);
             }
-
         });
 
         return unsubscribe;
     }, []);
-
+    
     return (
         <AuthContext.Provider value={{ currentUser, loading, login, signup, logout, signInWithGoogle, signInWithFacebook, accessToken }}>
             {!loading && children}
