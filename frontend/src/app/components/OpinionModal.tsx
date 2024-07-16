@@ -16,7 +16,7 @@ import {
   faThumbsUp,
 } from "@fortawesome/free-regular-svg-icons";
 import OpenRebuttal from "./openRebuttal";
-import { faX } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 
 interface OpinionModalProps {
   opinionData: {
@@ -266,23 +266,31 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       >
         <div className="absolute -top-[5rem] left-0 w-full h-[5rem]  bg-gradient-to-t from-[#fff] to-transparent z-40"></div>
 
-        <div className="p-6 flex-col text-black ">
+        <div className="p-6 flex-col text-black relative">
           <h3 className="text-6xl w-1/2 font-black my-4 p-4">Tell Us..</h3>
           <SurveyPrompt prompt="Life begins at conception, and abortion is morally equivalent to taking an innocent human life." />
           <SurveyPrompt prompt="Some religions grant exceptions for abortion in cases of rape, incest, or when the mothers life is in danger, while others oppose it under any circumstances." />
           <SurveyPrompt prompt="Abortion should be a private matter between a woman and her healthcare provider." />
           <button
             onClick={handleButtonClick}
-            className="shadow-lg rounded-full  text-white w-20 h-20 hover:scale-95 ease-in-out duration-200 bg-green-500 bottom-4 flex items-center justify-center"
+            className="shadow-lg rounded-full absolute  text-white w-20 h-20 hover:scale-95 ease-in-out duration-200 bg-green-500 bottom-4 flex items-center justify-center"
           >
             <FontAwesomeIcon icon={faPaperPlane} className="w-8 h-8" />
           </button>
         </div>
       </div>
       {showConfirmation && (
-        <div className="absolute w-full h-[100%] z-50 inset-0 bg-gradient-to-t from-stone-500 to-white/50 bg-opacity-95 flex items-center justify-center">
-          <div className="p-4 rounded shadow-lg text-black bg-white">
-            Your response has been recorded!
+        <div className="absolute w-full h-[100%] z-50 inset-0 bg-gradient-to-t from-blue-500 to-white/50 bg-opacity-95 flex items-center justify-center">
+          <div className="px-4 py-[10%] rounded shadow-lg text-black flex flex-col bg-white">
+            <div className="w-20 h-20 mx-auto my-4 border-4 border-green-300 rounded-full flex justify-center items-center">
+              <FontAwesomeIcon
+                icon={faCheck}
+                className="w-16 h-16 text-green-500"
+              />
+            </div>
+            <span className="mx-auto text-4xl my-2 font-black">Thanks!</span>
+
+            <span className="mx-auto">Your response has been recorded!</span>
           </div>
         </div>
       )}
@@ -331,9 +339,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
               {/* Rate it */}
               <div className="w-[90%] mx-auto my-4 bg-[#2b2b2b] p-4 rounded-xl text-white">
                 <h2 className="text-5xl my-4 font-semibold">Rate it!</h2>
-                <div className="w-full my-4"> 
-                  <h1 className="mb-4">Does this essay belong in this topic?</h1>
-                  <div className="p-4 bg-white rounded-full shadow-lg"></div>
+                <div className="w-full my-4">
+                  <h1 className="mb-4">
+                    Does this essay belong in this topic?
+                  </h1>
+                  <div className="p-4   rounded-full shadow-lg w-fit">
+                    <div className="p-4 rounded-full bg-white"></div>
+                  </div>
                 </div>
               </div>
             </div>

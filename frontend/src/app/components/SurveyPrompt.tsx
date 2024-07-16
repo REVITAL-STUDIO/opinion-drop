@@ -16,7 +16,7 @@ function valuetext(value: number) {
 const SurveyPrompt: React.FC<SurveyPromptProps> = ({ prompt }) => {
   return (
     <div className="flex flex-col p-4 gap-2 mx-auto">
-      <p className="text-center text-base">{prompt}</p>
+      <p className="text-center text-lg">{prompt}</p>
       <div className="w-full flex justify-center items-center">
         <Box sx={{ width: 300 }}>
           <Slider
