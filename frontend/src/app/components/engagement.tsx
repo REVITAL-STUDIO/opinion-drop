@@ -24,10 +24,10 @@ const Engagement = () => {
 
   return (
     <section className="w-full p-4 rounded-full my-4">
-      <div className=" w-1/4 bg-[#fff]/90 relative mx-auto rounded-xl flex justify-center items-center">
+      <div className=" w-1/2  relative mx-auto rounded-xl flex justify-center items-center">
         {/* Attention Currency */}
         <div className="w-1/2 flex flex-col justify-center items-center relative p-4">
-          <span className="text-base text-black font-semibold ">
+          <span className="text-base text-white font-semibold ">
             Attention Currency
           </span>
           {/* Progression Bar */}
@@ -38,8 +38,8 @@ const Engagement = () => {
                 style={{ transform: `rotate(${45 + progress * 1.8}deg)` }}
               ></div>
             </div>
-            <div className="w-full flex flex-col items-center absolute top-[60%]">
-              <div className="flex items-center text-black">
+            <div className="w-full flex flex-col items-center absolute top-[20%]">
+              <div className="flex items-center text-white">
                 <span className="text-base font-black flex">{progress}</span>%
               </div>
             </div>
@@ -47,7 +47,9 @@ const Engagement = () => {
         </div>
         {/* Trending */}
         <div className="w-1/2 flex flex-col justify-center items-center relative p-4">
-          <span className="text-base text-black font-semibold mb-1">Trending</span>
+          <span className="text-base text-white font-semibold mb-1">
+            Trending
+          </span>
           <div className="w-full h-[100px]  relative flex justify-center items-center">
             <svg
               width="150"

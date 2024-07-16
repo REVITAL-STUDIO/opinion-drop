@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaPaperPlane, FaFlag, FaX } from "react-icons/fa6";
 import ProgressBar from "progressbar.js";
 import InteractionModal from "./InteractionModal";
+import Box from "@mui/material/Box";
+import Slider from "@mui/material/Slider";
 
 import SurveyPrompt from "./SurveyPrompt";
 import {
@@ -17,6 +19,10 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import OpenRebuttal from "./openRebuttal";
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
+
+function valuetext(value: number) {
+  return `${value}`;
+}
 
 interface OpinionModalProps {
   opinionData: {
@@ -49,7 +55,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const [highlightedText, setHighlightedText] = useState("");
   const [highlightContainer, setHighlightContainer] =
     useState<HTMLElement | null>(null);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showEmojiPicker, setShowEmorjiPicker] = useState(false);
   const [highlightEnabled, setHighlightEnabled] = useState(true);
   const [showInteractionModal, setShowInteractionModal] = useState(false);
   const [interactionType, setInteractionType] = useState<
@@ -60,6 +66,11 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     null
   );
   const [openDiscussion, setOpenDiscussion] = useState(false);
+  const [sliderValue, setSliderValue] = useState<number>(50);
+
+  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    setSliderValue(newValue as number);
+  };
 
   const openDiscussionModal = () => {
     setOpenDiscussion(true);
@@ -273,7 +284,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           <SurveyPrompt prompt="Abortion should be a private matter between a woman and her healthcare provider." />
           <button
             onClick={handleButtonClick}
-            className="shadow-lg rounded-full absolute  text-white w-20 h-20 hover:scale-95 ease-in-out duration-200 bg-green-500 bottom-4 flex items-center justify-center"
+            className="shadow-lg rounded-full absolute bottom-8 text-white w-20 h-20 hover:scale-95 ease-in-out duration-200 bg-green-500 flex items-center justify-center"
           >
             <FontAwesomeIcon icon={faPaperPlane} className="w-8 h-8" />
           </button>
@@ -303,7 +314,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             </h2>
             <button
               onClick={openReplies}
-              className="absolute bottom-6 font-bold px-4 py-2 border border-black rounded-full text-black left-1/2 flex items-center gap-x-2"
+              className=" font-bold w-1/4 h-10 mt-2 border border-black rounded-full text-black flex items-center justify-center gap-x-2"
             >
               Reply
               <IoIosArrowDropdown />
@@ -327,7 +338,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           </div>
         </div>
 
-        <div className="flex-1  custom-scrollbar ">
+        <div className="flex-1 max-h-[500px] overflow-y-auto custom-scrollbar ">
           {/* Opinion Content */}
           {selectedTab == "Opinion" && (
             <div>
@@ -337,15 +348,44 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                 </p>
               </div>
               {/* Rate it */}
-              <div className="w-[90%] mx-auto my-4 bg-[#2b2b2b] p-4 rounded-xl text-white">
-                <h2 className="text-5xl my-4 font-semibold">Rate it!</h2>
+              <div className="w-[90%] mx-auto  p-4 rounded-xl text-black">
                 <div className="w-full my-4">
-                  <h1 className="mb-4">
+                  <h1 className=" text-center font-semibold">
                     Does this essay belong in this topic?
                   </h1>
-                  <div className="p-4   rounded-full shadow-lg w-fit">
-                    <div className="p-4 rounded-full bg-white"></div>
+                  <div className="p-4 mx-auto mt-[2%] rounded-full w-[50%] flex justify-evenly items-center">
+                    <button className="w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition bg-white text-3xl shadow-lg">
+                      👍
+                    </button>
+                    <button className="w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  bg-white text-3xl shadow-lg">
+                      👎
+                    </button>
                   </div>
+                </div>
+                <div className="w-full mx-auto">
+                  <h2 className="my-4 text-center font-semibold">
+                    How much do you agree with this Essay?
+                  </h2>
+                  <div className="w-full flex justify-center items-center">
+                    <Box sx={{ width: 300 }}>
+                      <Slider
+                        aria-label="Temperature"
+                        defaultValue={50}
+                        value={sliderValue}
+                        onChange={handleSliderChange}
+                        getAriaValueText={valuetext}
+                        valueLabelDisplay="auto"
+                        step={10}
+                        marks
+                        min={10}
+                        max={100}
+                        className="mx-auto "
+                      />
+                    </Box>
+                  </div>
+                  <p className="text-center text-3xl font-bold mb">
+                    {valuetext(sliderValue)}%
+                  </p>
                 </div>
               </div>
             </div>

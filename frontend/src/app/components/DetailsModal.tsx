@@ -19,7 +19,7 @@ interface OpinionModalProps {
 
 const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
   return (
-    <div className="z-30 absolute left-[1.5%] top-[1.5%] h-[30rem] w-[25%] bg-black/50 text-white p-4 shadow-lg border">
+    <div className="z-30 absolute left-[1.5%] top-[1.5%] h-[30rem] w-[25%] bg-black/50 text-white p-4 shadow-lg rounded-md">
       <div className="absolute inset-0 w-full h-full -z-10">
         <Image
           src={opinionData.backgroundImage}
