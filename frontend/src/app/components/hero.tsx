@@ -7,12 +7,7 @@ import {
   faShoppingCart,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
-import Image from "next/image";
-import Drop from "./drops";
-import Questions from "./questions";
-import CreateButton from "./createButton";
-import Engagement from "./engagement";
+import OpinionShowcase from "./OpinionShowcase";
 
 const Hero = () => {
   return (
@@ -95,12 +90,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
-      <div className="w-full relative mx-auto">
-        <CreateButton />
-        <Questions />
-        <Drop />
-        <Engagement />
-      </div>
+      <OpinionShowcase />
     </section>
   );
 };

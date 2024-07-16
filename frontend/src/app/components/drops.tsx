@@ -27,6 +27,7 @@ interface Opinion {
 const Drop = () => {
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
   const [showRepliesModal, setShowRepliesModal] = useState(true);
+  const [Opinions, setOpinions] = useState<Opinion[] | null>(null);
 
   const closeModal = () => {
     setSelectedOpinion(null);
@@ -157,30 +158,41 @@ const Drop = () => {
             //     <p className="text-sm mt-2 w-2/3 p-4">Be the first to share your opinion!</p>
             //   </div>
             // ) : (
-              <div
-                key={index}
-                className={`item ${slide.id} relative shadow-lg shadow-white/50 `}
-                style={{
-                  transform: `rotateY(${index * 60}deg) translateZ(250px)`,
-                }}
-              >
-                <Image
-                  src={slide.backgroundImage}
-                  alt={slide.author}
-                  fill
-                  className="absolute w-[100%] h-[100%] object-cover"
-                />
-                <button
-                  onClick={() => {
-                    setSelectedOpinion(slide);
-                  }}
-                  className="px-4 py-2 z-40 border shadow-lg bg-black text-white rounded-full text-xs absolute bottom-2 left-4 "
-                >
-                  View
-                </button>
+            <div
+              key={index}
+              className={`item ${slide.id} relative shadow-lg shadow-white/50 `}
+              style={{
+                transform: `rotateY(${index * 60}deg) translateZ(250px)`,
+              }}
+            >
+              <Image
+                src={slide.backgroundImage}
+                alt={slide.author}
+                fill
+                className="absolute w-[100%] h-[100%] object-cover"
+              />
+              <div className="absolute inset-0 bg-black opacity-30"></div>
 
-                {/* Custom content for each slide */}
+              <div className="text-white text-[15px] font-black absolute bottom-[4rem] left-2 text-left line-clamp-3 leading-tight flex flex-col gap-2">
+                <p className="text-[12px]">
+                  {slide.author}
+                </p>
+                <p className="text-[24px]">
+                  {slide.title}
+                </p>
               </div>
+              <button
+                onClick={() => {
+                  setSelectedOpinion(slide);
+                }}
+                className="px-4 py-2 z-40 border shadow-lg bg-black text-white rounded-full text-xs absolute bottom-2 left-4 "
+              >
+                View
+              </button>
+
+              {/* Custom content for each slide */}
+
+            </div>
             // )
           )}
         </div>
