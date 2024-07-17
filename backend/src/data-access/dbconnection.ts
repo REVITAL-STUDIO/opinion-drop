@@ -17,7 +17,7 @@ const pool = new Pool({
   port: port,
   ssl: {
     rejectUnauthorized: true,
-    ca: fs.readFileSync('./us-east-2-bundle.pem').toString(),  
+    ca: fs.readFileSync(path.resolve(__dirname, 'us-east-2-bundle.pem')).toString(),  
   },
 });
 
