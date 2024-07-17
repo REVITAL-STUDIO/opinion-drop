@@ -14,6 +14,9 @@ const pool = new Pool({
   database: process.env.POSTGRES_DB,
   password: process.env.DB_PASSWORD,
   port: port,
+  ssl: {
+    rejectUnauthorized: false, 
+  },
 });
 
 export default pool;
