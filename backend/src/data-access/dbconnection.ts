@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import path from 'path';
+const fs = require('fs');
 
 const envPath = path.resolve(__dirname, '../../../.env');
 
@@ -15,7 +16,8 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   port: port,
   ssl: {
-    rejectUnauthorized: false, 
+    rejectUnauthorized: true,
+    ca: fs.readFileSync('./us-east-2-bundle.pem').toString(),  
   },
 });
 

@@ -4,3 +4,4 @@ dist/
 .yml
 
 backend/src/utils/firebase/serviceAccountKey.json
+*.pem
