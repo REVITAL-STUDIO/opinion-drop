@@ -2,20 +2,22 @@ import { Opinion } from '../models/Opinion';
 import { OpinionDAO } from '../data-access/OpinionDAO';
 import pool from '../data-access/dbconnection';
 import { UserOpinion } from '../utils/types/dto';
+import { uploadImage } from '../utils/aws/uploadToS3';
+
 export class OpinionService {
     private opinionDAO: OpinionDAO;
 
     constructor() {
         this.opinionDAO = new OpinionDAO(pool);
     }
-    
+
 
     async createOpinion(opinionData: {
         userId: string,
         topicId: number,
         title: string,
         textContent: string,
-        backgroundImage: string | null,
+        backgroundImage: Express.Multer.File | null,
         parentOpinionId: number | null,
         images: string[] | null,
         videos: string[] | null,
@@ -23,17 +25,24 @@ export class OpinionService {
         audios: string[] | null,
     }): Promise<void> {
         try {
+
+            let uploadedImageUrl = null;
+
+            if (opinionData.backgroundImage) {
+                uploadedImageUrl = await uploadImage(opinionData.backgroundImage, 'images/opinion-backgrounds');
+            }
+
             const newOpinion = new Opinion(
                 opinionData.userId,
                 opinionData.topicId,
                 opinionData.title,
                 opinionData.textContent,
-                opinionData.backgroundImage,
+                uploadedImageUrl,
                 opinionData.parentOpinionId,
                 opinionData.images ?? null,
-                opinionData.videos?? null,
-                opinionData.documents?? null,
-                opinionData.audios?? null,
+                opinionData.videos ?? null,
+                opinionData.documents ?? null,
+                opinionData.audios ?? null,
 
             );
             await this.opinionDAO.createOpinion(newOpinion);
@@ -76,7 +85,7 @@ export class OpinionService {
         topicId: number,
         title: string,
         textContent: string,
-        backgroundImage: string | null,
+        backgroundImage: Express.Multer.File | null,
         parentOpinionId: number | null,
         images: string[] | null,
         videos: string[] | null,
@@ -84,18 +93,25 @@ export class OpinionService {
         audios: string[] | null,
     }): Promise<void> {
         try {
-        
+
+            let uploadedImageUrl = null;
+
+            if (opinionData.backgroundImage) {
+                uploadedImageUrl = await uploadImage(opinionData.backgroundImage, 'images/opinion-backgrounds');
+            }
+
+
             const updatedOpinion = new Opinion(
                 opinionData.userId,
                 opinionData.topicId,
                 opinionData.title,
                 opinionData.textContent,
-                opinionData.backgroundImage,
+                uploadedImageUrl,
                 opinionData.parentOpinionId,
                 opinionData.images ?? null,
-                opinionData.videos?? null,
-                opinionData.documents?? null,
-                opinionData.audios?? null,
+                opinionData.videos ?? null,
+                opinionData.documents ?? null,
+                opinionData.audios ?? null,
                 opinionData.opinionId
             );
             await this.opinionDAO.updateOpinion(updatedOpinion);
@@ -113,6 +129,6 @@ export class OpinionService {
             throw new Error('Error deleting opinion');
         }
     }
-    
+
 
 }
