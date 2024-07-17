@@ -10,6 +10,29 @@ import {
 import OpinionShowcase from "./OpinionShowcase";
 
 const Hero = () => {
+
+  
+  const fetchTopics = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/topics`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving topics");
+      }
+      const response = await res.json();
+      console.log("data: ", response.data);
+    } catch (error) {
+      console.log("Error Fetching Topics: ", error);
+    }
+  };
+  
   return (
     <section className="w-full bg-black min-h-screen bg-cover bg-center p-4">
       <div className="w-[90%] justify-between items-center mx-auto hidden text-white">

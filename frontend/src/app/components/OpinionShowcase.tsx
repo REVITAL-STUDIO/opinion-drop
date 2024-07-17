@@ -4,13 +4,17 @@ import CreateButton from "./createButton";
 import Questions from "./questions";
 import Engagement from "./engagement";
 
-export default function OpinionShowcase() {
+interface OpinionShowcaseProps {
+    topic: string;
+}
+
+export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
     return (
         <div className="w-full relative mx-auto">
             <CreateButton />
-            <Questions />
-            <Drop />
-            <Engagement />
+            <Questions/>
+            <Drop topic={topic} />
+            <Engagement/>
         </div>
     );
 }
