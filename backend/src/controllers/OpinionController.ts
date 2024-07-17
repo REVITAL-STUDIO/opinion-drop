@@ -73,6 +73,33 @@ export class OpinionController {
         }
     }
 
+    async getOpinionsByTopic(req: Request, res: Response): Promise<void> {
+        try {
+
+            const topicId: number = parseInt(req.params.topicId, 10);
+            console.log("topicid: ", topicId);
+            if (isNaN(topicId)) {
+                res.status(400).send('Invalid topic ID');
+                return;
+            }
+            const opinions = await this.opinionService.getOpinionsByTopic(topicId);
+            res.status(200).json({
+                status: 'success',
+                message: 'Opinions retrieved successfully',
+                data: {
+                    count: opinions.length,
+                    opinions: opinions
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController getOpinions:', error);
+            res.status(500).json({
+                status: 'error',
+                message: 'Failed to retrieve opinions'
+            });
+        }
+    }
+
     async updateOpinion(req: Request, res: Response): Promise<void> {
         try {
             const opinionId: number = parseInt(req.params.opinionId, 10);

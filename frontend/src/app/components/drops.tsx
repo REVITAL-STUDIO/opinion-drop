@@ -15,6 +15,10 @@ import OpinionModal from "./OpinionModal";
 import RepliesModal from "./RepliesModal";
 import Engagement from "./engagement";
 
+interface dropsProps {
+  topic: string;
+}
+
 interface Opinion {
   id: number;
   author: string;
@@ -24,7 +28,7 @@ interface Opinion {
   profilePicture?: string;
 }
 
-const Drop = () => {
+const Drop = ({topic}: dropsProps) => {
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
   const [showRepliesModal, setShowRepliesModal] = useState(true);
   const [Opinions, setOpinions] = useState<Opinion[] | null>(null);
@@ -37,26 +41,6 @@ const Drop = () => {
     setShowRepliesModal(false);
   };
 
-  const fetchTopics = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/topics`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!res.ok) {
-        throw new Error("Error retrieving topics");
-      }
-      const response = await res.json();
-      console.log("data: ", response.data);
-    } catch (error) {
-      console.log("Error Fetching Topics: ", error);
-    }
-  };
 
   const fetchOpinions = async () => {
     try {

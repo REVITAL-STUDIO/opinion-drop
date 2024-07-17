@@ -61,6 +61,15 @@ export class OpinionService {
         }
     }
 
+    async getOpinionsByTopic(topicId: number): Promise<UserOpinion[]> {
+        try {
+            return await this.opinionDAO.getOpinionsByTopic(topicId);
+        } catch (error) {
+            console.error('Error in OpinionService getOpinionsByTopic:', error);
+            throw new Error('Error retrieving opinions by topic');
+        }
+    }
+
     async updateOpinion(opinionData: {
         opinionId?: number
         userId: string,

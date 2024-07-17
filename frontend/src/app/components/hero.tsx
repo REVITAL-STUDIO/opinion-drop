@@ -90,7 +90,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
-      <OpinionShowcase />
+      <OpinionShowcase topic="abortion"/>
     </section>
   );
 };

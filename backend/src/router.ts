@@ -30,6 +30,7 @@ router.delete('/users/:userId', userController.deleteUser.bind(userController));
 router.post('/opinions', opinionController.createOpinion.bind(opinionController));
 router.get('/opinions/:opinionId', opinionController.getOpinion.bind(opinionController));
 router.get('/opinions', opinionController.getOpinions.bind(opinionController));
+router.get('/opinions/topic/:topicId', opinionController.getOpinionsByTopic.bind(opinionController));
 router.put('/opinions/:opinionId', opinionController.updateOpinion.bind(opinionController));
 router.delete('/opinions/:opinionId', opinionController.deleteOpinion.bind(opinionController));
 

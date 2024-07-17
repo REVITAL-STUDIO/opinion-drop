@@ -45,8 +45,8 @@ export class OpinionDAO {
         SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
         users.username as author, users.profile_picture as authorProfileImage
         FROM opinions
-        JOIN users ON opinions.userId = users.user_id
-        WHERE opinions.id = $1
+        JOIN users ON opinions.user_id = users.user_id
+        WHERE opinions.opinion_id = $1
         `;
 
 
@@ -76,7 +76,7 @@ export class OpinionDAO {
         SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
                users.username as author, users.profile_picture as authorProfileImage
         FROM opinions
-        JOIN users ON opinions.userId = users.user_id
+        JOIN users ON opinions.user_id = users.user_id
         WHERE parent_opinion_id IS NULL
     `;
         let client: PoolClient | undefined;
@@ -101,13 +101,42 @@ export class OpinionDAO {
         }
     }
 
+    async getOpinionsByTopic(topicId: number): Promise<UserOpinion[]> {
+        const query = `
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+               users.username as author, users.profile_picture as authorProfileImage
+        FROM opinions
+        JOIN users ON opinions.user_id = users.user_id
+        WHERE parent_opinion_id IS NULL AND topic_id = $1
+    `;
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result: QueryResult = await client.query(query, [topicId]);
+
+            const opinions: UserOpinion[] = [];
+            for (const row of result.rows) {
+
+                opinions.push(row as UserOpinion);
+            }
+
+            return opinions;
+        } catch (error) {
+            console.error('Error executing getOpinionsByTopic query:', error);
+            throw new Error(`Error retrieving opinions by topic: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
     
     async getRebuttals(): Promise<UserOpinion[]> {
         const query = `
         SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
                users.username as author, users.profile_picture as authorProfileImage
         FROM opinions
-        JOIN users ON opinions.userId = users.user_id
+        JOIN users ON opinions.user_id = users.user_id
         WHERE parent_opinion_id IS NOT NULL
     `;
         let client: PoolClient | undefined;
