@@ -1,11 +1,7 @@
 import { Icon } from "@iconify/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faDemocrat,
-  faRepublican,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { faDemocrat, faRepublican, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import EssayPrompt from "./essayPrompt";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,9 +17,19 @@ interface FileExtended extends File {
 
 const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
   const [selectedFiles, setSelectedFiles] = useState<FileExtended[]>([]);
-  const [selectedAffiliations, setSelectedAffiliations] = useState<string[]>(
-    []
-  );
+  const [selectedAffiliation, setSelectedAffiliation] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    textContent: "",
+    affiliation: "",
+    backgroundImage: "",
+    images: null,
+    videos: null,
+    documents: null,
+    audios: null,
+  });
+  const [essay, setEssay] = useState(false); // Controls essay prompt visibility
+  const [isVisible, setIsVisible] = useState(true); // Controls the visibility of the initial form
 
   const affiliations = [
     { label: "Conservative", icon: faDemocrat },
@@ -43,29 +49,22 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
     setSelectedFiles(files);
   };
 
-  const [formData, setFormData] = useState({
-    title: "",
-    textContent: "",
-    backgroundImage: "",
-    images: null,
-    videos: null,
-    documents: null,
-    audios: null,
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
   const createOpinion = async () => {
-    const opinionData = {
-      ...formData,
-      userId: 0,
-      topicId: 0,
-    };
+    const opinionData = new FormData();
+    opinionData.append("userId", "0");
+    opinionData.append("topicId", "0");
+    opinionData.append("title", formData.title);
+    opinionData.append("affiliation", formData.affiliation);
+    opinionData.append("textContent", formData.textContent);
+
+    if (selectedFiles.length > 0) {
+      opinionData.append("backgroundImage", selectedFiles[0]);
+    }
 
     try {
       const res = await fetch(
@@ -87,49 +86,52 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    console.log("selectedfile: ", selectedFiles);
 
+    e.preventDefault();
     if (selectedFiles.length === 0) {
       alert("Please drop a file to continue.");
       return;
     }
 
-    createOpinion(); // Call your createOpinion function or API request here
-  };
+    if (!selectedAffiliation) {
+      alert("Please select an affiliation.");
+      return;
+    }
 
-  const [essay, openEssay] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-
-  const openEssayPrompt = () => {
-    openEssay(!essay);
+    // Move to the essay step
+    setEssay(true);
     setIsVisible(false);
   };
 
+  const toggleAffiliation = (label: string) => {
+    console.log("selectedfile: ", selectedFiles);
+
+    setSelectedAffiliation(label);
+    setFormData({ ...formData, affiliation: label });
+  };
+
   const closeEssayPrompt = () => {
-    openEssay(false);
+    console.log("selectedfile: ", selectedFiles);
+
+    setEssay(false);
     setIsVisible(true);
   };
 
-  const toggleAffiliation = (label: string) => {
-    if (selectedAffiliations.includes(label)) {
-      setSelectedAffiliations(
-        selectedAffiliations.filter((item) => item !== label)
-      );
-    } else {
-      setSelectedAffiliations([...selectedAffiliations, label]);
-    }
+  const handleTextEditorChange = (textContent: string) => {
+    setFormData(prevState => ({
+      ...prevState,
+      textContent
+    }));
   };
-
+  
   return (
     <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-90 z-50">
       <button
         onClick={toggleCreate}
-        className="w-12 h-12  shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 "
+        className="w-12 h-12 shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 "
       >
-        <FontAwesomeIcon
-          icon={faXmark}
-          className="w-12 h-12 text-white text-xl"
-        />
+        <FontAwesomeIcon icon={faXmark} className="w-12 h-12 text-white text-xl" />
       </button>
       <AnimatePresence>
         {isVisible && (
@@ -137,36 +139,21 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="bg-gradient-to-t relative from-stone-500 to-stone-700 border w-3/4 h-[700px] p-8 rounded-lg shadow-xl"
           >
-            <div className="flex  gap-x-4 justify-between items-center z-10 text-white">
+            <div className="flex gap-x-4 justify-between items-center z-10 text-white">
               <div className="gap-x-4 flex my-4">
-                <h1 className="text-3xl font-semibold text-white">
-                  Voice An Opinion
-                </h1>
+                <h1 className="text-3xl font-semibold text-white">Voice An Opinion</h1>
                 <Icon icon="noto:fountain-pen" className="w-8 h-8" />
               </div>
             </div>
             <div className="flex gap-x-12 w-full h-[600px] ">
-              <div className="w-1/2 mx-auto my-[2%]   z-40">
+              <div className="w-1/2 mx-auto my-[2%] z-40">
                 <label className="text-white">Drop Your Cover Here</label>
-                <div className="w-full h-4/5  mt-4 flex justify-center items-center">
-                  <FileUpload onFilesSelected={handleFilesSelected} />
+                <div className="w-full h-4/5 mt-4 flex justify-center items-center">
+                  <FileUpload onFilesSelected={handleFilesSelected} initialFiles={selectedFiles} />
                 </div>
               </div>
-              <form
-                onSubmit={handleSubmit}
-                className="w-1/2 mx-auto rounded mt-[5%] z-40"
-              >
+              <form onSubmit={handleSubmit} className="w-1/2 mx-auto rounded mt-[5%] z-40">
                 <div className="w-full flex gap-x-4">
-                  <div className="mb-4">
-                    <input
-                      type="text"
-                      id="name"
-                      className="shadow appearance-none placeholder:text-white/90 text-white placeholder:text-sm p-4 border bg-transparent border-white rounded-full w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                      placeholder="Author"
-                      onChange={handleChange}
-                    />
-                  </div>
                   <div className="mb-4">
                     <input
                       type="text"
@@ -175,62 +162,35 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
                       required
                       placeholder="Title"
                       onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="w-full flex gap-x-4">
-                  <div className="mb-4">
-                    <input
-                      type="text"
-                      id="Country"
-                      className="shadow appearance-none placeholder:text-white/90 text-white placeholder:text-sm p-4 border bg-transparent border-white rounded-full w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                      placeholder="Country"
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <input
-                      type="text"
-                      id="City"
-                      className="shadow appearance-none placeholder:text-white/90 placeholder:text-sm p-4 border bg-transparent border-white rounded-full w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                      placeholder="City"
-                      onChange={handleChange}
+                      value={formData.title}
                     />
                   </div>
                 </div>
                 <div className="w-full">
-                  <h2 className="text-white font-semibold">
-                    What Best Describes You?
-                  </h2>
+                  <h2 className="text-white font-semibold">What Best Describes You?</h2>
                   <div className="flex flex-wrap gap-4 my-[5%] mx-auto">
                     {affiliations.map((affiliation, index) => (
                       <button
                         key={index}
-                        onClick={() => toggleAffiliation(affiliation.label)}
-                        className={`p-4 rounded-full ${
-                          selectedAffiliations.includes(affiliation.label)
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleAffiliation(affiliation.label);
+                        }} className={`p-4 rounded-full ${selectedAffiliation === affiliation.label
                             ? "bg-purple-500 text-white"
                             : "bg-[#efefef] text-black"
-                        } text-sm items-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex`}
+                          } text-sm items-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex`}
                       >
                         {affiliation.label}
                         {affiliation.icon && (
-                          <FontAwesomeIcon
-                            icon={affiliation.icon}
-                            className="ml-2"
-                          />
+                          <FontAwesomeIcon icon={affiliation.icon} className="ml-2" />
                         )}
                       </button>
                     ))}
                   </div>
                 </div>
-
                 <button
                   type="submit"
                   className="relative inline-flex shadow-xl items-center justify-center py-6  overflow-hidden font-medium text-white bg-white w-full transition duration-300 ease-out rounded-full group"
-                  disabled={!selectedAffiliations.length} // Disable button if no affiliation is selected
                 >
                   <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#2b2b2b] group-hover:translate-x-0 ease">
                     <svg
@@ -268,18 +228,18 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
       </AnimatePresence>
       {essay && (
         <>
-          <button
-            onClick={closeEssayPrompt}
-            className="p-8 absolute left-8 flex gap-x-8"
-          >
+          <button onClick={closeEssayPrompt} className="p-8 absolute left-8 flex gap-x-8">
             <div className="arrow">
               <span></span>
               <span></span>
               <span></span>
             </div>
           </button>
-          <EssayPrompt />
-        </>
+          <EssayPrompt
+            formData={formData}
+            selectedFiles={selectedFiles}
+            toggleEssay={() => setEssay(false)}
+          />        </>
       )}
     </section>
   );

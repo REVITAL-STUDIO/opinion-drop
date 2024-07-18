@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
-interface fileUploadProps {
+interface FileUploadProps {
   onFilesSelected: (files: FileExtended[]) => void;
   initialFiles?: File[];
 }
@@ -10,21 +10,19 @@ interface FileExtended extends File {
   url?: string;
 }
 
-const FileUpload: React.FC<fileUploadProps> = ({
-  onFilesSelected,
-  initialFiles,
-}) => {
-  const [selectedFiles, setSelectedFiles] = useState<FileExtended[]>(
-    initialFiles || []
-  );
+const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, initialFiles }) => {
+  const [selectedFiles, setSelectedFiles] = useState<FileExtended[]>(initialFiles || []);
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    setSelectedFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+    // Only allow one file
+    if (acceptedFiles.length > 0) {
+      setSelectedFiles([acceptedFiles[0] as FileExtended]);
+    }
   }, []);
 
-  const removeFile = (fileName: string) => {
-    setSelectedFiles((prevFiles) =>
-      prevFiles.filter((file) => file.name !== fileName)
-    );
+  const removeFile = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setSelectedFiles([]);
   };
 
   // Notify the parent component about the selected files
@@ -39,6 +37,7 @@ const FileUpload: React.FC<fileUploadProps> = ({
       "image/png": [],
       "image/jpg": [],
     },
+    maxFiles: 1, // Restrict to only one file
   });
 
   return (
@@ -49,26 +48,21 @@ const FileUpload: React.FC<fileUploadProps> = ({
       >
         <input {...getInputProps()} />
 
-        <button className="w-32 h-32 flex justify-center items-center rounded-full border-2 text-5xl  border-white border-dashed shadow-lg text-white">
+        <button className="w-32 h-32 flex justify-center items-center rounded-full border-2 text-5xl border-white border-dashed shadow-lg text-white">
           +
         </button>
-        {selectedFiles.map((file) => (
-          <div
-            key={file.name}
-            className=" absolute  w-[100%] h-[100%] group transition-transform duration-300 hover:scale-105"
-          >
-            {" "}
-            {/* Use key for optimization */}
+
+        {selectedFiles.length > 0 && (
+          <div className="absolute w-full h-full group transition-transform duration-300 hover:scale-105">
             <img
-              src={URL.createObjectURL(file)} // Use createObjectURL to generate a preview URL
-              alt={file.name}
-              className="w-[100%] h-[100%] object-cover hover:shadow-2xl absolute " // Set image width to full and auto height
+              src={URL.createObjectURL(selectedFiles[0])}
+              alt={selectedFiles[0].name}
+              className="w-full h-full object-cover hover:shadow-2xl absolute"
             />
             <button
-              onClick={() => removeFile(file.name)}
-              className="absolute -top-[4%] -left-[2%]  hover:cursor-pointer opacity-0 transition-opacity duration-800 group-hover:opacity-100 "
+              onClick={removeFile}
+              className="absolute -top-[4%] -left-[2%] hover:cursor-pointer opacity-0 transition-opacity duration-800 group-hover:opacity-100"
             >
-              {/* Close button */}
               <svg
                 width="29"
                 height="29"
@@ -88,7 +82,7 @@ const FileUpload: React.FC<fileUploadProps> = ({
               </svg>
             </button>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
