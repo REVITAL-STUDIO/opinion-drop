@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React from "react";
 
-const AdminPortal = () => {
+const UserPortal = () => {
   const slides = [
     {
       id: 1,
@@ -82,11 +82,11 @@ const AdminPortal = () => {
           />
         </div>
         <div className="flex flex-col  text-black gap-y-4 p-4">
-          <button className="p-4 w-fit text-base text-left font-semibold hover:bg-purple-600 hover:text-white duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4">
+          <button className="p-4 w-fit text-base text-left font-semibold hover:bg-purple-600 hover:text-white duration-150 ease-in-out transition rounded-xl flex items-center gap-x-4">
             <FontAwesomeIcon icon={faSquareH} /> Home
           </button>
 
-          <button className="p-4 w-fit text-base text-left font-semibold hover:bg-purple-600 hover:text-white duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4">
+          <button className="p-4 w-fit text-base text-left font-semibold hover:bg-purple-600 hover:text-white duration-150 ease-in-out transition rounded-xl flex items-center gap-x-4">
             <FontAwesomeIcon icon={faGears} className="" />
             Settings
           </button>
@@ -159,4 +159,4 @@ const AdminPortal = () => {
   );
 };
 
-export default AdminPortal;
+export default UserPortal;
