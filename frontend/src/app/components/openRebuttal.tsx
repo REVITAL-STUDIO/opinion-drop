@@ -225,38 +225,13 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
   
 
   return (
-    <div className="z-30  w-[60%] h-[800px] bg-white p-6 shadow-lg rounded-md">
-      {/* Survey Container */}
-
+    <div className="z-30  w-[60%] h-[750px] bg-white p-6 shadow-lg rounded-md">
       <div className="w-full">
         <div className="w-full flex justify-evenly relative items-center p-4">
-          <div className="relative w-[60%] flex">
+          <div className="relative w-[100%] flex">
             <h2 className="text-7xl leading-tight- mb-4 w-5/6 font-black px-4">
               Pro-Choice Perspectives on Abortion{" "}
             </h2>
-            <button
-              onClick={openReplies}
-              className="absolute bottom-6  font-bold px-4 py-2 border border-black rounded-full text-black left-3/4 flex items-center gap-x-2"
-            >
-              Reply
-              <IoIosArrowDropdown />
-            </button>
-            {replyMenu && (
-              <section className="absolute top-full left-1/3 gap-y-4 w-1/2 max-h-40 z-10 bg-[#2b2b2b] shadow-lg text-white">
-                <button className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out duration-200 transition border-b">
-                  State it
-                  <p className="text-gray-500 text-xs">
-                    Give them a fierce second opinion
-                  </p>
-                </button>
-                <button className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out duration-200 transition border-b">
-                  Debate it
-                  <p className="text-gray-500 text-xs">
-                    Support this Claim.. Better yet, add on
-                  </p>
-                </button>
-              </section>
-            )}
           </div>
 
           
@@ -282,7 +257,7 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
           </div>
         </div>
 
-        <div className="max-h-[300px] my-4 p-8 text-sm overflow-y-auto">
+        <div className="max-h-[400px] my-4 p-8 text-sm overflow-y-auto">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim

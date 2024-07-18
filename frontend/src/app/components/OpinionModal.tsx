@@ -19,6 +19,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import OpenRebuttal from "./openRebuttal";
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
+import StateIt from "./stateIt";
 
 function valuetext(value: number) {
   return `${value}`;
@@ -34,6 +35,8 @@ interface OpinionModalProps {
     profilePicture?: string;
   };
   closeModal: () => void;
+  toggleStateIt: () => void;
+  toggleDebateIt: () => void;
 }
 
 interface Highlight {
@@ -45,6 +48,8 @@ interface Highlight {
 const OpinionModal: React.FC<OpinionModalProps> = ({
   opinionData,
   closeModal,
+  toggleStateIt,
+  toggleDebateIt
 }) => {
   const [selectedOpinion, setSelectedOpinion] = useState(null);
   const [selectedTab, setSelectedTab] = useState("Opinion");
@@ -240,12 +245,12 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     }
   }, [highlightEnabled]);
 
-  const closeDiscussionModal = () => {
-    setOpenDiscussion(false);
-  };
+  
+
+  
 
   return (
-    <div className="z-30 absolute right-[4%] top-[1.5%] w-[50%] h-[800px] bg-white p-6 shadow-lg rounded-md">
+    <div className="z-30 absolute right-[4%] top-[5%] w-[50%] h-[750px] bg-white p-6 shadow-lg rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <IoClose onClick={closeModal} className="cursor-pointer z-100" />
         <a
@@ -314,24 +319,25 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             </h2>
             <button
               onClick={openReplies}
-              className=" font-bold w-1/4 h-10 mt-2 border border-black rounded-full text-black flex items-center justify-center gap-x-2"
+              className={`font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-[#000] `}
             >
               Reply
-              <IoIosArrowDropdown />
+              <IoIosArrowDropdown className={`${replyMenu ? "rotate-0": "-rotate-180"} transition ease-in-out duration-150`} />
             </button>
             {replyMenu && (
-              <section className="absolute top-full left-1/3 gap-y-4 w-1/2 max-h-40 z-10 bg-[#2b2b2b] shadow-lg text-white ">
-                <button className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out   duration-200 transition border-b">
-                  State It
-                  <p className="text-gray-500  text-xs">
+              <section className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}  transition-all ease-in-out duration-150 z-10 bg-gradient-to-bl from-purple-700 to-[#2b2b2b] rounded-lg shadow-lg text-white `}>
+                <button
+                  onClick={toggleStateIt}
+                  className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out   duration-200 transition rounded-tl-lg hover:scale-110 rounded-tr-lg border-b  "
+                >
+                  <span className="font-semibold">State It</span>
+                  <p className="  text-xs">
                     Support this Claim.. Better yet, add on
                   </p>
                 </button>
-                <button className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out   duration-200 transition border-b">
-                  Debate it
-                  <p className="text-gray-500 text-xs">
-                    Give them a fierce second opinion
-                  </p>
+                <button onClick={toggleDebateIt} className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out rounded-bl-lg rounded-br-lg hover:scale-110 duration-200 transition ">
+                  <span className="font-semibold">Debate It</span>
+                  <p className=" text-xs">Give them a fierce second opinion</p>
                 </button>
               </section>
             )}

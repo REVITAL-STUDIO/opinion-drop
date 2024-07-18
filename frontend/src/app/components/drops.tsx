@@ -14,6 +14,8 @@ import DetailsModal from "./DetailsModal";
 import OpinionModal from "./OpinionModal";
 import RepliesModal from "./RepliesModal";
 import Engagement from "./engagement";
+import StateIt from "./stateIt";
+import Debate from "./debateIt";
 
 interface dropsProps {
   topic: string;
@@ -28,10 +30,24 @@ interface Opinion {
   profilePicture?: string;
 }
 
-const Drop = ({topic}: dropsProps) => {
+const Drop = ({ topic }: dropsProps) => {
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
   const [showRepliesModal, setShowRepliesModal] = useState(true);
+  const [stateIt, setStateIt] = useState(false);
+  const [debateIt, setDebateIt] = useState(false);
+
+
   const [Opinions, setOpinions] = useState<Opinion[] | null>(null);
+
+  const toggleStateIt = () => {
+    setStateIt(!stateIt);
+  };
+
+  const toggleDebateIt = () => {
+    setDebateIt(!debateIt)
+  }
+
+  console.log("Clicked:", toggleStateIt)
 
   const closeModal = () => {
     setSelectedOpinion(null);
@@ -40,7 +56,6 @@ const Drop = ({topic}: dropsProps) => {
   const closeReplies = () => {
     setShowRepliesModal(false);
   };
-
 
   const fetchOpinions = async () => {
     try {
@@ -125,7 +140,7 @@ const Drop = ({topic}: dropsProps) => {
   };
 
   return (
-    <section className="w-full min-h-[500px] flex flex-col justify-center items-center ">
+    <section className=" flex  justify-center items-center ">
       <div className="container mb-[5%]">
         <div
           className="carousel"
@@ -187,15 +202,21 @@ const Drop = ({topic}: dropsProps) => {
       <div>
         {selectedOpinion && (
           <>
-            <div
-              className="fixed inset-0 bg-gradient-to-tr from-blue-500/90 via-red-500/90 to-white/90 blur-xl bg-opacity-95 z-10"
-              onClick={closeModal}
-            ></div>
-            <DetailsModal opinionData={selectedOpinion} />
-            <OpinionModal
-              opinionData={selectedOpinion}
-              closeModal={closeModal}
-            />
+            <div className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-red-500/95 to-white/90  bg-opacity-95 z-20">
+              <div className="w-1/2 h-full flex justify-center items-center">
+                <DetailsModal opinionData={selectedOpinion} />
+              </div>
+              <OpinionModal
+                opinionData={selectedOpinion}
+                closeModal={closeModal}
+                toggleStateIt={toggleStateIt}
+                toggleDebateIt={toggleDebateIt}
+              />
+              {stateIt && <StateIt />}
+              {debateIt && <Debate />}
+            </div>
+
+            {/* State It */}
             {showRepliesModal && <RepliesModal closeModal={closeReplies} />}
           </>
         )}

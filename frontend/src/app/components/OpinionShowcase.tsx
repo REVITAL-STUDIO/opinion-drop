@@ -10,11 +10,11 @@ interface OpinionShowcaseProps {
 
 export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
     return (
-        <div className="w-full relative mx-auto">
+        <div className="w-full relative  mx-auto">
             <CreateButton />
             <Questions/>
             <Drop topic={topic} />
-            <Engagement/>
+            {/* <Engagement/> */}
         </div>
     );
 }

@@ -12,7 +12,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
+import Settings from "./settings";
 
 const UserPortal = () => {
   const slides = [
@@ -67,10 +68,15 @@ const UserPortal = () => {
       `,
     },
   ];
-  // bg-[#f6f6f6]
+
+  const [openSettings, setOpenSettings] = useState(false);
+
+  const toggleSettings = () => {
+    setOpenSettings(!openSettings)
+  }
 
   return (
-    <section className="bg-gradient-to-t via-blue-400 from-red-300 to-gray-200 w-full h-screen flex">
+    <section className="bg-gradient-to-t via-blue-500 from-red-300 to-gray-200 w-full h-screen flex relative">
       <div className="w-1/6 h-full ">
         <div className="p-4 flex  items-center mt-[15%]">
           <Image
@@ -82,15 +88,15 @@ const UserPortal = () => {
           />
         </div>
         <div className="flex flex-col  text-black gap-y-4 p-4">
-          <button className="p-4 w-fit text-base text-left font-semibold hover:bg-purple-600 hover:text-white duration-150 ease-in-out transition rounded-xl flex items-center gap-x-4">
+          <button className="p-4 w-fit text-base text-left font-semibold  hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition  flex items-center gap-x-4">
             <FontAwesomeIcon icon={faSquareH} /> Home
           </button>
 
-          <button className="p-4 w-fit text-base text-left font-semibold hover:bg-purple-600 hover:text-white duration-150 ease-in-out transition rounded-xl flex items-center gap-x-4">
+          <button onClick={toggleSettings} className="p-4 w-fit text-base text-left font-semibold hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition flex items-center gap-x-4">
             <FontAwesomeIcon icon={faGears} className="" />
             Settings
           </button>
-          <button className="p-4 w-fit text-base text-left font-semibold text-red-500 duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4">
+          <button className="p-4 w-fit text-base text-left font-semibold text-black hover:text-red-600 duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4">
             <FontAwesomeIcon icon={faArrowRightFromBracket} /> Log Out
           </button>
         </div>
@@ -105,30 +111,30 @@ const UserPortal = () => {
         </div>
         {/* Performance */}
         <div className="p-4  my-[4%] ">
-          <h2 className="text-lg w-fit font-semibold border text-black border-black p-4 rounded-full">
+          <h2 className="text-lg w-fit font-semibold  text-black bg-white shadow-lg p-4 rounded-full">
             Performance
           </h2>
-          <div className="w-full flex gap-x-4 text-black mt-4">
-            <div className="p-4 shadow-lg rounded-xl flex flex-col bg-white">
-              <span>14k</span>
+          <div className="w-full flex gap-x-4 text-white mt-4">
+            <div className="p-4 shadow-lg rounded-xl flex flex-col items-center justify-center  bg-purple-400">
+              <span className="font-semibold text-xl">14k</span>
               Total Views
             </div>
-            <div className="p-4 shadow-lg rounded-xl flex flex-col bg-white">
-              <span>103</span>
+            <div className="p-4 shadow-lg rounded-xl flex flex-col items-center justify-center bg-purple-400">
+              <span className="font-semibold text-xl">103</span>
               Shares
             </div>
-            <div className="p-4 shadow-lg rounded-xl flex flex-col bg-white">
-              <span>5</span> # times ranked
+            <div className="p-4 shadow-lg rounded-xl flex flex-col items-center justify-center bg-purple-400">
+              <span className="font-semibold text-xl">5</span> # times ranked
             </div>
-            <div className="p-4 shadow-lg rounded-xl flex flex-col bg-white">
-              <span>345</span>
+            <div className="p-4 shadow-lg rounded-xl flex flex-col items-center justify-center bg-purple-400">
+              <span className="font-semibold text-xl">345</span>
               Total Likes
             </div>
           </div>
         </div>
         {/* Essay Submission */}
         <div className="mt-[4%]  w-full rounded-3xl text-white p-4">
-          <h2 className="text-lg w-fit font-semibold border text-black border-black p-4 rounded-full">
+          <h2 className="text-lg w-fit font-semibold  text-black  bg-white shadow-lg p-4 rounded-full">
             Essays Submitted
           </h2>
           <div className="my-4 grid grid-cols-3 gap-2">
@@ -148,13 +154,14 @@ const UserPortal = () => {
                 </h2>
               </div>
             ))}
-            <div className="p-[15%] bg-white rounded-2xl text-black hover:scale-110 transition ease-in-out duration-150 shadow-xl flex items-center gap-x-4">
+            <button className="p-[15%] bg-white rounded-2xl text-black hover:scale-95 transition ease-in-out duration-150 shadow-xl flex items-center gap-x-4">
               <h2 className="text-base font-semibold">Archive</h2>
               <FontAwesomeIcon icon={faArrowRightLong} />
-            </div>
+            </button>
           </div>
         </div>
       </div>
+      {openSettings && <Settings />}
     </section>
   );
 };
