@@ -3,10 +3,18 @@
 import { useState, useEffect } from "react";
 import OpinionCreate from "./opinionCreate";
 
-const CreateButton = () => {
+interface CreateButtonProps {
+  topic: {
+      name: string,
+      id: number
+    }
+  }
+
+const CreateButton = ({topic}: CreateButtonProps) => {
   const [openCreateOpinion, setOpenCreateOpinion] = useState(false);
 
   const toggleCreate = () => {
+    console.log("topic: ", topic);
     setOpenCreateOpinion((open) => !open);
   };
 

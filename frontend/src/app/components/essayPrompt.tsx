@@ -12,6 +12,9 @@ interface EssayPromptProps {
     title: string;
     textContent: string;
     affiliation: string;
+    userId: number | null;
+    topicId: number | null;
+    parentOpinionId: number | null,
     backgroundImage: string;
     images: FileList | null;
     videos: FileList | null;
