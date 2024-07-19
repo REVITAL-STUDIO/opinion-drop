@@ -250,7 +250,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   
 
   return (
-    <div className="z-30 absolute right-[4%] top-[5%] w-[50%] h-[750px] bg-white p-6 shadow-lg rounded-md">
+    <div className="z-30 absolute right-[4%] top-[5%] w-[50%] h-[800px] bg-white p-6 shadow-lg rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <IoClose onClick={closeModal} className="cursor-pointer z-100" />
         <a

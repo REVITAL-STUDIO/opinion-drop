@@ -44,7 +44,7 @@ const EssayPrompt: React.FC<EssayPromptProps> = ({ formData, selectedFiles, togg
           className="bg-gradient-to-t relative w-3/4 p-8 rounded-lg shadow-xl"
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <div className="text-4xl h-screen w-full text-white mx-auto">
+          <div className="text-base h-screen w-full text-white mx-auto">
             <TextEditor
               formData={formData}
               selectedFiles={selectedFiles}
