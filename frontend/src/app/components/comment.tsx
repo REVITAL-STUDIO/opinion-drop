@@ -56,7 +56,7 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
 
   return (
     <section className="w-full relative ">
-      <div className="min-h-[14rem] relative border-l-[3px] border-b-[3px] rounded-xl  border-[#fff]/50 overflow-visible w-[90%]">
+      <div className="min-h-[14rem] relative border-l-[3px] border-b-[3px] rounded-xl  border-[#fff]/50 overflow-visible w-[100%]">
         <div className=" -ml-[3%] flex items-center gap-4">
           <div className="w-[3rem] h-[3rem] rounded-full bg-gray-300 flex items-center justify-center">
             <img

@@ -7,7 +7,7 @@ const Cesspit = () => {
       <div className="mx-auto max-w-[90%] p-4 ">
         {/* Title */}
         {/* Form */}
-        <form className=" w-[75%] mx-auto my-[6%]">
+        <form className=" w-[100%] mx-auto my-[6%] ">
           <label htmlFor="chat" className="sr-only">
             Add a Comment
           </label>
@@ -89,7 +89,7 @@ const Cesspit = () => {
           </div>
         </form>
         {/* Chat */}
-        <div className="w-[1000px]   pt-[1rem] pb-[3rem] pl-[3rem] mx-auto">
+        <div className="    mx-auto">
           <Comment />
         </div>
       </div>

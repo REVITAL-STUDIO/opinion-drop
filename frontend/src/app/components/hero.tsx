@@ -8,6 +8,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import OpinionShowcase from "./OpinionShowcase";
+import ProfileButton from "./profileButton";
 
 const Hero = () => {
 
@@ -34,7 +35,7 @@ const Hero = () => {
   };
   
   return (
-    <section className="w-full bg-black min-h-screen bg-cover bg-center p-4">
+    <section className="w-full bg-black  bg-cover bg-center ">
       <div className="w-[90%] justify-between items-center mx-auto hidden text-white">
         <div className="w-1/2 flex flex-col my-4">
           <div className="flex gap-x-4">
@@ -114,6 +115,7 @@ const Hero = () => {
         </div>
       </div>
       <OpinionShowcase topic="abortion"/>
+      <ProfileButton />
     </section>
   );
 };

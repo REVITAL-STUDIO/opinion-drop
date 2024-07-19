@@ -57,7 +57,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFilesSelected, initialFiles }
             <img
               src={URL.createObjectURL(selectedFiles[0])}
               alt={selectedFiles[0].name}
-              className="w-full h-full object-cover hover:shadow-2xl absolute"
+              className="w-[100%] h-[100%] object-cover hover:shadow-2xl absolute"
             />
             <button
               onClick={removeFile}

@@ -140,38 +140,27 @@ const TextEditor: React.FC<TextEditorProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex justify-center items-center gap-x-4">
-      <h2 className="my-4 font-bold text-5xl w-1/2">Write Your Essay</h2>
-      <div className="bg-white text-black relative w-3/4 rounded-lg h-5/6 shadow-lg">
-        <div className="text-editor h-1/2 p-4">
+    <div className="w-full h-full flex flex-col justify-center items-center gap-x-4">
+      <h2 className="my-4 font-bold text-5xl w-1/2 hidden">Write Your Essay</h2>
+      <div className="bg-white text-black relative xl:w-3/4 w-[100%] rounded-lg h-5/6 shadow-lg">
+        <div className="text-editor  h-1/2  p-4">
           <Editor
             editorState={editorState}
             onChange={setEditorState}
             placeholder="Start writing your text here..."
           />
         </div>
-        <div className="h-2/5 w-full absolute bottom-0">
+        <div className=" h-1/2  border-t  w-full  bottom-0">
           <form
             onSubmit={createOpinion}
-            className="shadow-md rounded-lg p-6 h-full text-sm"
+            className="shadow-md rounded-lg p-6 h-full xl:text-sm text-xs"
           >
-            <h2 className="text-base font-medium mb-4">
+            <h2 className="text-sm font-medium mb-4">
               Please agree to the following terms before submitting your
               opinion:
             </h2>
 
-            <div className="mb-2">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  name="respectfulLanguage"
-                  checked={agreed.respectfulLanguage}
-                  onChange={handleChangeEssay}
-                  className="mr-2"
-                />
-                I agree to use respectful language in my post.
-              </label>
-            </div>
+           
             <div className="mb-2">
               <label className="flex items-center">
                 <input

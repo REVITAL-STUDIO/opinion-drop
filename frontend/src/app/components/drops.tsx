@@ -36,7 +36,6 @@ const Drop = ({ topic }: dropsProps) => {
   const [stateIt, setStateIt] = useState(false);
   const [debateIt, setDebateIt] = useState(false);
 
-
   const [Opinions, setOpinions] = useState<Opinion[] | null>(null);
 
   const toggleStateIt = () => {
@@ -44,10 +43,10 @@ const Drop = ({ topic }: dropsProps) => {
   };
 
   const toggleDebateIt = () => {
-    setDebateIt(!debateIt)
-  }
+    setDebateIt(!debateIt);
+  };
 
-  console.log("Clicked:", toggleStateIt)
+  console.log("Clicked:", toggleStateIt);
 
   const closeModal = () => {
     setSelectedOpinion(null);
@@ -141,23 +140,27 @@ const Drop = ({ topic }: dropsProps) => {
 
   return (
     <section className=" flex  justify-center items-center ">
-      <div className="container mb-[5%]">
+      <div className="container ">
         <div
           className="carousel"
           style={{
             transform: `rotateY(${currdeg}deg)`,
           }}
         >
-          {slides.map(
-            (slide, index) => (
-              // slide ? (
-              //   <div className="item ">
-              //     <button className="border w-[6rem] h-[6rem] rounded-full  shadow-md flex justify-center items-center text-black">
-              //       <FontAwesomeIcon icon={faPlus} className="w-[2rem] h-[2rem] text-white" />
-              //     </button>
-              //     <p className="text-sm mt-2 w-2/3 p-4">Be the first to share your opinion!</p>
-              //   </div>
-              // ) : (
+          {slides.map((slide, index) =>
+            // slide ? (
+            //   <div className="item ">
+            //     <button className="border w-[6rem] h-[6rem] rounded-full  shadow-md flex justify-center items-center text-black">
+            //       <FontAwesomeIcon
+            //         icon={faPlus}
+            //         className="w-[2rem] h-[2rem] text-white"
+            //       />
+            //     </button>
+            //     <p className="text-sm mt-2 w-2/3 p-4">
+            //       Be the first to share your opinion!
+            //     </p>
+            //   </div>
+            // ) : (
               <div
                 key={index}
                 className={`item ${slide.id} relative shadow-lg shadow-white/50 `}
@@ -185,10 +188,7 @@ const Drop = ({ topic }: dropsProps) => {
                 >
                   View
                 </button>
-
-                {/* Custom content for each slide */}
               </div>
-            )
             // )
           )}
         </div>

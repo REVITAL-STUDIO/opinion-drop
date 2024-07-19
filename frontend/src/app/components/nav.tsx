@@ -5,48 +5,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
+import CreateButton from "./createButton";
 
 const Nav = () => {
   return (
-    <section className="h-auto hidden">
-      <div className="w-full flex justify-between items-center text-white">
-        <ul className="flex justify-center items-center gap-x-12">
-          <button className="">
-            <FontAwesomeIcon icon={faUser} className="w-8" />
-          </button>
-          <Link
-            href="/"
-            className="px-4 py-2 border border-white  rounded-full"
-          >
-            Menu
-          </Link>
-          <Link
-            href="/"
-            className="px-4 py-2 border border-white  rounded-full"
-          >
-            Founder Podcast
-          </Link>
-        </ul>
-        {/* <Link href="/">
-          <Image
-            src="/images/opinion-drop-logo.png"
-            alt="Logo"
-            width={80}
-            height={80}
-          />
-        </Link> */}
-        <ul className="flex justify-center items-center gap-x-12">
-          <Link href="/" className="px-4 py-2 border border-white rounded-full">
-            Chat
-          </Link>
-          <Link href="/" className="px-4 py-2 border border-white rounded-full">
-            Drop <span>+</span>
-          </Link>
-          <button className="">
-            <FontAwesomeIcon icon={faUser} className="w-8" />
-          </button>
-        </ul>
-      </div>
+    <section className="h-[20%]  relative w-full flex justify-between items-center text-white z-10">
+      <Link href="/" className="flex  w-fit h-fit justify-center items-center absolute top-2 left-4">
+        <Image
+          src="/images/opinion-drop-logo.png"
+          alt="Logo"
+          width={80}
+          height={80}
+          className="mt-6"
+        />
+        <div className="px-4 py-2 h-fit  rounded-full border-2 font-semibold text-lg ml-4">Beta</div>
+      </Link>
+      <CreateButton />
     </section>
   );
 };
