@@ -65,7 +65,6 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
     { label: "Liberal", icon: faRepublican },
     { label: "Non-Political" },
     { label: "Libertarian" },
-    { label: "Progressive" },
     { label: "Independent" },
     { label: "Green Party" },
     { label: "Moderate" },
@@ -165,20 +164,21 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
 
   return (
     <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-90 z-50">
+      
       <button
         onClick={toggleCreate}
-        className="w-12 h-12 shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 "
+        className={`w-12 h-12 shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 ${essay ? "hidden" : "block"}`} 
       >
         <FontAwesomeIcon
           icon={faXmark}
-          className="w-12 h-12 text-white text-xl"
+          className="w-8 h-8 text-white "
         />
       </button>
       <AnimatePresence>
         {isVisible && (
           <motion.div
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="bg-gradient-to-t relative from-stone-500 to-stone-700 border w-3/4 h-[700px] p-8 rounded-lg shadow-xl"
+            className="bg-gradient-to-t relative from-stone-500 to-stone-700 border lg:w-3/4 w-[90%] h-[750px] p-8 rounded-lg shadow-xl"
           >
             <div className="flex gap-x-4 justify-between items-center z-10 text-white">
               <div className="gap-x-4 flex my-4">
@@ -188,10 +188,10 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
                 <Icon icon="noto:fountain-pen" className="w-8 h-8" />
               </div>
             </div>
-            <div className="flex gap-x-12 w-full h-[600px] ">
-              <div className="w-1/2 mx-auto my-[2%] z-40">
+            <div className="flex flex-col lg:flex-row gap-y-4 gap-x-12 w-full max-h-[600px] overflow-y-auto">
+              <div className="w-full lg:w-1/2 mx-auto my-[2%] z-40">
                 <label className="text-white">Drop Your Cover Here</label>
-                <div className="w-full h-4/5 mt-4 flex justify-center items-center">
+                <div className="w-full lg:h-4/5 h-[300px] mt-4 flex justify-center items-center">
                   <FileUpload
                     onFilesSelected={handleFilesSelected}
                     initialFiles={selectedFiles}
@@ -200,7 +200,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
               </div>
               <form
                 onSubmit={handleSubmit}
-                className="w-1/2 mx-auto rounded mt-[5%] z-40"
+                className="lg:w-1/2 w-full mx-auto rounded mt-[5%] z-40"
               >
                 <div className="w-full flex gap-x-4">
                   <div className="mb-4">
@@ -219,7 +219,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
                   <h2 className="text-white font-semibold">
                     What Best Describes You?
                   </h2>
-                  <div className="grid grid-cols-2 gap-4 my-[5%] mx-auto">
+                  <div className="grid grid-cols-2 gap-4 my-[2%] mx-auto">
                     {affiliations.map((affiliation, index) => (
                       <button
                         key={index}
@@ -231,7 +231,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
                           selectedAffiliation === affiliation.label
                             ? "bg-purple-500 text-white"
                             : "bg-[#efefef] text-black"
-                        } text-sm items-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex`}
+                        } lg:text-sm items-center text-xs justify-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex`}
                       >
                         {affiliation.label}
                         {affiliation.icon && (
@@ -246,7 +246,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
                 </div>
                 <button
                   type="submit"
-                  className="relative inline-flex shadow-xl items-center justify-center py-6  overflow-hidden font-medium text-white bg-white w-full transition duration-300 ease-out rounded-full group"
+                  className="relative inline-flex my-4 shadow-xl items-center justify-center py-6  overflow-hidden font-medium text-white bg-white w-full transition duration-300 ease-out rounded-full group"
                 >
                   <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#2b2b2b] group-hover:translate-x-0 ease">
                     <svg
@@ -286,7 +286,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
         <>
           <button
             onClick={closeEssayPrompt}
-            className="p-8 absolute left-8 flex gap-x-8"
+            className="p-8 absolute top-0 left-8 flex gap-x-8 z-10"
           >
             <div className="arrow">
               <span></span>

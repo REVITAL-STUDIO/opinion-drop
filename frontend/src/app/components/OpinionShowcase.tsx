@@ -8,23 +8,18 @@ import Nav from "./nav";
 
 interface OpinionShowcaseProps {
   topic: {
-      name: string,
-      id: number
-    }
-  }
+    name: string;
+    id: number;
+  };
+}
 
 export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
   return (
-    <div className="w-full min-h-screen mx-auto relative ">
+    <div className="relative w-full border-red-500 min-h-screen flex flex-col justify-center items-center">
       <CreateButton topic={topic} />
-      <div className="relative min-h-screen flex flex-col justify-center items-center">
-        <Questions />
-        <Drop topic={topic} />
-        {/* <Engagement/> */}
-      </div>
-      
+      <Questions />
+      <Drop topic={topic} />
+      {/* <Engagement/> */}
     </div>
   );
 }
-   
-

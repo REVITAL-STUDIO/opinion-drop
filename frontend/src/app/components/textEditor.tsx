@@ -153,22 +153,26 @@ const TextEditor: React.FC<TextEditorProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex justify-center items-center gap-x-4">
-      <h2 className="my-4 font-bold text-5xl w-1/2">Write Your Essay</h2>
-      <div className="bg-white text-black relative w-3/4 rounded-lg h-5/6 shadow-lg">
-        <div className="text-editor h-1/2 p-4">
-          <Editor
-            editorState={editorState}
-            onChange={setEditorState}
-            placeholder="Start writing your text here..."
-          />
+    <div className="w-full h-full flex flex-col lg:flex-row justify-center items-center gap-x-4">
+       <h2 className="my-4 font-bold text-5xl w-1/2 hidden xl:block">
+        Write Your Essay
+      </h2> 
+      <div className="bg-white text-black relative xl:w-2/3 w-full rounded-lg h-5/6 shadow-lg">
+        <div className="w-full h-1/2">
+          <div className="text-editor  max-h-[100%] overflow-y-auto p-4">
+            <Editor
+              editorState={editorState}
+              onChange={setEditorState}
+              placeholder="Start writing your text here..."
+            />
+          </div>
         </div>
-        <div className="h-2/5 w-full absolute bottom-0">
+        <div className="h-1/2 w-full  bottom-0 shadow-md  border-t">
           <form
             onSubmit={createOpinion}
-            className="shadow-md rounded-lg p-6 h-full text-sm"
+            className="shadow-md rounded-lg p-6 h-full md:text-base text-xs"
           >
-            <h2 className="text-base font-medium mb-4">
+            <h2 className="lg:text-base text-sm font-medium mb-4">
               Please agree to the following terms before submitting your
               opinion:
             </h2>

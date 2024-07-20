@@ -349,7 +349,7 @@ span:hover .overlay-container {
   }
 }
 
-@media (max-width: 932px) {
+@media (max-width: 1024px) {
   .next {
     right: 1em;
   }
@@ -405,10 +405,10 @@ span:hover .overlay-container {
 
 @media (max-width: 1200px) and (orientation: landscape) {
   .next {
-    right: 4em;
+    right: 1em;
   }
 
   .prev {
-    left: 4em;
+    left: 1em;
   }
 }

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
   faMicrophone,
+  faPlus,
   faSearch,
   faShoppingCart,
   faUser,
@@ -49,7 +50,7 @@ const Hero = () => {
 
   useEffect(() => {
     // fetchTopics();
-    setTopics([{name: "example topic", id: 1} as Topic])
+    setTopics([{ name: "example topic", id: 1 } as Topic]);
   }, []);
 
   useEffect(() => {}, [topics]);
@@ -62,92 +63,21 @@ const Hero = () => {
         fill
         className="absolute w-[100%] h-[100%] object-cover object-center blur-md brightness-50"
       />
-      {/* <div className="w-[90%] justify-between items-center mx-auto hidden text-white">
-        <div className="w-1/2 flex flex-col my-4">
-          <div className="flex gap-x-4">
-            <button className="p-4 rounded-full border mb-4 w-fit">
-              <FontAwesomeIcon icon={faUser} className="w-5" />
-            </button>
-            <button className="p-4 rounded-full border mb-4 w-fit">
-              <FontAwesomeIcon icon={faShoppingCart} className="w-5" />
-            </button>
-          </div>
-
-          <div className="w-1/2 relative">
-            <h2 className="mb-4 text-white text-center font-semibold p-4 rounded-full bg-gradient-to-l from-transparent to-blue-600">
-              For Progressives
-            </h2>
-            <div className="flex w-full rounded-full border-2 justify-evenly items-center">
-              <button className="w-8 h-8 flex justify-center items-center  ">
-                <FontAwesomeIcon
-                  icon={faSearch}
-                  className="text-white w-6 h-6"
-                />
-              </button>
-
-              <div className="flex items-center justify-center p-2">
-                <input
-                  type="text"
-                  className="w-full p-2  bg-transparent text-white border-gray-300 rounded-md focus:outline-none focus:ring-none focus:none"
-                />
-              </div>
-              <button className="w-8 h-8 flex justify-center items-center  ">
-                <FontAwesomeIcon
-                  icon={faMicrophone}
-                  className="text-white w-6 h-6"
-                />
-              </button>
-            </div>
-
-            <div className="absolute w-72 h-72 rounded-full"></div>
-          </div>
-        </div>
-
-        <div className="w-1/2 flex flex-col items-end">
-          <div className="flex gap-x-4">
-            <button className="p-4 rounded-full border mb-4 w-fit">
-              <FontAwesomeIcon icon={faShoppingCart} className="w-5" />
-            </button>
-            <button className="p-4 rounded-full border mb-4 w-fit">
-              <FontAwesomeIcon icon={faUser} className="w-5" />
-            </button>
-          </div>
-          <div className="w-1/2">
-            <h2 className="mb-4 text-white text-center font-semibold p-4 rounded-full bg-gradient-to-r from-transparent to-red-600">
-              For Conservatives
-            </h2>
-            <div className="flex w-full rounded-full border-2 justify-evenly items-center">
-              <button className="w-8 h-8 flex justify-center items-center  ">
-                <FontAwesomeIcon
-                  icon={faSearch}
-                  className="text-white w-6 h-6"
-                />
-              </button>
-
-              <div className="flex items-center justify-center p-2">
-                <input
-                  type="text"
-                  className="w-full p-2  bg-transparent text-white border-gray-300 rounded-md focus:outline-none focus:ring-none focus:none"
-                />
-              </div>
-              <button className="w-8 h-8 flex justify-center items-center  ">
-                <FontAwesomeIcon
-                  icon={faMicrophone}
-                  className="text-white w-6 h-6"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div> */}
       <Nav />
-      <ProfileButton />
       {topics.length > 0 ? (
-        topics.map((topic) => (
-          <OpinionShowcase key={topic.id} topic={topic} />
-        ))
+        topics.map((topic) => <OpinionShowcase key={topic.id} topic={topic} />)
       ) : (
-        <p>No topics available</p>
+        <div className="item ">
+          <button className="border w-[6rem] h-[6rem] rounded-full  shadow-md flex justify-center items-center text-black">
+            <FontAwesomeIcon
+              icon={faPlus}
+              className="w-[2rem] h-[2rem] text-white"
+            />
+          </button>
+          <p className="text-sm mt-2 w-2/3 p-4">
+            Be the first to share your opinion! //{" "}
+          </p>{" "}
+        </div>
       )}
     </section>
   );

@@ -44,7 +44,7 @@ const EssayPrompt: React.FC<EssayPromptProps> = ({ formData, selectedFiles, togg
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="bg-gradient-to-t relative w-3/4 p-8 rounded-lg shadow-xl"
+          className="bg-gradient-to-t relative w-full p-8 rounded-lg shadow-xl"
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <div className="text-base h-screen w-full text-white mx-auto">

@@ -33,7 +33,7 @@ const CreateButton = ({topic}:createButtonProps )=> {
   // }, [openCreateOpinion]);
 
   return (
-    <div className="xl:my-4  right-0  top-[15%] absolute z-20 p-4">
+    <div className="xl:my-4  w-full relative top-6 h-1/4 z-20 p-4">
       <button
         onClick={toggleCreate}
         className="xl:w-32 w-24  p-4 text-white hover:scale-95 ease-in-out duration-200 transition bg-gradient-to-tl from-red-400 font-bold to-blue-500 shadow-lg float-right relative rounded-full md:text-sm text-xs border-black"
