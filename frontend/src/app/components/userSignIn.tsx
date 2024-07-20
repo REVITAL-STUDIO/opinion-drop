@@ -9,13 +9,34 @@ import {
   faRepublican,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../hooks/AuthContext";
+import motion from 'framer-motion'
 
 const UserSignIn = () => {
-  const [login, setLoginState] = useState(false);
+  const [loginForm, setLoginState] = useState(false);
   const [nextMenu, setNextMenu] = useState(false);
   const [selectedAffiliations, setSelectedAffiliations] = useState<string[]>(
     []
   );
+  const { login, signup } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { signInWithGoogle, signInWithFacebook } = useAuth();
+
+  const handleSignInWithGoogle = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      setError("Google sign-in failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const toggleLoginState = () => {
     setLoginState(!login);
@@ -49,11 +70,39 @@ const UserSignIn = () => {
     { label: "Centrist" },
   ];
 
+  const [closeMenu, setClose] = useState(false);
+
+  const closeMenuFunction = () => {
+    setClose(true);
+  };
+
+  const handleAuthAction = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      if (isSignUp) {
+        await signup(email, password);
+      } else {
+        await login(email, password);
+      }
+    } catch (error) {
+      setError("Authentication failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <section className="bg-white w-full h-screen flex justify-center items-center">
-      {login ? (
+    <section className="bg-[#2b2b2b]/90 absolute top-0 left-0 w-full border-6 border-red-500  h-screen flex justify-center items-center z-50">
+      <button
+        onClick={closeMenuFunction}
+        className="absolute left-4 top-4 z-10 w-12 h-12 "
+      >
+        <FontAwesomeIcon icon={faXmark} className="w-8 h-8 text-white" />
+      </button>
+      {loginForm ? (
         //Sign In
-        <div className="w-1/3 h-3/4 bg-gradient-to-tr text-white shadow-md from-blue-400 via-red-400 to-white rounded-md flex flex-col  items-center">
+        <div className="lg:w-1/3 w-[90%] p-4 bg-gradient-to-tr text-white shadow-md from-blue-400 via-red-400 to-white rounded-md flex flex-col  items-center">
           {nextMenu ? (
             <>
               <div className="w-3/4">
@@ -103,7 +152,10 @@ const UserSignIn = () => {
                 </p>
               </div>
               <div className="w-full flex flex-col justify-center items-center text-sm">
-                <button className="py-4 px-2 my-2 border w-3/4 text-sm rounded-full flex items-center justify-center shadow-md">
+                <button
+                  onClick={handleSignInWithGoogle}
+                  className="py-4 px-2 my-2 border w-3/4 text-sm rounded-full flex items-center justify-center shadow-md"
+                >
                   <Image
                     src={GoogleIcon}
                     alt="google icon"
@@ -126,6 +178,7 @@ const UserSignIn = () => {
                     Your email
                   </label>
                   <input
+                    onChange={(e) => setEmail(e.target.value)}
                     type="email"
                     name="email"
                     className="bg-gray-50 border border-gray-300 text-black placeholder:text-sm rounded-lg focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none"
@@ -154,6 +207,7 @@ const UserSignIn = () => {
                     Password
                   </label>
                   <input
+                    onChange={(e) => setPassword(e.target.value)}
                     type="password"
                     name="password"
                     placeholder="••••••••"
@@ -183,7 +237,7 @@ const UserSignIn = () => {
         </div>
       ) : (
         //Login
-        <div className="w-1/3 h-3/4 bg-gradient-to-tr text-white shadow-md from-blue-400 via-red-400 to-white rounded-md flex flex-col  items-center">
+        <div className="lg:w-1/3 w-[90%] p-4 bg-gradient-to-tr text-white shadow-md from-blue-400 via-red-400 to-white rounded-md flex flex-col  items-center">
           <div className="w-3/4">
             <h2 className="my-4 text-2xl font-semibold">Login</h2>
             <p className="text-sm my-4">
@@ -192,7 +246,10 @@ const UserSignIn = () => {
             </p>
           </div>
           <div className="w-full flex flex-col justify-center items-center text-sm">
-            <button className="py-4 px-2 my-2 border w-3/4 text-sm rounded-full flex items-center justify-center shadow-md">
+            <button
+              onClick={handleSignInWithGoogle}
+              className="py-4 px-2 my-2 border w-3/4 text-sm rounded-full flex items-center justify-center shadow-md"
+            >
               <Image src={GoogleIcon} alt="google icon" className="w-5 mr-4 " />
               Continue with Google{" "}
             </button>
@@ -211,6 +268,7 @@ const UserSignIn = () => {
                 Your email
               </label>
               <input
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 name="email"
                 className="bg-gray-50 border border-gray-300 text-black placeholder:text-sm rounded-lg focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none"
@@ -225,6 +283,7 @@ const UserSignIn = () => {
                 Password
               </label>
               <input
+                onChange={(e) => setPassword(e.target.value)}
                 type="password"
                 name="password"
                 placeholder="••••••••"
@@ -258,13 +317,14 @@ const UserSignIn = () => {
               </a>
             </div>
             <button
+              onClick={handleAuthAction}
               type="submit"
               className="w-full text-white bg-primary-600 border rounded-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium hover:bg-white hover:text-black ease-in-out transition duration-150 text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
               Sign in
             </button>
             <p className="text-sm font-light text-white ">
-              Already have an Account?{" "}
+              New User?{" "}
               <button
                 onClick={toggleLoginState}
                 className="font-medium text-white hover:underline "

@@ -5,6 +5,7 @@ import Questions from "./questions";
 import Image from "next/image";
 import Engagement from "./engagement";
 import Nav from "./nav";
+import SignIn from "./signInButton";
 
 interface OpinionShowcaseProps {
   topic: {
@@ -19,6 +20,7 @@ export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
       <CreateButton topic={topic} />
       <Questions />
       <Drop topic={topic} />
+      <SignIn />
       {/* <Engagement/> */}
     </div>
   );
