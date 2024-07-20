@@ -13,18 +13,38 @@ import FileUpload from "./FileUpload";
 import { useAuth } from "../hooks/AuthContext";
 interface OpinionCreateProps {
   toggleCreate: () => void;
+  topic: {
+    name: string;
+    id: number;
+  };
+}
+interface FormData {
+  title: string;
+  textContent: string;
+  affiliation: string;
+  userId: number | null;
+  topicId: number | null;
+  parentOpinionId: number | null;
+  backgroundImage: string;
+  images: FileList | null;
+  videos: FileList | null;
+  documents: FileList | null;
+  audios: FileList | null;
 }
 
 interface FileExtended extends File {
   url?: string;
 }
 
-const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
+const OpinionCreate: React.FC<OpinionCreateProps> = ({
+  toggleCreate,
+  topic,
+}) => {
   const [selectedFiles, setSelectedFiles] = useState<FileExtended[]>([]);
   const [selectedAffiliation, setSelectedAffiliation] = useState<string | null>(
     null
   );
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     textContent: "",
     userId: null,
@@ -37,14 +57,15 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
     documents: null,
     audios: null,
   });
-  const [essay, setEssay] = useState(false); 
-  const [isVisible, setIsVisible] = useState(true); 
+  const [essay, setEssay] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   const affiliations = [
     { label: "Conservative", icon: faDemocrat },
     { label: "Liberal", icon: faRepublican },
     { label: "Non-Political" },
     { label: "Libertarian" },
+    { label: "Progressive" },
     { label: "Independent" },
     { label: "Green Party" },
     { label: "Moderate" },
@@ -53,16 +74,22 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
     { label: "Centrist" },
   ];
 
-
   const handleFilesSelected = (files: File[]) => {
     setSelectedFiles(files);
   };
+
+  useEffect(() => {
+    console.log("in opinion create topic: ", topic);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
+    if (!formData.topicId) {
+      setFormData({ ...formData, topicId: topic.id });
+    }
   };
 
   const createOpinion = async () => {
@@ -140,31 +167,31 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
     <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-90 z-50">
       <button
         onClick={toggleCreate}
-        className={`w-12 h-12 shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 z-10 ${essay ? "hidden" : "block"}`}
+        className="w-12 h-12 shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 "
       >
         <FontAwesomeIcon
           icon={faXmark}
-          className=" text-white text-lg"
+          className="w-12 h-12 text-white text-xl"
         />
       </button>
       <AnimatePresence>
         {isVisible && (
           <motion.div
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="bg-gradient-to-t relative from-stone-500 to-stone-700 border xl:w-3/4 w-[95%] h-[700px] p-8 rounded-lg shadow-xl"
+            className="bg-gradient-to-t relative from-stone-500 to-stone-700 border w-3/4 h-[700px] p-8 rounded-lg shadow-xl"
           >
             <div className="flex gap-x-4 justify-between items-center z-10 text-white">
-              <div className="gap-x-4 flex xl:my-4 ">
-                <h1 className="xl:text-3xl text-lg font-semibold text-white">
+              <div className="gap-x-4 flex my-4">
+                <h1 className="text-3xl font-semibold text-white">
                   Voice An Opinion
                 </h1>
                 <Icon icon="noto:fountain-pen" className="w-8 h-8" />
               </div>
             </div>
-            <div className="flex flex-col xl:flex-row gap-x-12 w-full max-h-[600px] overflow-x-hidden overflow-y-auto">
-              <div className="xl:w-1/2 w-[100%] mx-auto my-[2%] z-40">
+            <div className="flex gap-x-12 w-full h-[600px] ">
+              <div className="w-1/2 mx-auto my-[2%] z-40">
                 <label className="text-white">Drop Your Cover Here</label>
-                <div className="w-full xl:h-4/5 h-[300px] mt-4 flex justify-center items-center">
+                <div className="w-full h-4/5 mt-4 flex justify-center items-center">
                   <FileUpload
                     onFilesSelected={handleFilesSelected}
                     initialFiles={selectedFiles}
@@ -173,7 +200,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
               </div>
               <form
                 onSubmit={handleSubmit}
-                className="xl:w-1/2 w-[100%] mx-auto rounded mt-[4%] z-40"
+                className="w-1/2 mx-auto rounded mt-[5%] z-40"
               >
                 <div className="w-full flex gap-x-4">
                   <div className="mb-4">
@@ -189,10 +216,10 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
                   </div>
                 </div>
                 <div className="w-full">
-                  <h2 className="text-white xl:text-base text-sm font-semibold">
+                  <h2 className="text-white font-semibold">
                     What Best Describes You?
                   </h2>
-                  <div className="grid grid-cols-2 gap-2 my-[5%] mx-auto">
+                  <div className="grid grid-cols-2 gap-4 my-[5%] mx-auto">
                     {affiliations.map((affiliation, index) => (
                       <button
                         key={index}
@@ -204,7 +231,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
                           selectedAffiliation === affiliation.label
                             ? "bg-purple-500 text-white"
                             : "bg-[#efefef] text-black"
-                        } md:text-sm text-[10px] hover:shadow-sm justify-center items-center hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex`}
+                        } text-sm items-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex`}
                       >
                         {affiliation.label}
                         {affiliation.icon && (
@@ -219,7 +246,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
                 </div>
                 <button
                   type="submit"
-                  className="relative inline-flex shadow-xl items-center justify-center py-6   overflow-hidden font-medium text-white bg-white w-full transition duration-300 ease-out rounded-full group"
+                  className="relative inline-flex shadow-xl items-center justify-center py-6  overflow-hidden font-medium text-white bg-white w-full transition duration-300 ease-out rounded-full group"
                 >
                   <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#2b2b2b] group-hover:translate-x-0 ease">
                     <svg
@@ -237,7 +264,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
                       ></path>
                     </svg>
                   </span>
-                  <span className="absolute flex items-center justify-center w-full h-full text-black transition-all duration-300 transform group-hover:translate-x-full xl:text-base text-xs ease">
+                  <span className="absolute flex items-center justify-center w-full h-full text-black transition-all duration-300 transform group-hover:translate-x-full ease">
                     Write Your Essay
                   </span>
                 </button>
@@ -259,7 +286,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
         <>
           <button
             onClick={closeEssayPrompt}
-            className="p-8 absolute  left-12 top-0 flex gap-x-8 z-20"
+            className="p-8 absolute left-8 flex gap-x-8"
           >
             <div className="arrow">
               <span></span>

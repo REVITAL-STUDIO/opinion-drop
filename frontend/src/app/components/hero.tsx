@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import OpinionShowcase from "./OpinionShowcase";
 import ProfileButton from "./profileButton";
 import Nav from "./nav";
+import Image from "next/image";
 
 interface Topic {
   name: string;
@@ -47,14 +48,21 @@ const Hero = () => {
   };
 
   useEffect(() => {
-    fetchTopics();
+    // fetchTopics();
+    setTopics([{name: "example topic", id: 1} as Topic])
   }, []);
 
   useEffect(() => {}, [topics]);
 
   return (
-    <section className="w-full bg-black  bg-cover bg-center ">
-      <div className="w-[90%] justify-between items-center mx-auto hidden text-white">
+    <section className="w-full bg-black min-h-screen bg-cover bg-center relative">
+      <Image
+        src="/Images/AdobeStock_756592648.jpeg"
+        alt="OD Background"
+        fill
+        className="absolute w-[100%] h-[100%] object-cover object-center blur-md brightness-50"
+      />
+      {/* <div className="w-[90%] justify-between items-center mx-auto hidden text-white">
         <div className="w-1/2 flex flex-col my-4">
           <div className="flex gap-x-4">
             <button className="p-4 rounded-full border mb-4 w-fit">
@@ -131,11 +139,13 @@ const Hero = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <Nav />
       <ProfileButton />
       {topics.length > 0 ? (
-        topics.map((topic) => <OpinionShowcase key={topic.id} topic={topic} />)
+        topics.map((topic) => (
+          <OpinionShowcase key={topic.id} topic={topic} />
+        ))
       ) : (
         <p>No topics available</p>
       )}

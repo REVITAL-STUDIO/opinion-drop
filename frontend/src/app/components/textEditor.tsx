@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { convertToRaw, convertFromRaw, Editor, EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
+import { useAuth } from "../hooks/AuthContext";
 
 interface FileExtended extends File {
   url?: string;
@@ -13,7 +14,7 @@ interface TextEditorProps {
     affiliation: string;
     userId: number | null;
     topicId: number | null;
-    parentOpinionId: number | null,
+    parentOpinionId: number | null;
     backgroundImage: string;
     images: FileList | null;
     videos: FileList | null;
@@ -31,7 +32,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
   toggleEssay,
   onTextEditorChange,
 }) => {
-
   const [editorState, setEditorState] = useState(() => {
     const savedContent = localStorage.getItem("editorContent");
     if (savedContent) {
@@ -61,7 +61,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
     localStorage.setItem("editorContent", JSON.stringify(rawContent));
     onTextEditorChange(contentState.getPlainText());
   }, [editorState]);
-
 
   // Load saved state from localStorage when the component mounts
   useEffect(() => {
@@ -106,34 +105,45 @@ const TextEditor: React.FC<TextEditorProps> = ({
     setAgreed({ ...agreed, [name]: checked });
   };
 
+  const { currentUser } = useAuth();
+
   const createOpinion = async (event: React.FormEvent) => {
     event.preventDefault();
+
     if (Object.values(agreed).every(Boolean)) {
       const textContent = editorState.getCurrentContent().getPlainText();
       const opinionData = new FormData();
-      opinionData.append("userId", "0");
-      opinionData.append("topicId", "0");
+
+      if (currentUser) {
+        opinionData.append("userId", currentUser.uid);
+      }
+      console.log("topic id from formdata: ", formData.topicId);
+      opinionData.append("topicId", String(formData.topicId));
       opinionData.append("title", formData.title);
       opinionData.append("affiliation", formData.affiliation);
       opinionData.append("textContent", textContent);
-
       if (selectedFiles.length > 0) {
         opinionData.append("backgroundImage", selectedFiles[0]);
       }
+
+      console.log("FormData contents:");
+      opinionData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
 
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions`,
           {
             method: "POST",
-            body: opinionData, 
+            body: opinionData,
           }
         );
         if (!res.ok) {
           throw new Error("Error creating opinion");
         }
         alert("Opinion submitted successfully.");
-        toggleEssay(); // Close the essay prompt
+        toggleEssay();
       } catch (error) {
         console.log("Error creating opinion: ", error);
       }
@@ -143,27 +153,38 @@ const TextEditor: React.FC<TextEditorProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center gap-x-4">
-      <h2 className="my-4 font-bold text-5xl w-1/2 hidden">Write Your Essay</h2>
-      <div className="bg-white text-black relative xl:w-3/4 w-[100%] rounded-lg h-5/6 shadow-lg">
-        <div className="text-editor  h-1/2  p-4">
+    <div className="w-full h-full flex justify-center items-center gap-x-4">
+      <h2 className="my-4 font-bold text-5xl w-1/2">Write Your Essay</h2>
+      <div className="bg-white text-black relative w-3/4 rounded-lg h-5/6 shadow-lg">
+        <div className="text-editor h-1/2 p-4">
           <Editor
             editorState={editorState}
             onChange={setEditorState}
             placeholder="Start writing your text here..."
           />
         </div>
-        <div className=" h-1/2  border-t  w-full  bottom-0">
+        <div className="h-2/5 w-full absolute bottom-0">
           <form
             onSubmit={createOpinion}
-            className="shadow-md rounded-lg p-6 h-full xl:text-sm text-xs"
+            className="shadow-md rounded-lg p-6 h-full text-sm"
           >
-            <h2 className="text-sm font-medium mb-4">
+            <h2 className="text-base font-medium mb-4">
               Please agree to the following terms before submitting your
               opinion:
             </h2>
 
-           
+            <div className="mb-2">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="respectfulLanguage"
+                  checked={agreed.respectfulLanguage}
+                  onChange={handleChangeEssay}
+                  className="mr-2"
+                />
+                I agree to use respectful language in my post.
+              </label>
+            </div>
             <div className="mb-2">
               <label className="flex items-center">
                 <input

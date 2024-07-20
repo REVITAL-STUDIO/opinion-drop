@@ -16,7 +16,8 @@ interface OpinionShowcaseProps {
 export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
   return (
     <div className="w-full min-h-screen mx-auto relative ">
-      <div className="relative  xl:mt-0  min-h-[100vh] md:mt-[10%] flex flex-col justify-center items-center">
+      <CreateButton topic={topic} />
+      <div className="relative min-h-screen flex flex-col justify-center items-center">
         <Questions />
         <Drop topic={topic} />
         {/* <Engagement/> */}
