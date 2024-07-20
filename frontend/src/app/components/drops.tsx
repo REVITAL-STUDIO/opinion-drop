@@ -62,7 +62,7 @@ const Drop = ({ topic }: dropsProps) => {
   const fetchOpinions = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/topic/${topic.id}`,
         {
           method: "GET",
           headers: {
@@ -75,14 +75,21 @@ const Drop = ({ topic }: dropsProps) => {
       }
       const response = await res.json();
       console.log("data: ", response.data);
+      setOpinions(response.data.opinions);
     } catch (error) {
       console.log("Error Fetching Opinions: ", error);
     }
   };
 
   useEffect(() => {
-fetchOpinions();
-    }, []);
+    fetchOpinions();
+    console.log("opinions state variable", Opinions);
+
+  }, []);
+
+  useEffect(() => {
+    console.log("opinions state variable", Opinions);
+  }, [Opinions]);
 
 
   const [currdeg, setCurrdeg] = useState(0);
@@ -156,19 +163,19 @@ fetchOpinions();
           }}
         >
           {slides.map((slide, index) =>
-             !slide ? (
-               <div className="item ">
-                 <button className="border w-[6rem] h-[6rem] rounded-full  shadow-md flex justify-center items-center text-black">
-                   <FontAwesomeIcon
-                     icon={faPlus}
-                     className="w-[2rem] h-[2rem] text-white"
-                   />
-                 </button>
-                 <p className="text-sm mt-2 w-2/3 p-4">
-                   Be the first to share your opinion!
-                 </p>
-               </div>
-             ) : (
+            !slide ? (
+              <div className="item ">
+                <button className="border w-[6rem] h-[6rem] rounded-full  shadow-md flex justify-center items-center text-black">
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    className="w-[2rem] h-[2rem] text-white"
+                  />
+                </button>
+                <p className="text-sm mt-2 w-2/3 p-4">
+                  Be the first to share your opinion!
+                </p>
+              </div>
+            ) : (
               <div
                 key={index}
                 className={`item ${slide.id} relative shadow-lg shadow-white/50 `}
@@ -197,7 +204,7 @@ fetchOpinions();
                   View
                 </button>
               </div>
-             )
+            )
           )}
         </div>
       </div>
