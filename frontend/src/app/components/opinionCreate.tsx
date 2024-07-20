@@ -10,7 +10,7 @@ import Image from "next/image";
 import EssayPrompt from "./essayPrompt";
 import { motion, AnimatePresence } from "framer-motion";
 import FileUpload from "./FileUpload";
-
+import { useAuth } from "../hooks/AuthContext";
 interface OpinionCreateProps {
   toggleCreate: () => void;
 }
@@ -27,6 +27,9 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
   const [formData, setFormData] = useState({
     title: "",
     textContent: "",
+    userId: null,
+    topicId: null,
+    parentOpinionId: null,
     affiliation: "",
     backgroundImage: "",
     images: null,
@@ -34,8 +37,8 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
     documents: null,
     audios: null,
   });
-  const [essay, setEssay] = useState(false); // Controls essay prompt visibility
-  const [isVisible, setIsVisible] = useState(true); // Controls the visibility of the initial form
+  const [essay, setEssay] = useState(false); 
+  const [isVisible, setIsVisible] = useState(true); 
 
   const affiliations = [
     { label: "Conservative", icon: faDemocrat },
@@ -49,6 +52,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate }) => {
     { label: "Constitutional Party" },
     { label: "Centrist" },
   ];
+
 
   const handleFilesSelected = (files: File[]) => {
     setSelectedFiles(files);

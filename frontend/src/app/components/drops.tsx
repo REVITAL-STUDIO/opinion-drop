@@ -18,7 +18,10 @@ import StateIt from "./stateIt";
 import Debate from "./debateIt";
 
 interface dropsProps {
-  topic: string;
+  topic: {
+    name: string,
+    id: number
+  }
 }
 
 interface Opinion {

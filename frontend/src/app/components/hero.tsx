@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,12 +8,18 @@ import {
   faShoppingCart,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
 import OpinionShowcase from "./OpinionShowcase";
 import ProfileButton from "./profileButton";
+import Nav from "./nav";
 
+interface Topic {
+  name: string;
+  id: number;
+}
 const Hero = () => {
+  const [topics, setTopics] = useState<Topic[]>([]);
 
-  
   const fetchTopics = async () => {
     try {
       const res = await fetch(
@@ -29,11 +36,22 @@ const Hero = () => {
       }
       const response = await res.json();
       console.log("data: ", response.data);
+      const mappedTopics: Topic[] = response.data.topics.map((topic: any) => ({
+        name: topic.name,
+        id: topic.topicId,
+      }));
+      setTopics(mappedTopics);
     } catch (error) {
       console.log("Error Fetching Topics: ", error);
     }
   };
-  
+
+  useEffect(() => {
+    fetchTopics();
+  }, []);
+
+  useEffect(() => {}, [topics]);
+
   return (
     <section className="w-full bg-black  bg-cover bg-center ">
       <div className="w-[90%] justify-between items-center mx-auto hidden text-white">
@@ -114,8 +132,13 @@ const Hero = () => {
           </div>
         </div>
       </div>
-      <OpinionShowcase topic="abortion"/>
+      <Nav />
       <ProfileButton />
+      {topics.length > 0 ? (
+        topics.map((topic) => <OpinionShowcase key={topic.id} topic={topic} />)
+      ) : (
+        <p>No topics available</p>
+      )}
     </section>
   );
 };

@@ -11,6 +11,9 @@ interface TextEditorProps {
     title: string;
     textContent: string;
     affiliation: string;
+    userId: number | null;
+    topicId: number | null;
+    parentOpinionId: number | null,
     backgroundImage: string;
     images: FileList | null;
     videos: FileList | null;
@@ -123,7 +126,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
           `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions`,
           {
             method: "POST",
-            body: opinionData, // FormData does not require Content-Type header
+            body: opinionData, 
           }
         );
         if (!res.ok) {
