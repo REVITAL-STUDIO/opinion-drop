@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -80,8 +80,13 @@ const Drop = ({ topic }: dropsProps) => {
     }
   };
 
+  useEffect(() => {
+fetchOpinions();
+    }, []);
+
+
   const [currdeg, setCurrdeg] = useState(0);
-  const slides = [
+  const slides: Opinion[] = [
     {
       id: 1,
       backgroundImage: "/Images/pexels-itfeelslikefilm-590496.jpg",
@@ -151,7 +156,7 @@ const Drop = ({ topic }: dropsProps) => {
           }}
         >
           {slides.map((slide, index) =>
-             slide ? (
+             !slide ? (
                <div className="item ">
                  <button className="border w-[6rem] h-[6rem] rounded-full  shadow-md flex justify-center items-center text-black">
                    <FontAwesomeIcon

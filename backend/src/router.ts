@@ -4,7 +4,9 @@ import { OpinionController } from './controllers/OpinionController';
 import { CommentController } from './controllers/CommentController';
 import { TopicController } from './controllers/TopicController';
 import { RatingController } from './controllers/RatingController';
+import multer from 'multer';
 
+const upload = multer();
 const router = Router();
 
 // Instantiate controllers
@@ -27,7 +29,7 @@ router.delete('/users/:userId', userController.deleteUser.bind(userController));
 
 
 // Opinion Routes
-router.post('/opinions', opinionController.createOpinion.bind(opinionController));
+router.post('/opinions',upload.single('backgroundImage'), opinionController.createOpinion.bind(opinionController));
 router.get('/opinions/:opinionId', opinionController.getOpinion.bind(opinionController));
 router.get('/opinions', opinionController.getOpinions.bind(opinionController));
 router.get('/opinions/topic/:topicId', opinionController.getOpinionsByTopic.bind(opinionController));

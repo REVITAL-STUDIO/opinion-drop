@@ -27,6 +27,7 @@ export class OpinionDAO {
 
         let client: PoolClient | undefined;
 
+        console.log("got to opinion dao create method");
         try {
             client = await this.pool.connect();
             await client.query(query, values);

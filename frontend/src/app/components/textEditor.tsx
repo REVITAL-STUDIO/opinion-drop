@@ -108,9 +108,11 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const { currentUser } = useAuth();
 
   const createOpinion = async (event: React.FormEvent) => {
+
     event.preventDefault();
 
     if (Object.values(agreed).every(Boolean)) {
+
       const textContent = editorState.getCurrentContent().getPlainText();
       const opinionData = new FormData();
 

@@ -50,7 +50,7 @@ const Hero = () => {
 
   useEffect(() => {
     // fetchTopics();
-    setTopics([{ name: "example topic", id: 1 } as Topic]);
+    setTopics([{name: "example topic", id: 1} as Topic])
   }, []);
 
   useEffect(() => {}, [topics]);

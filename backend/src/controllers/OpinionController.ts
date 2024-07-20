@@ -4,6 +4,7 @@ import { OpinionService } from '../services/OpinionService';
 import { validate, OpinionSchemaType } from '../utils/validation/schemas/OpinionSchema';
 
 
+
 export class OpinionController {
     private opinionService: OpinionService;
 
@@ -15,14 +16,36 @@ export class OpinionController {
     async createOpinion(req: Request, res: Response): Promise<void> {
         try {
 
-            if (!validate(req.body)) {
-                res.status(400).send('Invalid opinion data');
-                return;
-            }
+            const { title, textContent, userId, topicId , parentOpinionId, images, videos, audios, documents} = req.body;
+            console.log("createopinion request body: ", req.body);
+      if (!title || !textContent || !userId || !topicId) {
+        res.status(400).send('Invalid opinion data');
+        return;
+      }
 
-            const opinionData: OpinionSchemaType = req.body as OpinionSchemaType;
+      const { file } = req;
+      console.log("Uploaded file: ", file);
 
-            await this.opinionService.createOpinion(opinionData);
+      const opinionData = {
+        title,
+        textContent,
+        userId,
+        topicId,
+        backgroundImage: null as null | Express.Multer.File,
+        parentOpinionId,
+        images,
+        videos,
+        audios,
+        documents,
+
+      };
+
+      if (req.file) {
+        opinionData.backgroundImage = req.file; // or handle the file as needed
+      }
+
+      await this.opinionService.createOpinion(opinionData);
+      res.status(201).send('Opinion created successfully');
             res.status(201).send('Opinion created successfully');
         } catch (error) {
             console.error('Error in OpinionController createOpinion:', error);

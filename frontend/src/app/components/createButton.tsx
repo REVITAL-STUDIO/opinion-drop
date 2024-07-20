@@ -14,8 +14,8 @@ const CreateButton = ({topic}:createButtonProps )=> {
   const [openCreateOpinion, setOpenCreateOpinion] = useState(false);
 
   const toggleCreate = () => {
-
-   setOpenCreateOpinion((open) => !open);
+    console.log("topic in create button: ", topic);
+    setOpenCreateOpinion((open) => !open);
   };
 
   // useEffect(() => {

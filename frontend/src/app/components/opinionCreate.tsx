@@ -14,9 +14,9 @@ import { useAuth } from "../hooks/AuthContext";
 interface OpinionCreateProps {
   toggleCreate: () => void;
   topic: {
-    name: string;
-    id: number;
-  };
+    name: string,
+    id: number
+  }
 }
 interface FormData {
   title: string;
@@ -36,10 +36,9 @@ interface FileExtended extends File {
   url?: string;
 }
 
-const OpinionCreate: React.FC<OpinionCreateProps> = ({
-  toggleCreate,
-  topic,
-}) => {
+
+
+const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate, topic }) => {
   const [selectedFiles, setSelectedFiles] = useState<FileExtended[]>([]);
   const [selectedAffiliation, setSelectedAffiliation] = useState<string | null>(
     null
@@ -79,17 +78,21 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
 
   useEffect(() => {
     console.log("in opinion create topic: ", topic);
-  }, []);
+    }, []);
 
+    
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
-    if (!formData.topicId) {
-      setFormData({ ...formData, topicId: topic.id });
+    if(!formData.topicId){
+    setFormData({ ...formData, topicId: topic.id });
+
     }
   };
+
+
 
   const createOpinion = async () => {
     const opinionData = new FormData();
@@ -227,8 +230,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
                           e.preventDefault();
                           toggleAffiliation(affiliation.label);
                         }}
-                        className={`p-4 rounded-full ${
-                          selectedAffiliation === affiliation.label
+                        className={`p-4 rounded-full ${selectedAffiliation === affiliation.label
                             ? "bg-purple-500 text-white"
                             : "bg-[#efefef] text-black"
                         } lg:text-sm items-center text-xs justify-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex`}
