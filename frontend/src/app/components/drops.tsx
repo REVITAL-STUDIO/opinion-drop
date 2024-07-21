@@ -141,6 +141,7 @@ const Drop = ({ topic }: dropsProps) => {
 
                   <div className="text-white text-[15px] font-black absolute bottom-[4rem] left-2 text-left line-clamp-3 leading-tight flex flex-col gap-2">
                     <p className="text-[12px]">{slide.author}</p>
+
                     <p className="text-[24px]">{slide.title}</p>
                   </div>
                   <button
