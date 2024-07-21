@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import UserSignIn from "./userSignIn";
+import CreditialSignIn from "./CredentialsSignIn";
 
 const SignIn = () => {
   const [openSignUp, setSignUp] = useState(false);
@@ -17,7 +18,7 @@ const SignIn = () => {
         Sign In
       </button>
 
-      {openSignUp && <UserSignIn />}
+      {openSignUp && <CreditialSignIn/>}
     </div>
   );
 };

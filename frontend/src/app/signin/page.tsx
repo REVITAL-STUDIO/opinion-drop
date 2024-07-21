@@ -2,6 +2,8 @@
 import React from 'react';
 import SignIn from '../components/CredentialsSignIn';
 import { useAuth } from '../hooks/AuthContext';
+import UserSignIn from '../components/userSignIn';
+import { Sign } from 'crypto';
 
 const AuthPage: React.FC = () => {
     const { currentUser, loading, logout } = useAuth();

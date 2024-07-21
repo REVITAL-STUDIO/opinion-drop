@@ -9,7 +9,7 @@ import UserSignIn from "./components/userSignIn";
 export default function Home() {
   return (
     <main>
-      <UserPortal />  
+      {/* <UserPortal />   */}
       <Hero />
       {/* <Cesspit />  */}
     </main>

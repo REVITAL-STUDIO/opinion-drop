@@ -75,7 +75,7 @@ const Hero = () => {
             />
           </button>
           <p className="text-sm mt-2 w-2/3 p-4">
-            Be the first to share your opinion! //{" "}
+            Be the first to share your opinion!{" "}
           </p>{" "}
         </div>
       )}

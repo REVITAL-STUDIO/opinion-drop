@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import GoogleIcon from "/public/Images/google.png";
 import Image from "next/image";
@@ -10,9 +9,10 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../hooks/AuthContext";
-import motion from 'framer-motion'
 
-const UserSignIn = () => {
+import motion from "framer-motion";
+
+const UserSignIn: React.FC = () => {
   const [loginForm, setLoginState] = useState(false);
   const [nextMenu, setNextMenu] = useState(false);
   const [selectedAffiliations, setSelectedAffiliations] = useState<string[]>(
@@ -24,7 +24,7 @@ const UserSignIn = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { signInWithGoogle, signInWithFacebook } = useAuth();
+  const { signInWithGoogle } = useAuth();
 
   const handleSignInWithGoogle = async () => {
     setLoading(true);
@@ -36,10 +36,6 @@ const UserSignIn = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const toggleLoginState = () => {
-    setLoginState(!login);
   };
 
   const toggleNextMenu = () => {
@@ -73,10 +69,11 @@ const UserSignIn = () => {
   const [closeMenu, setClose] = useState(false);
 
   const closeMenuFunction = () => {
-    setClose(true);
+    setClose(!closeMenu);
   };
 
-  const handleAuthAction = async () => {
+  const handleAuthAction = async (event: React.FormEvent) => {
+    event.preventDefault();
     setLoading(true);
     setError(null);
     try {
@@ -100,9 +97,12 @@ const UserSignIn = () => {
       >
         <FontAwesomeIcon icon={faXmark} className="w-8 h-8 text-white" />
       </button>
+
       {loginForm ? (
-        //Sign In
+        //Sign Up
         <div className="lg:w-1/3 w-[90%] p-4 bg-gradient-to-tr text-white shadow-md from-blue-400 via-red-400 to-white rounded-md flex flex-col  items-center">
+          {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+
           {nextMenu ? (
             <>
               <div className="w-3/4">
@@ -145,7 +145,7 @@ const UserSignIn = () => {
           ) : (
             <>
               <div className="w-3/4">
-                <h2 className="my-4 text-2xl font-semibold">Sign In</h2>
+                <h2 className="my-4 text-2xl font-semibold">Sign Up</h2>
                 <p className="text-sm my-4">
                   By continuing, you agree to our User Agreement and acknowledge
                   that you understand the Privacy Policy.
@@ -169,7 +169,6 @@ const UserSignIn = () => {
                 <h2>or</h2>
                 <div className="w-full border"></div>
               </div>
-              <form className="space-y-2 w-[80%]" action="#">
                 <div>
                   <label
                     htmlFor="email"
@@ -223,15 +222,14 @@ const UserSignIn = () => {
                   Continue
                 </button>
                 <p className="text-sm font-light text-white">
-                  Don’t have an account yet?{" "}
+                  Already a User?{" "}
                   <button
-                    onClick={toggleLoginState}
+                    onClick={() => setIsSignUp(!isSignUp)}
                     className="font-medium text-white hover:underline "
                   >
                     Login
                   </button>
                 </p>
-              </form>
             </>
           )}
         </div>
@@ -259,12 +257,8 @@ const UserSignIn = () => {
             <h2>or</h2>
             <div className="w-full border"></div>
           </div>
-          <form className="space-y-2 w-[80%]" action="#">
             <div>
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-white dark:text-white"
-              >
+              <label className="block mb-2 text-sm font-medium text-white dark:text-white">
                 Your email
               </label>
               <input
@@ -276,10 +270,7 @@ const UserSignIn = () => {
               />
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block mb-2 text-sm font-medium text-white dark:text-white"
-              >
+              <label className="block mb-2 text-sm font-medium text-white dark:text-white">
                 Password
               </label>
               <input
@@ -326,13 +317,12 @@ const UserSignIn = () => {
             <p className="text-sm font-light text-white ">
               New User?{" "}
               <button
-                onClick={toggleLoginState}
+                onClick={() => setIsSignUp(!isSignUp)}
                 className="font-medium text-white hover:underline "
               >
                 Sign up
               </button>
             </p>
-          </form>
         </div>
       )}
     </section>
