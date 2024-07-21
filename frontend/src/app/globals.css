@@ -233,8 +233,8 @@ span:hover .overlay-container {
 
 .container {
   margin: 0 auto;
-  width: 450px;
-  height: 450px;
+  width: 500px;
+  height: 500px;
   perspective: 1000px;
 }
 .carousel {
@@ -261,7 +261,7 @@ span:hover .overlay-container {
   text-align: center;
   color: #fff;
   opacity: 0.99;
-  border-radius: 10px;
+  border-radius: 10%;
 }
 
 .next,
