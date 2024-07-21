@@ -5,7 +5,7 @@ import ProviderSignIn from "./ProviderSignIn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-const CreditialSignIn: React.FC = () => {
+const SignIn: React.FC = () => {
   const { login, signup } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -114,4 +114,4 @@ const CreditialSignIn: React.FC = () => {
   );
 };
 
-export default CreditialSignIn;
+export default SignIn;
