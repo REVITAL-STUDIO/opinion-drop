@@ -30,9 +30,9 @@ interface OpinionModalProps {
     id: number;
     author: string;
     title: string;
-    textContent: string;
-    backgroundImage: string;
-    profilePicture?: string;
+    text: string;
+    backgroundimage: string;
+    authorprofileimage?: string;
   };
   closeModal: () => void;
   toggleStateIt: () => void;
@@ -350,7 +350,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             <div>
               <div className="relative mx-4 px-4">
                 <p className="opinion-text text-sm indent-3">
-                  {opinionData.textContent}
+                  {opinionData.text}
                 </p>
               </div>
               {/* Rate it */}

@@ -12,8 +12,8 @@ interface OpinionModalProps {
     id: number;
     author: string;
     title: string;
-    textContent: string;
-    backgroundImage: string;
+    text: string;
+    backgroundimage: string;
   };
 }
 
@@ -22,7 +22,7 @@ const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
     <div className="z-30 relative h-[60%] w-[50%] bg-black/50 text-white p-4 shadow-lg rounded">
       <div className="absolute inset-0 w-full h-full -z-10 rounded">
         <Image
-          src={opinionData.backgroundImage}
+          src={opinionData.backgroundimage}
           fill
           alt="slider"
           className="object-cover"
