@@ -123,9 +123,9 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    console.log("selectedfile: ", selectedFiles);
-
     e.preventDefault();
+
+    // Initial validation
     if (selectedFiles.length === 0) {
       alert("Please drop a file to continue.");
       return;
@@ -135,6 +135,19 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
       alert("Please select an affiliation.");
       return;
     }
+
+    // Gather all data
+    const data = {
+      ...formData,
+      affiliation: selectedAffiliation,
+      files: selectedFiles,
+    };
+
+    // Log data for debugging
+    console.log("Submitted data:", data);
+
+    // Perform necessary actions (e.g., sending data to an API)
+    // Example: await fetch('/api/submit', { method: 'POST', body: JSON.stringify(data) });
 
     // Move to the essay step
     setEssay(true);
@@ -163,7 +176,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
   };
 
   return (
-    <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-90 z-50">
+    <section className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-90 z-50">
       <button
         onClick={toggleCreate}
         className={`w-12 h-12 shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 ${
@@ -176,7 +189,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
         {isVisible && (
           <motion.div
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="bg-gradient-to-t relative from-stone-500 to-stone-700 border lg:w-3/4  w-[90%]  p-8 rounded-lg shadow-xl"
+            className="bg-gradient-to-t relative from-stone-500 to-stone-700 border lg:w-3/4  w-[90%]  xl:p-8 p-4 rounded-lg shadow-xl"
           >
             <div className="flex gap-x-4 justify-between items-center z-10 text-white">
               <div className="gap-x-4 flex my-4">
@@ -186,7 +199,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
                 <Icon icon="noto:fountain-pen" className="w-8 h-8" />
               </div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-y-4 gap-x-12 w-full max-h-[450px] overflow-y-auto">
+            <div className="flex flex-col lg:flex-row gap-y-4 gap-x-12 w-full xl:max-h-[750px] xl:overflow-none max-h-[400px] overflow-y-auto">
               <div className="w-full lg:w-1/2 mx-auto my-[2%] z-40">
                 <label className="text-white">Drop Your Cover Here</label>
                 <div className="w-full lg:h-4/5 h-[300px] mt-4 flex justify-center items-center">
@@ -196,10 +209,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
                   />
                 </div>
               </div>
-              <form
-                onSubmit={handleSubmit}
-                className="lg:w-1/2 w-full mx-auto rounded mt-[5%] z-40"
-              >
+              <form className="lg:w-1/2 w-full mx-auto rounded mt-[5%] z-40 ">
                 <div className="w-full flex gap-x-4">
                   <div className="mb-4">
                     <input
@@ -229,7 +239,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
                           selectedAffiliation === affiliation.label
                             ? "bg-purple-500 text-white"
                             : "bg-[#efefef] text-black"
-                        } lg:text-sm items-center text-xs justify-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex`}
+                        } lg:text-sm items-center text-xs justify-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white duration-300 transition ease-in-out gap-x-4 flex`}
                       >
                         {affiliation.label}
                         {affiliation.icon && (
@@ -242,31 +252,8 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
                     ))}
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  className="relative inline-flex my-4 shadow-xl items-center justify-center py-6  overflow-hidden font-medium text-white bg-white w-full transition duration-300 ease-out rounded-full group"
-                >
-                  <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#2b2b2b] group-hover:translate-x-0 ease">
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="white"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      ></path>
-                    </svg>
-                  </span>
-                  <span className="absolute flex items-center justify-center w-full h-full text-black transition-all duration-300 transform group-hover:translate-x-full ease">
-                    Write Your Essay
-                  </span>
-                </button>
               </form>
+
               <div className="absolute inset-0 ">
                 <Image
                   src="/Images/pexels-ketchumcommunity-1464232.jpg"
@@ -279,6 +266,31 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
             </div>
           </motion.div>
         )}
+        <button
+          onClick={handleSubmit}
+          type="submit"
+          className="relative inline-flex my-4 w-[90%] shadow-xl items-center justify-center py-6 xl:w-3/4  overflow-hidden font-medium text-white bg-white  transition duration-300 ease-out rounded-full group"
+        >
+          <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#2b2b2b] group-hover:translate-x-0 ease">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="white"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              ></path>
+            </svg>
+          </span>
+          <span className="absolute flex items-center justify-center w-full h-full text-black transition-all duration-300 transform group-hover:translate-x-full ease">
+            Write Your Essay
+          </span>
+        </button>
       </AnimatePresence>
       {essay && (
         <>
