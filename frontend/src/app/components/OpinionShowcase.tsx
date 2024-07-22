@@ -17,12 +17,11 @@ interface OpinionShowcaseProps {
 
 export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
   return (
-    <div className="relative w-full border-red-500 min-h-screen flex flex-col justify-center items-center">
+    <div className="relative w-full">
       <CreateButton topic={topic} />
       <Questions />
       <Drop topic={topic} />
       <SignInButton />
-      {/* <Engagement/> */}
     </div>
   );
 }

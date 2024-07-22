@@ -14,9 +14,9 @@ import { useAuth } from "../hooks/AuthContext";
 interface OpinionCreateProps {
   toggleCreate: () => void;
   topic: {
-    name: string,
-    id: number
-  }
+    name: string;
+    id: number;
+  };
 }
 interface FormData {
   title: string;
@@ -36,9 +36,10 @@ interface FileExtended extends File {
   url?: string;
 }
 
-
-
-const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate, topic }) => {
+const OpinionCreate: React.FC<OpinionCreateProps> = ({
+  toggleCreate,
+  topic,
+}) => {
   const [selectedFiles, setSelectedFiles] = useState<FileExtended[]>([]);
   const [selectedAffiliation, setSelectedAffiliation] = useState<string | null>(
     null
@@ -78,21 +79,17 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate, topic }) =>
 
   useEffect(() => {
     console.log("in opinion create topic: ", topic);
-    }, []);
+  }, []);
 
-    
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
-    if(!formData.topicId){
-    setFormData({ ...formData, topicId: topic.id });
-
+    if (!formData.topicId) {
+      setFormData({ ...formData, topicId: topic.id });
     }
   };
-
-
 
   const createOpinion = async () => {
     const opinionData = new FormData();
@@ -167,31 +164,29 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate, topic }) =>
 
   return (
     <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-90 z-50">
-      
       <button
         onClick={toggleCreate}
-        className={`w-12 h-12 shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 ${essay ? "hidden" : "block"}`} 
+        className={`w-12 h-12 shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 ${
+          essay ? "hidden" : "block"
+        }`}
       >
-        <FontAwesomeIcon
-          icon={faXmark}
-          className="w-8 h-8 text-white "
-        />
+        <FontAwesomeIcon icon={faXmark} className="w-8 h-8 text-white " />
       </button>
       <AnimatePresence>
         {isVisible && (
           <motion.div
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="bg-gradient-to-t relative from-stone-500 to-stone-700 border lg:w-3/4 w-[90%] h-[750px] p-8 rounded-lg shadow-xl"
+            className="bg-gradient-to-t relative from-stone-500 to-stone-700 border lg:w-3/4  w-[90%]  p-8 rounded-lg shadow-xl"
           >
             <div className="flex gap-x-4 justify-between items-center z-10 text-white">
               <div className="gap-x-4 flex my-4">
-                <h1 className="text-3xl font-semibold text-white">
+                <h1 className="xl:text-3xl text-xl font-semibold text-white">
                   Voice An Opinion
                 </h1>
                 <Icon icon="noto:fountain-pen" className="w-8 h-8" />
               </div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-y-4 gap-x-12 w-full max-h-[600px] overflow-y-auto">
+            <div className="flex flex-col lg:flex-row gap-y-4 gap-x-12 w-full max-h-[450px] overflow-y-auto">
               <div className="w-full lg:w-1/2 mx-auto my-[2%] z-40">
                 <label className="text-white">Drop Your Cover Here</label>
                 <div className="w-full lg:h-4/5 h-[300px] mt-4 flex justify-center items-center">
@@ -230,7 +225,8 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({ toggleCreate, topic }) =>
                           e.preventDefault();
                           toggleAffiliation(affiliation.label);
                         }}
-                        className={`p-4 rounded-full ${selectedAffiliation === affiliation.label
+                        className={`p-4 rounded-full ${
+                          selectedAffiliation === affiliation.label
                             ? "bg-purple-500 text-white"
                             : "bg-[#efefef] text-black"
                         } lg:text-sm items-center text-xs justify-center hover:shadow-sm hover:shadow-white hover:bg-purple-500 hover:text-white hover:scale-110 duration-300 transition ease-in-out gap-x-4 flex`}

@@ -5,12 +5,12 @@ import OpinionCreate from "./opinionCreate";
 
 interface createButtonProps {
   topic: {
-      name: string,
-      id: number
-    }
-  }
+    name: string;
+    id: number;
+  };
+}
 
-const CreateButton = ({topic}:createButtonProps )=> {
+const CreateButton = ({ topic }: createButtonProps) => {
   const [openCreateOpinion, setOpenCreateOpinion] = useState(false);
 
   const toggleCreate = () => {
@@ -25,7 +25,7 @@ const CreateButton = ({topic}:createButtonProps )=> {
   //     } else {
   //       document.body.style.overflow = 'auto';
   //     }
-  
+
   //     return () => {
   //       document.body.style.overflow = 'auto';
   //     };
@@ -33,14 +33,16 @@ const CreateButton = ({topic}:createButtonProps )=> {
   // }, [openCreateOpinion]);
 
   return (
-    <div className="xl:my-4  w-full relative top-6 h-1/4 z-20 p-4">
+    <div className="xl:my-4  w-full absolute top-0  z-20 p-4">
       <button
         onClick={toggleCreate}
         className="xl:w-32 w-24  p-4 text-white hover:scale-95 ease-in-out duration-200 transition bg-gradient-to-tl from-red-400 font-bold to-blue-500 shadow-lg float-right relative rounded-full md:text-sm text-xs border-black"
       >
         create +
       </button>
-      {openCreateOpinion && <OpinionCreate topic={topic} toggleCreate={toggleCreate} />}
+      {openCreateOpinion && (
+        <OpinionCreate topic={topic} toggleCreate={toggleCreate} />
+      )}
     </div>
   );
 };

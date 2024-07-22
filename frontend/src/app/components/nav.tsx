@@ -9,10 +9,13 @@ import CreateButton from "./createButton";
 
 const Nav = () => {
   return (
-    <section className="h-[25%]  relative w-full flex justify-between items-center text-white z-10">
+    <section
+      className="p-4
+     relative w-full flex justify-between items-center text-white z-10"
+    >
       <Link
         href="/"
-        className="flex  w-fit h-fit justify-center items-center absolute top-2 left-4"
+        className="flex ml-4 w-fit h-fit justify-center items-center "
       >
         <Image
           src="/images/opinion-drop-logo.png"
