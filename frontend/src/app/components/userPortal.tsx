@@ -112,7 +112,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ ease: "easeInOut", duration: 0.5 }}
-            className="absolute top-0 left-0 bg-gradient-to-t via-blue-500 z-50 from-red-300 to-gray-200 w-full h-screen flex flex-col xl:flex-row"
+            className="fixed top-0 left-0 bg-gradient-to-t via-blue-500 z-50 from-red-300 to-gray-200 w-full h-screen flex flex-col xl:flex-row"
           >
             <div className="w-1/6 h-full hidden xl:block">
               <div className="p-4 flex  items-center mt-[15%]">

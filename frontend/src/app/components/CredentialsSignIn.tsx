@@ -46,7 +46,7 @@ const SignIn: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ ease: "easeInOut", duration: 0.5 }}
-            className="flex flex-col items-center justify-center w-full min-h-screen absolute top-0 left-0 bg-black/90 z-50"
+            className="flex flex-col items-center justify-center w-full min-h-screen fixed top-0 left-0 bg-black/90 z-50"
           >
             <button
               onClick={closeMenuFunction}
@@ -55,7 +55,7 @@ const SignIn: React.FC = () => {
               <FontAwesomeIcon icon={faXmark} className="w-8 h-8 text-white" />
             </button>
             {error && <p className="text-red-500 text-sm my-4">{error}</p>}
-            <div className="bg-gradient-to-tr text-white shadow-md from-blue-400 via-red-400 to-white p-6 rounded-lg  w-96">
+            <div className="bg-gradient-to-tr text-white shadow-md from-blue-400 via-red-400 to-white p-6 rounded-lg xl:w-96 w-80">
               <h2 className="text-2xl font-semibold  mb-4">
                 {isSignUp ? "Sign Up" : "Sign In"}
               </h2>

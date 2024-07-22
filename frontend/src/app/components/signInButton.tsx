@@ -43,7 +43,7 @@ const SignInButton: React.FC = () => {
           <>
             <button
               onClick={toggleOpenUserPortal}
-              className="p-4 lg:w-2/5 w-3/4 flex justify-center items-center gap-x-2 hover:scale-95 text-white ease-in-out transition duration-300 rounded-full mx-auto"
+              className="p-4 lg:w-2/5 w-full flex justify-center items-center gap-x-2 hover:scale-95 text-white ease-in-out transition duration-300 rounded-full mx-auto"
             >
               <div className="w-[3rem] h-[3rem] rounded-full bg-gradient-to-tl from-red-400 via-white to-blue-500"></div>
               Welcome,{" "}
