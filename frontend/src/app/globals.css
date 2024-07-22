@@ -233,8 +233,8 @@ span:hover .overlay-container {
 
 .container {
   margin: 0 auto;
-  width: 500px;
-  height: 500px;
+  width: 450px;
+  height: 450px;
   perspective: 1000px;
 }
 .carousel {

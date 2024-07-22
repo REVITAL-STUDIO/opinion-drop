@@ -59,11 +59,11 @@ const Debate = () => {
         <h2 className="text-6xl font-bold text-red-200">Debate It</h2>
         <p className="mt-4 text-base tracking-wider font-medium text-white">
           Where your voice matters! Dive into the heart of political discourse
-          and challenge viewpoints with your own well-crafted essays.Whether
-          you're passionate about defending your beliefs or eager to present a
-          fresh perspective, this is your platform to engage, enlighten, and
-          influence. Join the conversation and make your stance known in the
-          world of politics!{" "}
+          and challenge viewpoints with your own well-crafted essays. Whether
+          you&apos;re passionate about defending your beliefs or eager to
+          present a fresh perspective, this is your platform to engage,
+          enlighten, and influence. Join the conversation and make your stance
+          known in the world of politics!{" "}
         </p>
       </div>
       <div className="bg-white text-black mt-[2%] relative ml-4 w-1/2 rounded-lg h-2/3 shadow-lg">

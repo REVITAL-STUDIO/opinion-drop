@@ -58,12 +58,13 @@ const StateIt = () => {
         {" "}
         <h2 className="text-6xl font-bold text-blue-200">State It</h2>
         <p className="mt-4 text-base text-white">
-          Welcome to <span className="font-bold text-xl">"State It,"</span> where agreement finds its voice! Here, you can
-          align with viewpoints that resonate with you and express your support
-          through thoughtful essays. Celebrate the ideas you believe in and
-          contribute to the dialogue with your unique perspective. Join us in
-          affirming beliefs and amplifying voices that matter in the realm of
-          politics!
+          Welcome to{" "}
+          <span className="font-bold text-xl">&quot;State It,&quot;</span> where
+          agreement finds its voice! Here, you can align with viewpoints that
+          resonate with you and express your support through thoughtful essays.
+          Celebrate the ideas you believe in and contribute to the dialogue with
+          your unique perspective. Join us in affirming beliefs and amplifying
+          voices that matter in the realm of politics!
         </p>
       </div>
       <div className="bg-white text-black mt-[2%] relative  w-1/2 rounded-lg h-2/3 shadow-lg mr-4">
