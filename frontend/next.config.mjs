@@ -15,7 +15,7 @@ const nextConfig = {
         protocol: "https",
         hostname: "opiniondrop-storage.s3.us-east-2.amazonaws.com",
         port: "",
-        pathname: "/images/**", // Adjust the pathname as needed
+        pathname: "/**", 
       },
     ],
   },

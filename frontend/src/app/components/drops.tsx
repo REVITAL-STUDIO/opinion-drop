@@ -27,9 +27,9 @@ interface Opinion {
   id: number;
   author: string;
   title: string;
-  textContent: string;
-  backgroundImage: string;
-  profilePicture?: string;
+  text: string;
+  backgroundimage: string;
+  authorprofileimage?: string;
 }
 
 const Drop = ({ topic }: dropsProps) => {
@@ -132,7 +132,7 @@ const Drop = ({ topic }: dropsProps) => {
                   }}
                 >
                   <Image
-                    src={slide.backgroundImage}
+                    src={slide.backgroundimage}
                     alt={slide.author}
                     fill
                     className="absolute w-[100%] h-[100%] object-cover rounded-xl"
