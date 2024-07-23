@@ -18,11 +18,11 @@ const Nav = () => {
         <Image
           src="/images/opinion-drop-logo.png"
           alt="Logo"
-          width={80}
-          height={80}
+          width={65}
+          height={65}
           className="mt-6"
         />
-        <div className="px-4 py-2 h-fit  rounded-full border-2 font-semibold text-lg ml-4">
+        <div className="px-4 py-2 h-fit  rounded-full border-2 font-semibold text-sm ml-4">
           Beta
         </div>
       </Link>

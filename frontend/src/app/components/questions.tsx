@@ -7,7 +7,7 @@ const Questions = () => {
     <section className="w-full  flex mx-auto">
       <div className="w-full text-white xl:mt-0  p-4  rounded-xl text-center shadow-white/30">
         <FontAwesomeIcon icon={faQuestionCircle} className="text-2xl my-4" />
-        <p className=" md:text-[16px] text-[10px] font-bold">
+        <p className=" md:text-[16px] text-[12px] font-bold">
           How can we conduct an efficient and fair open primary at the
           Democratic Convention in Chicago on August 19th?
         </p>
