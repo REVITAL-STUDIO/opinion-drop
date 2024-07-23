@@ -8,7 +8,7 @@ import SignInButton from "./signInButton";
 const Nav = () => {
   return (
     <section
-      className="p-4
+      className="
      relative w-full flex justify-between items-center text-white z-10"
     >
       <Link

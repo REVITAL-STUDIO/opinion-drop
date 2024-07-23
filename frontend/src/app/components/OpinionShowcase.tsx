@@ -20,9 +20,7 @@ export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
     <div className="relative w-full">
       <Questions />
       <Drop topic={topic} />
-      <div className="relative right-[5%]">
       <CreateButton topic={topic} />
-      </div>
     </div>
   );
 }

@@ -33,10 +33,10 @@ const CreateButton = ({ topic }: createButtonProps) => {
   // }, [openCreateOpinion]);
 
   return (
-    <div className="">
+    <div className="my-4 mr-4">
       <button
         onClick={toggleCreate}
-        className="xl:w-32 min-w-26 py-4 text-white hover:scale-95 ease-in-out duration-200 transition bg-gradient-to-tl from-red-400 font-bold to-blue-500 shadow-lg float-right relative rounded-full md:text-sm text-xs border-black"
+        className="p-4 text-white hover:scale-95 ease-in-out duration-200 transition bg-gradient-to-tl from-red-400 font-bold to-blue-500 shadow-lg float-right relative rounded-full md:text-sm text-xs"
       >
         Drop Opinion +
       </button>
