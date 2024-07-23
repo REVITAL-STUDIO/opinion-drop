@@ -18,10 +18,11 @@ interface OpinionShowcaseProps {
 export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
   return (
     <div className="relative w-full">
-      <CreateButton topic={topic} />
       <Questions />
       <Drop topic={topic} />
-      <SignInButton />
+      <div className="relative right-[5%]">
+      <CreateButton topic={topic} />
+      </div>
     </div>
   );
 }

@@ -132,6 +132,36 @@ export class OpinionDAO {
         }
     }
     
+    async getOpinionsByUser(userId: string): Promise<UserOpinion[]> {
+        const query = `
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+               users.username as author, users.profile_picture as authorProfileImage
+        FROM opinions
+        JOIN users ON opinions.user_id = users.user_id
+        WHERE parent_opinion_id IS NULL AND users.user_id = $1
+    `;
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result: QueryResult = await client.query(query, [userId]);
+
+            const opinions: UserOpinion[] = [];
+            for (const row of result.rows) {
+
+                opinions.push(row as UserOpinion);
+            }
+
+            return opinions;
+        } catch (error) {
+            console.error('Error executing getOpinionsByUser query:', error);
+            throw new Error(`Error retrieving opinions by user: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
     async getRebuttals(): Promise<UserOpinion[]> {
         const query = `
         SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 

@@ -3,9 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
-import CreateButton from "./createButton";
+import SignInButton from "./signInButton";
 
 const Nav = () => {
   return (
@@ -28,6 +26,7 @@ const Nav = () => {
           Beta
         </div>
       </Link>
+      <SignInButton />
     </section>
   );
 };

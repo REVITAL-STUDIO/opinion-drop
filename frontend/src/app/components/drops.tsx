@@ -100,7 +100,7 @@ const Drop = ({ topic }: dropsProps) => {
   };
 
   return (
-    <section className=" flex  justify-center items-center ">
+    <section className=" flex  justify-center items-center mt-6">
       <div className="container ">
         <div
           className="carousel"

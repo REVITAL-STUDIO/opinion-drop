@@ -11,16 +11,30 @@ import React, { useEffect, useState } from "react";
 import Settings from "./settings";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
+import { useAuth } from "../hooks/AuthContext";
 
 interface UserPortalProps {
   handleLogout: () => void;
   toggleOpenUserPortal: () => void;
 }
 
+interface Opinion {
+  id: number;
+  author: string;
+  title: string;
+  text: string;
+  backgroundimage: string;
+  authorprofileimage?: string;
+}
+
 const UserPortal: React.FC<UserPortalProps> = ({
   handleLogout,
   toggleOpenUserPortal,
 }) => {
+  const { currentUser, loading, logout } = useAuth();
+
+  const [opinions, setOpinions] = useState<Opinion[]>([]);
+
   const slides = [
     {
       id: 1,
@@ -103,6 +117,38 @@ const UserPortal: React.FC<UserPortalProps> = ({
     setIsMenuOpen(false);
   };
 
+  const fetchUserOpinions = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/user/${currentUser?.uid}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving opinions");
+      }
+      const response = await res.json();
+      console.log("data: ", response.data);
+      console.log("More Data:", response.data.opinions);
+      setOpinions(response.data.opinions);
+    } catch (error) {
+      console.log("Error Fetching Opinions: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserOpinions();
+    console.log("opinions state variable", opinions);
+  }, []);
+
+  useEffect(() => {
+    console.log("opinions state variable", opinions);
+  }, [opinions]);
+
   return (
     <>
       {isMenuOpen && (
@@ -155,18 +201,16 @@ const UserPortal: React.FC<UserPortalProps> = ({
            space-x-reverse `}
               >
                 <span
-                  className={`block w-3/4 my-0.5 border-4  rounded-full ${
-                    menuOpen
-                      ? "rotate-45 transition-transform duration-300 ease-in-out border-[#000]"
-                      : "transition-transform duration-300 ease-in-out border-[#000]"
-                  }`}
+                  className={`block w-3/4 my-0.5 border-4  rounded-full ${menuOpen
+                    ? "rotate-45 transition-transform duration-300 ease-in-out border-[#000]"
+                    : "transition-transform duration-300 ease-in-out border-[#000]"
+                    }`}
                 ></span>
                 <span
-                  className={`block w-3/4 my-0.5 border-4  rounded-full ${
-                    menuOpen
-                      ? "-rotate-45 w-3/4 absolute top-2/5 transition-transform duration-300 ease-in-out border-[#000]"
-                      : "transition-transform duration-300 ease-in-out border-[#000]"
-                  }`}
+                  className={`block w-3/4 my-0.5 border-4  rounded-full ${menuOpen
+                    ? "-rotate-45 w-3/4 absolute top-2/5 transition-transform duration-300 ease-in-out border-[#000]"
+                    : "transition-transform duration-300 ease-in-out border-[#000]"
+                    }`}
                 ></span>
               </button>
               <AnimatePresence>
@@ -224,7 +268,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
               <div className="p-4 mt-[4%] rounded-full w-fit flex items-center gap-x-4">
                 <div className="w-[4rem] h-[4rem] rounded-full shadow-md bg-white"></div>
                 <h1 className="text-3xl text-black ">
-                  Welcome, <span className="font-bold">User</span>
+                  Welcome, <span className="font-bold">{currentUser?.username}</span>! Your Opinions Are the Catalyst for Change.
                 </h1>
               </div>
               {/* Performance */}
@@ -235,22 +279,33 @@ const UserPortal: React.FC<UserPortalProps> = ({
                   Your Summary
                 </h2>
                 <div className="my-4 grid xl:grid-cols-3 grid-cols-2 gap-2">
-                  {slides.map((slide, index) => (
-                    <button
-                      key={index}
-                      className="xl:p-[25%] p-[50%] border rounded-2xl relative overflow-hidden shadow-md"
-                    >
-                      <Image
-                        src={slide.backgroundImage}
-                        alt={slide.author}
-                        fill
-                        className=" w-[100%] h-[100%] object-cover object-center brightness-75"
-                      />
-                      <h2 className="font-semibold left-4  absolute mx-auto xl:text-base text-sm text-left">
-                        {slide.title}
-                      </h2>
-                    </button>
-                  ))}
+                  {opinions.length === 0 ? (
+                    <div className="col-span-full text-center p-4">
+                      <p className="text-3xl font-bold text-gray-700 mb-2">No Opinions Yet</p>
+                      <p className="text-xl text-gray-300 mb-4">Share your thoughts, join the conversation!</p>
+                      <button onClick={closeMenuFunction}
+                        className="mt-[3%] bg-indigo-300 text-white text-lg font-semibold py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-300">
+                        Explore Carousels
+                      </button>
+                    </div>
+                  ) : (
+                    opinions.map((slide, index) => (
+                      <button
+                        key={index}
+                        className="xl:p-[25%] p-[50%] border rounded-2xl relative overflow-hidden shadow-md"
+                      >
+                        <Image
+                          src={slide.backgroundimage}
+                          alt={slide.author}
+                          fill
+                          className="w-[100%] h-[100%] object-cover object-center brightness-75"
+                        />
+                        <h2 className="font-semibold left-4 absolute mx-auto xl:text-base text-sm text-left">
+                          {slide.title}
+                        </h2>
+                      </button>
+                    ))
+                  )}
                 </div>
               </div>
             </div>

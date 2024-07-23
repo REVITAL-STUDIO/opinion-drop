@@ -16,36 +16,36 @@ export class OpinionController {
     async createOpinion(req: Request, res: Response): Promise<void> {
         try {
 
-            const { title, textContent, userId, topicId , parentOpinionId, images, videos, audios, documents} = req.body;
+            const { title, textContent, userId, topicId, parentOpinionId, images, videos, audios, documents } = req.body;
             console.log("createopinion request body: ", req.body);
-      if (!title || !textContent || !userId || !topicId) {
-        res.status(400).send('Invalid opinion data');
-        return;
-      }
+            if (!title || !textContent || !userId || !topicId) {
+                res.status(400).send('Invalid opinion data');
+                return;
+            }
 
-      const { file } = req;
-      console.log("Uploaded file: ", file);
+            const { file } = req;
+            console.log("Uploaded file: ", file);
 
-      const opinionData = {
-        title,
-        textContent,
-        userId,
-        topicId,
-        backgroundImage: null as null | Express.Multer.File,
-        parentOpinionId,
-        images,
-        videos,
-        audios,
-        documents,
+            const opinionData = {
+                title,
+                textContent,
+                userId,
+                topicId,
+                backgroundImage: null as null | Express.Multer.File,
+                parentOpinionId,
+                images,
+                videos,
+                audios,
+                documents,
 
-      };
+            };
 
-      if (req.file) {
-        opinionData.backgroundImage = req.file; // or handle the file as needed
-      }
+            if (req.file) {
+                opinionData.backgroundImage = req.file; // or handle the file as needed
+            }
 
-      await this.opinionService.createOpinion(opinionData);
-      res.status(201).send('Opinion created successfully');
+            await this.opinionService.createOpinion(opinionData);
+            res.status(201).send('Opinion created successfully');
             res.status(201).send('Opinion created successfully');
         } catch (error) {
             console.error('Error in OpinionController createOpinion:', error);
@@ -115,7 +115,35 @@ export class OpinionController {
                 }
             });
         } catch (error) {
-            console.error('Error in OpinionController getOpinions:', error);
+            console.error('Error in OpinionController getOpinionsById:', error);
+            res.status(500).json({
+                status: 'error',
+                message: 'Failed to retrieve opinions'
+            });
+        }
+    }
+
+    async getOpinionsByUser(req: Request, res: Response): Promise<void> {
+        try {
+
+            const userId: string = req.params.userId;
+            console.log("userid: ", userId);
+
+            if (!userId) {
+                res.status(400).send('Invalid user ID');
+                return;
+            }
+            const opinions = await this.opinionService.getOpinionsByUser(userId);
+            res.status(200).json({
+                status: 'success',
+                message: 'Opinions retrieved successfully',
+                data: {
+                    count: opinions.length,
+                    opinions: opinions
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController getOpinionsByUser:', error);
             res.status(500).json({
                 status: 'error',
                 message: 'Failed to retrieve opinions'
@@ -130,7 +158,7 @@ export class OpinionController {
                 res.status(400).send('Invalid opinion ID');
                 return;
             }
-            
+
             if (!validate(req.body)) {
                 res.status(400).send('Invalid opinion data');
                 return;
