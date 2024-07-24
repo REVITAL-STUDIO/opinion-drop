@@ -30,7 +30,7 @@ router.delete('/users/:userId', userController.deleteUser.bind(userController));
 
 // Opinion Routes
 router.post('/opinions',upload.single('backgroundImage'), opinionController.createOpinion.bind(opinionController));
-router.post('/opinions/rebutall',upload.single('backgroundImage'), opinionController.createOpinion.bind(opinionController));
+router.post('/opinions/rebuttal',upload.single('backgroundImage'), opinionController.createOpinion.bind(opinionController));
 router.get('/opinions/:opinionId', opinionController.getOpinion.bind(opinionController));
 router.get('/opinions', opinionController.getOpinions.bind(opinionController));
 router.get('/opinions/topic/:topicId', opinionController.getOpinionsByTopic.bind(opinionController));

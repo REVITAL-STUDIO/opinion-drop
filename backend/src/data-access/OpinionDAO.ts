@@ -44,7 +44,7 @@ export class OpinionDAO {
 
     async getOpinion(opinionId: number): Promise<UserOpinion | null> {
         const query = `
-        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as textcontent, opinions.background_image as backgroundImage, 
         users.username as author, users.profile_picture as authorProfileImage
         FROM opinions
         JOIN users ON opinions.user_id = users.user_id
@@ -75,7 +75,7 @@ export class OpinionDAO {
 
     async getOpinions(): Promise<UserOpinion[]> {
         const query = `
-        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as textcontent, opinions.background_image as backgroundImage, 
                users.username as author, users.profile_picture as authorProfileImage
         FROM opinions
         JOIN users ON opinions.user_id = users.user_id
@@ -165,7 +165,7 @@ export class OpinionDAO {
 
     async getOpinionRebuttals(opinionId: number): Promise<UserOpinion[]> {
         const query = `
-        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as textContent, opinions.background_image as backgroundImage, 
         users.username as author, users.profile_picture as authorProfileImage
         FROM opinions
         JOIN users ON opinions.user_id = users.user_id
@@ -178,11 +178,12 @@ export class OpinionDAO {
             const result: QueryResult = await client.query(query, [opinionId]);
 
             const opinions: UserOpinion[] = [];
+            console.log("query results: ", result.rows)
             for (const row of result.rows) {
 
                 opinions.push(row as UserOpinion);
             }
-
+            console.log("rebuttals: ", opinions)
             return opinions;
         } catch (error) {
             console.error('Error executing getOpinionRebuttals query:', error);
@@ -195,7 +196,7 @@ export class OpinionDAO {
 
     async getRebuttals(): Promise<UserOpinion[]> {
         const query = `
-        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as textContent, opinions.background_image as backgroundImage, 
                users.username as author, users.profile_picture as authorProfileImage
         FROM opinions
         JOIN users ON opinions.user_id = users.user_id
