@@ -55,7 +55,10 @@ const Drop = ({ topic }: dropsProps) => {
     setSelectedOpinion(null);
   };
 
-  
+  const closeReplies = () => {
+    setShowRepliesModal(false);
+  };
+
   const fetchOpinions = async () => {
     try {
       const res = await fetch(
@@ -166,23 +169,23 @@ const Drop = ({ topic }: dropsProps) => {
         {selectedOpinion && (
           <>
             <div className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/90 to-red-500/95  bg-opacity-95 z-20 w-full h-screen flex justify-center items-center">
-              <div className="w-1/2 ">
+               <div className="w-1/2 ">
                 {" "}
                 <DetailsModal opinionData={selectedOpinion} />
-              </div>
-              <OpinionModal
+              </div> 
+               <OpinionModal
                 opinionData={selectedOpinion}
                 closeModal={closeModal}
                 toggleStateIt={toggleStateIt}
                 toggleDebateIt={toggleDebateIt}
               />
               {stateIt && <StateIt />}
-              {debateIt && <Debate />}
+              {debateIt && <Debate />} 
               <MoreButton />
             </div>
 
             {/* State It */}
-           
+            
 
           </>
         )}

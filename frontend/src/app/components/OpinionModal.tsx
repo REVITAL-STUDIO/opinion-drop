@@ -112,13 +112,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.id === currentHighlightId
             ? {
-              ...highlight,
-              container: updateHighlightContainer(
-                highlight.container,
-                emoji,
-                "emoji"
-              ),
-            }
+                ...highlight,
+                container: updateHighlightContainer(
+                  highlight.container,
+                  emoji,
+                  "emoji"
+                ),
+              }
             : highlight
         )
       );
@@ -132,13 +132,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.id === currentHighlightId
             ? {
-              ...highlight,
-              container: updateHighlightContainer(
-                highlight.container,
-                comment,
-                "comment"
-              ),
-            }
+                ...highlight,
+                container: updateHighlightContainer(
+                  highlight.container,
+                  comment,
+                  "comment"
+                ),
+              }
             : highlight
         )
       );
@@ -251,32 +251,36 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       title: "Pro-Choice Perspectives on Abortion",
       author: "Alice Johnson",
       textContent: "rebutall text...........",
-      parentOpinionId: 1
+      parentOpinionId: 1,
     },
     {
       id: 1,
       title: "Pro-Life Arguments Against Abortion",
       author: "Bob Smith",
       textContent: "rebutall text...........",
-      parentOpinionId: 1    },
+      parentOpinionId: 1,
+    },
     {
       id: 1,
       title: "Legal Aspects of Abortion Rights",
       author: "Catherine Lee",
       textContent: "rebutall text...........",
-      parentOpinionId: 1    },
+      parentOpinionId: 1,
+    },
     {
       id: 1,
       title: "Ethical Considerations in Abortion Debates",
       author: "David Brown",
       textContent: "rebutall text...........",
-      parentOpinionId: 1    },
+      parentOpinionId: 1,
+    },
     {
       id: 1,
       title: "Medical Implications of Abortion Procedures",
       author: "Eva Green",
       textContent: "rebutall text...........",
-      parentOpinionId: 1    },
+      parentOpinionId: 1,
+    },
   ];
 
   return (
@@ -284,19 +288,21 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <IoClose onClick={closeModal} className="cursor-pointer z-100" />
         <a
-          className={`cursor-pointer ${selectedTab === "Opinion"
-            ? "border-b-[4px] border-[#606060] "
-            : "border-b-0"
-            }`}
+          className={`cursor-pointer ${
+            selectedTab === "Opinion"
+              ? "border-b-[4px] border-[#606060] "
+              : "border-b-0"
+          }`}
           onClick={() => setSelectedTab("Opinion")}
         >
           Opinion
         </a>
         <a
-          className={`cursor-pointer ${selectedTab === "Rebuttal"
-            ? "border-b-[4px] border-[#606060] "
-            : "border-b-0"
-            }`}
+          className={`cursor-pointer ${
+            selectedTab === "Rebuttal"
+              ? "border-b-[4px] border-[#606060] "
+              : "border-b-0"
+          }`}
           onClick={() => setSelectedTab("Rebuttal")}
         >
           Rebuttal
@@ -304,8 +310,9 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       </div>
       {/* Survey Container */}
       <div
-        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]   bg-opacity-95  bg-[#fff] z-30 flex justify-center shadow-lg rounded-b-md ${hideOpinion ? "" : "invisible"
-          }`}
+        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]   bg-opacity-95  bg-[#fff] z-30 flex justify-center shadow-lg rounded-b-md ${
+          hideOpinion ? "" : "invisible"
+        }`}
       >
         <div className="absolute -top-[5rem] left-0 w-full h-[5rem]  bg-[#fff]/90  z-40"></div>
 
@@ -350,14 +357,16 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             >
               Reply
               <IoIosArrowDropdown
-                className={`${replyMenu ? "rotate-0" : "-rotate-180"
-                  } transition ease-in-out duration-150`}
+                className={`${
+                  replyMenu ? "rotate-0" : "-rotate-180"
+                } transition ease-in-out duration-150`}
               />
             </button>
             {replyMenu && (
               <section
-                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                  }  transition-all ease-in-out duration-150 z-10 bg-gradient-to-bl from-purple-700 to-[#2b2b2b] rounded-lg shadow-lg text-white `}
+                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${
+                  replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                }  transition-all ease-in-out duration-150 z-10 bg-gradient-to-bl from-purple-700 to-[#2b2b2b] rounded-lg shadow-lg text-white `}
               >
                 <button
                   onClick={toggleStateIt}

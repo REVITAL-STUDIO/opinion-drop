@@ -54,10 +54,10 @@ const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0, y: 500 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 500 }}
-        transition={{ duration: 0.5, ease: "easeInOut" }} // Added transition property
+        initial={{ y: 500 }}
+        animate={{ y: 0 }}
+        exit={{ y: 500 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }} // Added transition property
         className="z-40 absolute top-0 left-0 right-0 bg-black/95 text-white px-4 shadow-lg transition-transform"
       >
         <div className="mt-[4%] px-[4rem] w-full flex gap-[8%] min-h-screen">
