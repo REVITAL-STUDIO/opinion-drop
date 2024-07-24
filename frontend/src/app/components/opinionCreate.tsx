@@ -10,7 +10,6 @@ import Image from "next/image";
 import EssayPrompt from "./essayPrompt";
 import { motion, AnimatePresence } from "framer-motion";
 import FileUpload from "./FileUpload";
-import { useAuth } from "../hooks/AuthContext";
 interface OpinionCreateProps {
   toggleCreate: () => void;
   topic: {
@@ -91,36 +90,6 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
     }
   };
 
-  const createOpinion = async () => {
-    const opinionData = new FormData();
-    opinionData.append("userId", "0");
-    opinionData.append("topicId", "0");
-    opinionData.append("title", formData.title);
-    opinionData.append("affiliation", formData.affiliation);
-    opinionData.append("textContent", formData.textContent);
-
-    if (selectedFiles.length > 0) {
-      opinionData.append("backgroundImage", selectedFiles[0]);
-    }
-
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(opinionData),
-        }
-      );
-      if (!res.ok) {
-        throw new Error("Error creating opinion");
-      }
-    } catch (error) {
-      console.log("Error creating opinion: ", error);
-    }
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -27,7 +27,7 @@ interface RebuttalModalProps {
     id: number;
     author: string;
     title: string;
-    textContent: string;
+    textcontent: string;
     profilePicture?: string;
     parentOpinionId: number
   };
@@ -233,9 +233,6 @@ const RebuttalModal: React.FC<RebuttalModalProps> = ({
               {rebuttal.title}{" "}
             </h2>
           </div>
-
-          
-
           <div className="mx-4 flex absolute top-4 right-24 gap-x-4 mt-4">
             <button className="p-4 rounded-full border-red-500 border hover:bg-red-600 text-red-600 hover:text-white ease-in-out transition duration-200">
               <FontAwesomeIcon icon={faFlag} className="w-6 h-6" />
@@ -259,7 +256,7 @@ const RebuttalModal: React.FC<RebuttalModalProps> = ({
 
         <div className="max-h-[400px] my-4 p-8 text-sm overflow-y-auto">
           <p>
-           {rebuttal.textContent}
+           {rebuttal.textcontent}
           </p>
         </div>
       </div>

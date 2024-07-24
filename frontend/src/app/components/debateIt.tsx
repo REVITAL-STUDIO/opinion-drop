@@ -3,23 +3,37 @@ import TextEditor from "./textEditor";
 import { Editor, EditorState } from "draft-js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../hooks/AuthContext";
 
-const Debate = () => {
+interface DebateItProps {
+  opinionData: {
+    id: number;
+    author: string;
+    title: string;
+    textcontent: string;
+    backgroundimage: string;
+    authorprofileimage?: string;
+  }; 
+   topic: {
+    name: string;
+    id: number;
+  };
+  toggleDebateIt: () => void;
+
+}
+
+const DebateIt = ({opinionData, topic, toggleDebateIt}: DebateItProps) => {
+  const [rebuttalTitle, setRebuttalTitle] = useState("");
+
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
 
   const [agreed, setAgreed] = useState({
-    respectfulLanguage: false,
-    factChecking: false,
     noPersonalAttacks: false,
     originalContent: false,
-    constructiveDiscussion: false,
     noPlagiarism: false,
-    communityGuidelines: false,
     understandingConsequences: false,
-    respectPrivacy: false,
-    legalResponsibility: false,
   });
 
   const handleChangeEssay = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,19 +41,57 @@ const Debate = () => {
     setAgreed({ ...agreed, [name]: checked });
   };
 
-  const handleEssay = (event: React.FormEvent) => {
+  const [close, setClose] = useState(false);
+
+  
+  const { currentUser } = useAuth();
+
+  const createRebuttal = async (event: React.FormEvent) => {
+
     event.preventDefault();
+
     if (Object.values(agreed).every(Boolean)) {
-      alert(
-        "Thank you for agreeing to the terms. You can now submit your opinion."
-      );
-      // Perform the submission action (e.g., navigate to the essay submission page or show the essay form)
+
+      const textContent = editorState.getCurrentContent().getPlainText();
+      const rebuttalData = new FormData();
+
+      if (currentUser) {
+        rebuttalData.append("userId", currentUser.uid);
+      }
+
+      console.log("topic id from formdata: ", topic.id);
+      rebuttalData.append("topicId", String(topic.id));
+      rebuttalData.append("title", rebuttalTitle);
+      rebuttalData.append("textContent", textContent);
+      rebuttalData.append("parentOpinionId", String(opinionData.id));
+
+      
+
+      console.log("FormData contents:");
+      rebuttalData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
+
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/rebuttal`,
+          {
+            method: "POST",
+            body: rebuttalData,
+          }
+        );
+        if (!res.ok) {
+          throw new Error("Error creating opinion");
+        }
+        alert("Opinion submitted successfully.");
+      } catch (error) {
+        console.log("Error creating opinion: ", error);
+      }
     } else {
       alert("Please agree to all terms before submitting.");
     }
   };
 
-  const [close, setClose] = useState(false);
 
   if (close) {
     return null; // Don't render anything if close is true
@@ -67,6 +119,20 @@ const Debate = () => {
         </p>
       </div>
       <div className="bg-white text-black mt-[2%] relative ml-4 w-1/2 rounded-lg h-2/3 shadow-lg">
+      <div className="mb-4">
+          <label htmlFor="rebuttalTitle" className="block mb-2 font-medium">
+            Rebuttal Title:
+          </label>
+          <input
+            type="text"
+            id="rebuttalTitle"
+            name="rebuttalTitle"
+            value={rebuttalTitle}
+            onChange={(e) => setRebuttalTitle(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter a title for your rebuttal"
+          />
+        </div>
         <div className="text-editor h-1/2 p-4">
           <Editor
             editorState={editorState}
@@ -76,7 +142,7 @@ const Debate = () => {
         </div>
         <div className="h-2/5 w-full absolute bottom-0">
           <form
-            onSubmit={handleEssay}
+            onSubmit={createRebuttal}
             className="shadow-md rounded-lg p-6 h-full text-sm"
           >
             <h2 className="text-base font-medium mb-4">
@@ -150,4 +216,4 @@ const Debate = () => {
   );
 };
 
-export default Debate;
+export default DebateIt;

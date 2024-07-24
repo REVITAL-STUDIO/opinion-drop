@@ -14,7 +14,7 @@ import DetailsModal from "./DetailsModal";
 import OpinionModal from "./OpinionModal";
 import RepliesModal from "./RepliesModal";
 import StateIt from "./stateIt";
-import Debate from "./debateIt";
+import DebateIt from "./debateIt";
 import MoreButton from "./moreButton";
 
 interface dropsProps {
@@ -28,7 +28,7 @@ interface Opinion {
   id: number;
   author: string;
   title: string;
-  text: string;
+  textcontent: string;
   backgroundimage: string;
   authorprofileimage?: string;
 }
@@ -176,8 +176,8 @@ const Drop = ({ topic }: dropsProps) => {
                 toggleStateIt={toggleStateIt}
                 toggleDebateIt={toggleDebateIt}
               />
-              {stateIt && <StateIt />}
-              {debateIt && <Debate />}
+              {stateIt && <StateIt opinionData={selectedOpinion} topic={topic} toggleStateIt={toggleStateIt} />}
+              {debateIt && <DebateIt opinionData={selectedOpinion} topic={topic} toggleDebateIt={toggleDebateIt} />}
               <MoreButton />
             </div>
 

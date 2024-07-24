@@ -12,7 +12,7 @@ interface OpinionModalProps {
     id: number;
     author: string;
     title: string;
-    text: string;
+    textcontent: string;
     backgroundimage: string;
   };
 }

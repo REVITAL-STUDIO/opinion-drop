@@ -30,13 +30,22 @@ interface OpinionModalProps {
     id: number;
     author: string;
     title: string;
-    text: string;
+    textcontent: string;
     backgroundimage: string;
     authorprofileimage?: string;
   };
   closeModal: () => void;
   toggleStateIt: () => void;
   toggleDebateIt: () => void;
+}
+
+interface Rebuttal {
+  id: number;
+  author: string;
+  title: string;
+  textcontent: string;
+  authorprofileimage?: string;
+  parentOpinionId: number;
 }
 
 interface Highlight {
@@ -51,11 +60,11 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   toggleStateIt,
   toggleDebateIt,
 }) => {
-  const [selectedOpinion, setSelectedOpinion] = useState(null);
   const [selectedTab, setSelectedTab] = useState("Opinion");
   const [hideOpinion, setHideOpinion] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [replyMenu, setReplyMenu] = useState(false);
+  const [rebuttals, setRebuttals] = useState<Rebuttal[]>([]);
 
   const [highlightedText, setHighlightedText] = useState("");
   const [highlightContainer, setHighlightContainer] =
@@ -245,37 +254,66 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     }
   }, [highlightEnabled]);
 
-  const rebuttals = [
+  const fetchRebuttals = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinion/rebuttals/${opinionData.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving opinions");
+      }
+      const response = await res.json();
+      console.log("data: ", response.data);
+      console.log("rebuttals:", response.data.opinions);
+      setRebuttals(response.data.opinions);
+    } catch (error) {
+      console.log("Error Fetching Opinions: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRebuttals();
+    console.log("rebuttal state variable", rebuttals);
+  }, []);
+
+
+  const demoRebuttals = [
     {
       id: 1,
       title: "Pro-Choice Perspectives on Abortion",
       author: "Alice Johnson",
-      textContent: "rebutall text...........",
+      textcontent: "rebutall text...........",
       parentOpinionId: 1
     },
     {
       id: 1,
       title: "Pro-Life Arguments Against Abortion",
       author: "Bob Smith",
-      textContent: "rebutall text...........",
+      textcontent: "rebutall text...........",
       parentOpinionId: 1    },
     {
       id: 1,
       title: "Legal Aspects of Abortion Rights",
       author: "Catherine Lee",
-      textContent: "rebutall text...........",
+      textcontent: "rebutall text...........",
       parentOpinionId: 1    },
     {
       id: 1,
       title: "Ethical Considerations in Abortion Debates",
       author: "David Brown",
-      textContent: "rebutall text...........",
+      textcontent: "rebutall text...........",
       parentOpinionId: 1    },
     {
       id: 1,
       title: "Medical Implications of Abortion Procedures",
       author: "Eva Green",
-      textContent: "rebutall text...........",
+      textcontent: "rebutall text...........",
       parentOpinionId: 1    },
   ];
 
@@ -386,7 +424,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             <div>
               <div className="relative mx-4 px-4">
                 <p className="opinion-text text-sm indent-3">
-                  {opinionData.text}
+                  {opinionData.textcontent}
                 </p>
               </div>
               {/* Rate it */}
