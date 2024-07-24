@@ -11,7 +11,7 @@ export class OpinionDAO {
 
 
     async createOpinion(newOpinion: Opinion): Promise<void> {
-        const query = "INSERT INTO opinions (user_id, topic_id, title, text_content, background_image, images, videos, documents, audios) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)"
+        const query = "INSERT INTO opinions (user_id, topic_id, title, text_content, background_image, images, videos, documents, audios, parent_opinion_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)"
         const opinionData = newOpinion.getOpinionData();
         const values = [
             opinionData.userId,
@@ -23,6 +23,7 @@ export class OpinionDAO {
             opinionData.videos,
             opinionData.documents,
             opinionData.audios,
+            opinionData.parentOpinionId
         ];
 
         let client: PoolClient | undefined;
@@ -131,7 +132,7 @@ export class OpinionDAO {
 
         }
     }
-    
+
     async getOpinionsByUser(userId: string): Promise<UserOpinion[]> {
         const query = `
         SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
@@ -156,6 +157,36 @@ export class OpinionDAO {
         } catch (error) {
             console.error('Error executing getOpinionsByUser query:', error);
             throw new Error(`Error retrieving opinions by user: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async getOpinionRebuttals(opinionId: number): Promise<UserOpinion[]> {
+        const query = `
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+        users.username as author, users.profile_picture as authorProfileImage
+        FROM opinions
+        JOIN users ON opinions.user_id = users.user_id
+        WHERE parent_opinion_id = $1
+    `;
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result: QueryResult = await client.query(query, [opinionId]);
+
+            const opinions: UserOpinion[] = [];
+            for (const row of result.rows) {
+
+                opinions.push(row as UserOpinion);
+            }
+
+            return opinions;
+        } catch (error) {
+            console.error('Error executing getOpinionRebuttals query:', error);
+            throw new Error(`Error retrieving opinion rebuttals: ${error}`);
         } finally {
             client && client.release();
 

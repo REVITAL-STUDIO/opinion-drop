@@ -52,6 +52,46 @@ export class OpinionService {
         }
     }
 
+    // async createOpinionRebuttal(rebuttalData: {
+    //     userId: string,
+    //     topicId: number,
+    //     title: string,
+    //     textContent: string,
+    //     backgroundImage: Express.Multer.File | null,
+    //     parentOpinionId: number | null,
+    //     images: string[] | null,
+    //     videos: string[] | null,
+    //     documents: string[] | null,
+    //     audios: string[] | null,
+    // }): Promise<void> {
+    //     try {
+
+    //         let uploadedImageUrl = null;
+
+    //         if (rebuttalData.backgroundImage) {
+    //             uploadedImageUrl = await uploadImage(rebuttalData.backgroundImage, 'images/opinion-backgrounds');
+    //         }
+
+    //         const newRebuttal = new Opinion(
+    //             rebuttalData.userId,
+    //             rebuttalData.topicId,
+    //             rebuttalData.title,
+    //             rebuttalData.textContent,
+    //             uploadedImageUrl,
+    //             rebuttalData.parentOpinionId,
+    //             rebuttalData.images ?? null,
+    //             rebuttalData.videos ?? null,
+    //             rebuttalData.documents ?? null,
+    //             rebuttalData.audios ?? null,
+
+    //         );
+    //         await this.opinionDAO.createOpinion(newRebuttal);
+    //     } catch (error) {
+    //         console.error('Error in OpinionService createOpinion:', error);
+    //         throw new Error('Error creating opinion');
+    //     }
+    // }
+
     async getOpinion(opinionId: number): Promise<UserOpinion | null> {
         try {
             return await this.opinionDAO.getOpinion(opinionId);
@@ -85,6 +125,15 @@ export class OpinionService {
         } catch (error) {
             console.error('Error in OpinionService getOpinionsByUser:', error);
             throw new Error('Error retrieving opinions by user');
+        }
+    }
+
+    async getOpinionRebuttals(opinionId: number): Promise<UserOpinion[]> {
+        try {
+            return await this.opinionDAO.getOpinionRebuttals(opinionId);
+        } catch (error) {
+            console.error('Error in OpinionService getOpinionRebuttals:', error);
+            throw new Error('Error retrieving opinion rebuttals');
         }
     }
 

@@ -39,7 +39,7 @@ export class Opinion {
             title: this.title,
             textContent: this.textContent,
             backgroundImage: this.backgroundImage,
-            parentOpinnionId: this.parentOpinionId,
+            parentOpinionId: this.parentOpinionId,
             images: this.images,
             videos: this.videos,
             documents: this.documents,
