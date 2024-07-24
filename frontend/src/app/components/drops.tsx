@@ -167,8 +167,9 @@ const Drop = ({ topic }: dropsProps) => {
       <div>
         {selectedOpinion && (
           <>
-            <div className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-red-500/95 to-white/90  bg-opacity-95 z-20">
-              <div className="w-1/2 h-full flex justify-center items-center">
+            <div className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-red-500/95 to-white/90  bg-opacity-95 z-20 w-full h-full flex justify-center items-center">
+              <div className="w-1/2 ">
+                {" "}
                 <DetailsModal opinionData={selectedOpinion} />
               </div>
               <OpinionModal

@@ -43,10 +43,10 @@ const SignInButton: React.FC = () => {
           <>
             <button
               onClick={toggleOpenUserPortal}
-              className="  w-full flex justify-center items-center gap-x-2 hover:scale-95 text-white ease-in-out transition duration-300 rounded-full "
+              className="  w-full flex justify-center mr-2 items-center gap-x-2 hover:scale-95 text-white ease-in-out transition duration-300 rounded-full "
             >
-              <div className="mr-3 xl:w-[3rem] xl:h-[3rem] w-[1.5rem] h-[1.5rem] rounded-full bg-gradient-to-tl from-red-400 via-white to-blue-500"></div>
-              <span className="font-semibold uppercase">
+              <div className=" xl:w-[3rem] xl:h-[3rem] w-[1.5rem] h-[1.5rem] rounded-full bg-gradient-to-tl from-red-400 via-white to-blue-500"></div>
+              <span className="font-normal uppercase lg:text-base text-sm">
                 {currentUser.username}
               </span>
             </button>

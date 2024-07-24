@@ -19,7 +19,7 @@ interface OpinionModalProps {
 
 const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
   return (
-    <div className="z-30 relative h-[60%] w-[50%] bg-black/50 text-white p-4 shadow-lg rounded">
+    <div className="z-30 relative py-[15%] w-[50%] mx-auto bg-black/50 text-white p-4 shadow-lg rounded">
       <div className="absolute inset-0 w-full h-full -z-10 rounded">
         <Image
           src={opinionData.backgroundimage}
@@ -29,8 +29,8 @@ const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
         />
         <div className="absolute inset-0 bg-black opacity-50"></div>
       </div>
-      <div className="flex justify-between mb-8 relative">
-        <div className="w-fit h-fit rounded-full p-4 bg-[#FFFFF0] "></div>
+      <div className="flex justify-between mb-8 ">
+        <div className="w-fit h-fit absolute top-4 left-4 rounded-full p-4 bg-[#FFFFF0] "></div>
         {/* <div className="flex flex-col text-sm font-semibold right-0">
           <p>You Rated: 80%</p>
           <p>Society Rating: 36%</p>

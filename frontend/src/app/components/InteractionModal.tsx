@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
-import  Picker  from "@emoji-mart/react";
-import data from '@emoji-mart/data';
+import Picker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
 
 interface InteractionModalProps {
   highlightedText: string;
@@ -16,7 +16,9 @@ const InteractionModal: React.FC<InteractionModalProps> = ({
   onAddEmoji,
   onAddComment,
 }) => {
-  const [interactionType, setInteractionType] = useState<"emoji" | "comment" | null>(null);
+  const [interactionType, setInteractionType] = useState<
+    "emoji" | "comment" | null
+  >(null);
   const [emoji, setEmoji] = useState("");
   const [comment, setComment] = useState("");
 

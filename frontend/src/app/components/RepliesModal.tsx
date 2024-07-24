@@ -52,18 +52,18 @@ const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
 
   return (
     <div
-      className="z-50 fixed bottom-0 left-0 right-0 bg-[#1E1E1E] text-white px-4 shadow-lg transition-transform"
+      className="z-50 fixed bottom-0 left-0 right-0 bg-black/90 text-white px-4 shadow-lg transition-transform"
       style={{ height: `${currentHeight + 50}px`, maxHeight: `100vh` }}
     >
-      
       <button
-        className="top-0 w-full h-[3.5rem]  cursor-pointer flex items-center justify-left gap-x-2 font-semibold "
+        className="top-0 w-fit h-[3.5rem]  cursor-pointer flex items-center justify-left gap-x-2 font-semibold "
         onMouseDown={startDragging}
       >
         <IoIosArrowUp className="text-white w-8 h-8 " />
-        More
       </button>
-      <h2 className="text-4xl font-bold mb-[2%] relative left-[24%] mt-[3%]">DISCUSSION</h2>
+      <h2 className="text-4xl font-bold mb-[2%] relative left-[24%] mt-[3%]">
+        DISCUSSION
+      </h2>
       <div className="mt-[4%] px-[4rem] w-full flex gap-[8%] min-h-screen">
         <div className="w-[25%] mt-[5%]">
           <div className="flex flex-col gap-8">
@@ -100,10 +100,20 @@ const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
               className="w-full h-[80px] p-2 border border-[#676767] rounded-md bg-transparent text-white placeholder-white"
               placeholder="Write your comment here..."
             />
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="absolute top-6 right-6 text-white size-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="absolute top-6 right-6 text-white size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
             </svg>
-
           </div>
         </div>
       </div>

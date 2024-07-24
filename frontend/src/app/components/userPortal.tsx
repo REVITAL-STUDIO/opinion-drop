@@ -201,16 +201,18 @@ const UserPortal: React.FC<UserPortalProps> = ({
            space-x-reverse `}
               >
                 <span
-                  className={`block w-3/4 my-0.5 border-4  rounded-full ${menuOpen
-                    ? "rotate-45 transition-transform duration-300 ease-in-out border-[#000]"
-                    : "transition-transform duration-300 ease-in-out border-[#000]"
-                    }`}
+                  className={`block w-3/4 my-0.5 border-4  rounded-full ${
+                    menuOpen
+                      ? "rotate-45 transition-transform duration-300 ease-in-out border-[#000]"
+                      : "transition-transform duration-300 ease-in-out border-[#000]"
+                  }`}
                 ></span>
                 <span
-                  className={`block w-3/4 my-0.5 border-4  rounded-full ${menuOpen
-                    ? "-rotate-45 w-3/4 absolute top-2/5 transition-transform duration-300 ease-in-out border-[#000]"
-                    : "transition-transform duration-300 ease-in-out border-[#000]"
-                    }`}
+                  className={`block w-3/4 my-0.5 border-4  rounded-full ${
+                    menuOpen
+                      ? "-rotate-45 w-3/4 absolute top-2/5 transition-transform duration-300 ease-in-out border-[#000]"
+                      : "transition-transform duration-300 ease-in-out border-[#000]"
+                  }`}
                 ></span>
               </button>
               <AnimatePresence>
@@ -263,12 +265,13 @@ const UserPortal: React.FC<UserPortalProps> = ({
                 )}
               </AnimatePresence>
             </div>
-            <div className="w-5/6 h-full text-white">
+            <div className="lg::w-5/6 w-full h-full text-white">
               {/* UserName */}
               <div className="p-4 mt-[4%] rounded-full w-fit flex items-center gap-x-4">
                 <div className="w-[4rem] h-[4rem] rounded-full shadow-md bg-white"></div>
-                <h1 className="text-3xl text-black ">
-                  Welcome, <span className="font-bold">{currentUser?.username}</span>! Your Opinions Are the Catalyst for Change.
+                <h1 className="lg:text-3xl text-lg text-black ">
+                  Welcome,{" "}
+                  <span className="font-bold">{currentUser?.username}</span>!
                 </h1>
               </div>
               {/* Performance */}
@@ -278,13 +281,19 @@ const UserPortal: React.FC<UserPortalProps> = ({
                 <h2 className="xl:text-lg text-base w-fit font-semibold  text-black   p-4 rounded-full">
                   Your Summary
                 </h2>
-                <div className="my-4 grid xl:grid-cols-3 grid-cols-2 gap-2">
+                <div className="my-4 grid xl:grid-cols-3 grid-cols-2 gap-2 mx-auto">
                   {opinions.length === 0 ? (
                     <div className="col-span-full text-center p-4">
-                      <p className="text-3xl font-bold text-gray-700 mb-2">No Opinions Yet</p>
-                      <p className="text-xl text-gray-300 mb-4">Share your thoughts, join the conversation!</p>
-                      <button onClick={closeMenuFunction}
-                        className="mt-[3%] bg-indigo-300 text-white text-lg font-semibold py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-300">
+                      <p className="lg:text-3xl text-xl font-bold text-gray-700 mb-2">
+                        No Opinions Yet
+                      </p>
+                      <p className="lg:text-xl text-lg text-gray-300 mb-4">
+                        Share your thoughts, join the conversation!
+                      </p>
+                      <button
+                        onClick={closeMenuFunction}
+                        className="mt-[1%] bg-indigo-300 text-white text-lg font-normal py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-300"
+                      >
                         Explore Carousels
                       </button>
                     </div>
