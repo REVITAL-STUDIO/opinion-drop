@@ -41,17 +41,56 @@ export class OpinionController {
             };
 
             if (req.file) {
-                opinionData.backgroundImage = req.file; // or handle the file as needed
+                opinionData.backgroundImage = req.file; 
             }
 
             await this.opinionService.createOpinion(opinionData);
-            res.status(201).send('Opinion created successfully');
             res.status(201).send('Opinion created successfully');
         } catch (error) {
             console.error('Error in OpinionController createOpinion:', error);
             res.status(500).send('Failed to create opinion');
         }
     }
+
+    
+    // async createOpinionRebuttal(req: Request, res: Response): Promise<void> {
+    //     try {
+
+    //         const { title, textContent, userId, topicId, parentOpinionId, images, videos, audios, documents } = req.body;
+    //         console.log("createopinion request body: ", req.body);
+    //         if (!title || !textContent || !userId || !topicId || parentOpinionId) {
+    //             res.status(400).send('Invalid opinion rebuttal data');
+    //             return;
+    //         }
+
+    //         const { file } = req;
+    //         console.log("Uploaded file: ", file);
+
+    //         const rebuttalData = {
+    //             title,
+    //             textContent,
+    //             userId,
+    //             topicId,
+    //             backgroundImage: null as null | Express.Multer.File,
+    //             parentOpinionId,
+    //             images,
+    //             videos,
+    //             audios,
+    //             documents,
+
+    //         };
+
+    //         if (req.file) {
+    //             rebuttalData.backgroundImage = req.file; // or handle the file as needed
+    //         }
+
+    //         await this.opinionService.createOpinionRebuttal(rebuttalData);
+    //         res.status(201).send('Rebuttal created successfully');
+    //     } catch (error) {
+    //         console.error('Error in OpinionController createOpinionRebuttal:', error);
+    //         res.status(500).send('Failed to create rebuttal');
+    //     }
+    // }
 
     async getOpinion(req: Request, res: Response): Promise<void> {
         try {
@@ -100,7 +139,6 @@ export class OpinionController {
         try {
 
             const topicId: number = parseInt(req.params.topicId, 10);
-            console.log("topicid: ", topicId);
             if (isNaN(topicId)) {
                 res.status(400).send('Invalid topic ID');
                 return;
@@ -137,6 +175,34 @@ export class OpinionController {
             res.status(200).json({
                 status: 'success',
                 message: 'Opinions retrieved successfully',
+                data: {
+                    count: opinions.length,
+                    opinions: opinions
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController getOpinionsByUser:', error);
+            res.status(500).json({
+                status: 'error',
+                message: 'Failed to retrieve opinions'
+            });
+        }
+    }
+
+    async getOpinionRebuttals(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            console.log("topicid: ", opinionId);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+           
+            const opinions = await this.opinionService.getOpinionRebuttals(opinionId);
+            res.status(200).json({
+                status: 'success',
+                message: 'Rebuttals retrieved successfully',
                 data: {
                     count: opinions.length,
                     opinions: opinions

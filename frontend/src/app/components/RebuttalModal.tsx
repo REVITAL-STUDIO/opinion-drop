@@ -22,20 +22,20 @@ interface Highlight {
   text: string;
 }
 
-interface OpenRebuttalProps {
-  opinionData?: {
+interface RebuttalModalProps {
+  rebuttal: {
     id: number;
     author: string;
     title: string;
     textContent: string;
-    backgroundImage: string;
     profilePicture?: string;
+    parentOpinionId: number
   };
   closeModal?: () => void;
 }
 
-const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
-  opinionData,
+const RebuttalModal: React.FC<RebuttalModalProps> = ({
+  rebuttal,
   closeModal,
 }) => {
   const [selectedOpinion, setSelectedOpinion] = useState<any>(null); // Replace 'any' with the correct type if needed
@@ -230,7 +230,7 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
         <div className="w-full flex justify-evenly relative items-center p-4">
           <div className="relative w-[100%] flex">
             <h2 className="text-7xl leading-tight- mb-4 w-5/6 font-black px-4">
-              Pro-Choice Perspectives on Abortion{" "}
+              {rebuttal.title}{" "}
             </h2>
           </div>
 
@@ -251,7 +251,7 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
           <div>
             <div className="relative mx-4 px-4">
               <p className="opinion-text text-lg font-bold indent-3">
-                Alice Johnson{" "}
+                {rebuttal.author}{" "}
               </p>
             </div>
           </div>
@@ -259,41 +259,7 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
 
         <div className="max-h-[400px] my-4 p-8 text-sm overflow-y-auto">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum. <br></br>
-            <br></br>Sed ut perspiciatis unde omnis iste natus error sit
-            voluptatem accusantium doloremque laudantium, totam rem aperiam,
-            eaque ipsa quae ab illo inventore veritatis et quasi architecto
-            beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
-            voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
-            magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
-            quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-            adipisci velit, sed quia non numquam eius modi tempora incidunt ut
-            labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad
-            minima veniam, quis nostrum exercitationem ullam corporis suscipit
-            laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
-            vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
-            molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas
-            nulla pariatur?<br></br>
-            <br></br>Sed ut perspiciatis unde omnis iste natus error sit
-            voluptatem accusantium doloremque laudantium, totam rem aperiam,
-            eaque ipsa quae ab illo inventore veritatis et quasi architecto
-            beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
-            voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
-            magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
-            quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-            adipisci velit, sed quia non numquam eius modi tempora incidunt ut
-            labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad
-            minima veniam, quis nostrum exercitationem ullam corporis suscipit
-            laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
-            vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil
-            molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas
-            nulla pariatur?
+           {rebuttal.textContent}
           </p>
         </div>
       </div>
@@ -309,4 +275,4 @@ const OpenRebuttal: React.FC<OpenRebuttalProps> = ({
   );
 };
 
-export default OpenRebuttal;
+export default RebuttalModal;
