@@ -276,7 +276,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           hideOpinion ? "" : "invisible"
         }`}
       >
-        <div className="absolute -top-[5rem] left-0 w-full h-[5rem]  bg-[#fff]/90 z-40"></div>
+        <div className="absolute -top-[5rem] left-0 w-full h-[5rem]  bg-[#fff]/90  z-40"></div>
 
         <div className="p-6 flex-col text-black relative">
           <h3 className="text-6xl w-1/2 font-black my-4 p-4">Tell Us..</h3>
