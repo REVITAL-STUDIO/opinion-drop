@@ -15,6 +15,7 @@ import OpinionModal from "./OpinionModal";
 import RepliesModal from "./RepliesModal";
 import StateIt from "./stateIt";
 import Debate from "./debateIt";
+import MoreButton from "./moreButton";
 
 interface dropsProps {
   topic: {
@@ -54,10 +55,7 @@ const Drop = ({ topic }: dropsProps) => {
     setSelectedOpinion(null);
   };
 
-  const closeReplies = () => {
-    setShowRepliesModal(false);
-  };
-
+  
   const fetchOpinions = async () => {
     try {
       const res = await fetch(
@@ -167,7 +165,7 @@ const Drop = ({ topic }: dropsProps) => {
       <div>
         {selectedOpinion && (
           <>
-            <div className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-red-500/95 to-white/90  bg-opacity-95 z-20 w-full h-full flex justify-center items-center">
+            <div className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/90 to-red-500/95  bg-opacity-95 z-20 w-full h-screen flex justify-center items-center">
               <div className="w-1/2 ">
                 {" "}
                 <DetailsModal opinionData={selectedOpinion} />
@@ -180,10 +178,12 @@ const Drop = ({ topic }: dropsProps) => {
               />
               {stateIt && <StateIt />}
               {debateIt && <Debate />}
+              <MoreButton />
             </div>
 
             {/* State It */}
-            {showRepliesModal && <RepliesModal closeModal={closeReplies} />}
+           
+
           </>
         )}
       </div>
