@@ -17,10 +17,12 @@ const CommentForm: React.FC<CommentFormProps> = ({ commentForm }) => {
   const [input, setInput] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [showInput, setShowInput] = useState(false);
+  const [expand, setExpand] = useState(false);
 
   const handleNewComment = () => {
+    setExpand(!expand);
     setShowInput(true);
-  }
+  };
 
   const onAddComment = () => {
     console.log("Comment added:", input);
@@ -97,7 +99,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ commentForm }) => {
           </>
         )}
       </div>
-      <div className="pl-[25%]">
+      <div className={`${expand ? "block" : "n"}  pl-[25%] `}>
         {showInput && (
           <div className="inputContainer">
             <input
@@ -106,6 +108,14 @@ const CommentForm: React.FC<CommentFormProps> = ({ commentForm }) => {
               autoFocus
               onChange={(e) => setInput(e.target.value)}
             ></input>
+            <Action className="reply" type="REPLY" />
+            <Action
+              className="reply"
+              type="CANCEL"
+              handleClick={() => {
+                setShowInput(false);
+              }}
+            />
           </div>
         )}
         {commentForm?.items?.map((cmnt) => {
