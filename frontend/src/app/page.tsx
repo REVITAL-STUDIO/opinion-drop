@@ -7,6 +7,7 @@ import UserPortal from "./components/userPortal";
 import UserSignIn from "./components/userSignIn";
 import CommentForm from "./components/CommentForm";
 import CommentMainFile from "./components/commentMainFIle";
+import Comment from "./components/comment";
 
 export default function Home() {
   return (

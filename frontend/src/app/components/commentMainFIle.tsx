@@ -17,7 +17,7 @@ const comments: {
   items: [
     {
       id: 1677252427307,
-      name: "hello",
+      name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       items: [
         {
           id: 1677252434572,
@@ -51,7 +51,7 @@ const CommentMainFile = () => {
   const [commentsData, setCommentData] = useState(comments);
 
   return (
-    <div className="App">
+    <div className="App bg-gradient-to-tl from-red-100 via-white to-blue-100">
       <CommentForm commentForm={commentsData} />
     </div>
   );

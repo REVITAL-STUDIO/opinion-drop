@@ -414,23 +414,25 @@ span:hover .overlay-container {
 
 /* Node Tree */
 .App {
-  margin-top: 20px;
-  width: fit-content;
+  
+  width: 100%;   
+  min-height: 100vh;
 }
 
 .commentContainer {
   margin-top: 6px;
-  background-color: #d3d3d3e0;
+  border-bottom: 1px solid black;
   display: flex;
   flex-direction: column;
   padding: 5px 10px;
-  width: 300px;
+  width: 75%;
   cursor: pointer;
-  border-radius: 5px;
+  
 }
 
 .commentContainer:hover {
-  background-color: #d3d3d3bf;
+  scale: 95%;
+  transition: ease-in-out 0.5s linear ;
 }
 
 .inputContainer {
