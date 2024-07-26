@@ -108,11 +108,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const { currentUser } = useAuth();
 
   const createOpinion = async (event: React.FormEvent) => {
-
     event.preventDefault();
 
     if (Object.values(agreed).every(Boolean)) {
-
       const textContent = editorState.getCurrentContent().getPlainText();
       const opinionData = new FormData();
 
@@ -154,11 +152,17 @@ const TextEditor: React.FC<TextEditorProps> = ({
     }
   };
 
+  const [confirmation, setConfirmation] = useState(false);
+
+  const toggleConfirmation = () => {
+    setConfirmation(!confirmation);
+  };
+
   return (
     <div className="w-full h-full flex flex-col lg:flex-row justify-center items-center gap-x-4">
-       <h2 className="my-4 font-bold text-5xl w-1/2 hidden xl:block">
+      <h2 className="my-4 font-bold text-5xl w-1/2 hidden xl:block">
         Write Your Essay
-      </h2> 
+      </h2>
       <div className="bg-white text-black relative xl:w-2/3 w-full rounded-lg h-5/6 shadow-lg">
         <div className="w-full h-1/2">
           <div className="text-editor  max-h-[100%] overflow-y-auto p-4">
@@ -255,8 +259,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
             </div>
 
             <button
+              onClick={toggleConfirmation}
               type="submit"
-              className="px-4 py-2 mt-[2%] bg-gradient-to-bl from-red-500 to-blue-500 text-white rounded-lg hover:bg-blue-600 transition ease-in-out hover:scale-95 duration-300"
+              className="px-4 py-2 mb-4 bg-gradient-to-bl from-red-500 to-blue-500 text-white rounded-lg hover:bg-blue-600 transition ease-in-out hover:scale-95 duration-300 "
             >
               Drop Essay
             </button>

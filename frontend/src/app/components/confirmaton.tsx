@@ -7,9 +7,9 @@ const Confirmation = () => {
   return (
     <AnimatePresence>
       <motion.section
-        initial={{ x: 0, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        exit={{ x: "-100%", opacity: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         className="p-4  w-1/4 flex flex-col justify-center border border-dashed text-white bg-gradient-to-t relative from-stone-500 to-stone-700 items-center rounded-lg"
       >
         <h2 className=" text-center text-2xl p-4">Thanks for your Opinion.</h2>

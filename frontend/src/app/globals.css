@@ -421,7 +421,7 @@ span:hover .overlay-container {
 
 .commentContainer {
   margin-top: 6px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid white;
   display: flex;
   flex-direction: column;
   padding: 5px 10px;
@@ -431,8 +431,8 @@ span:hover .overlay-container {
 }
 
 .commentContainer:hover {
-  scale: 95%;
-  transition: ease-in-out 0.5s linear ;
+  transform: scale(0.95);
+  transition: transform 0.5s ease-in-out;
 }
 
 .inputContainer {

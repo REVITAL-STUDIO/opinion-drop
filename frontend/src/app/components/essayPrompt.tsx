@@ -14,7 +14,7 @@ interface EssayPromptProps {
     affiliation: string;
     userId: number | null;
     topicId: number | null;
-    parentOpinionId: number | null,
+    parentOpinionId: number | null;
     backgroundImage: string;
     images: FileList | null;
     videos: FileList | null;
@@ -25,7 +25,11 @@ interface EssayPromptProps {
   toggleEssay: () => void;
 }
 
-const EssayPrompt: React.FC<EssayPromptProps> = ({ formData, selectedFiles, toggleEssay }) => {
+const EssayPrompt: React.FC<EssayPromptProps> = ({
+  formData,
+  selectedFiles,
+  toggleEssay,
+}) => {
   const [confirmation, setConfirmation] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
@@ -44,8 +48,11 @@ const EssayPrompt: React.FC<EssayPromptProps> = ({ formData, selectedFiles, togg
     <AnimatePresence>
       {isVisible && (
         <motion.div
+          initial={{ opacity: 0, x: -500 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 500 }}
+          transition={{ ease: "easeInOut", duration: 0.8 }}
           className="bg-gradient-to-t relative w-full p-8 rounded-lg shadow-xl"
-          transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <div className="text-base h-screen w-full text-white mx-auto">
             <TextEditor
@@ -56,11 +63,6 @@ const EssayPrompt: React.FC<EssayPromptProps> = ({ formData, selectedFiles, togg
             />
           </div>
         </motion.div>
-      )}
-      {confirmation && (
-        <>
-          <Confirmation />
-        </>
       )}
     </AnimatePresence>
   );

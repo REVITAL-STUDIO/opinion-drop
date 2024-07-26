@@ -90,7 +90,6 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
     }
   };
 
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -145,7 +144,13 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
   };
 
   return (
-    <section className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-90 z-50">
+    <motion.section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ ease: "easeInOut", duration: 0.8 }}
+      className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-90 z-50"
+    >
       <button
         onClick={toggleCreate}
         className={`w-12 h-12 shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 ${
@@ -157,6 +162,9 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
       <AnimatePresence>
         {isVisible && (
           <motion.div
+            initial={{ opacity: 0, x: -500 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 500 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="bg-gradient-to-t relative from-stone-500 to-stone-700 border lg:w-3/4  w-[90%]  xl:p-8 p-4 rounded-lg shadow-xl"
           >
@@ -280,7 +288,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
           />{" "}
         </>
       )}
-    </section>
+    </motion.section>
   );
 };
 

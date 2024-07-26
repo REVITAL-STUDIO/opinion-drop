@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import CommentForm from "./CommentForm";
 
@@ -51,7 +51,7 @@ const CommentMainFile = () => {
   const [commentsData, setCommentData] = useState(comments);
 
   return (
-    <div className="App bg-gradient-to-tl from-red-100 via-white to-blue-100">
+    <div className="App bg-black text-white">
       <CommentForm commentForm={commentsData} />
     </div>
   );

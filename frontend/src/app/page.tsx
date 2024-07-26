@@ -12,8 +12,8 @@ import Comment from "./components/comment";
 export default function Home() {
   return (
     <main>
-      <CommentMainFile />
       <Hero />
+      <CommentMainFile />
     </main>
   );
 }
