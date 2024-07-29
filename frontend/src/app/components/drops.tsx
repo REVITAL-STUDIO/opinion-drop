@@ -16,6 +16,7 @@ import RepliesModal from "./RepliesModal";
 import StateIt from "./stateIt";
 import DebateIt from "./debateIt";
 import MoreButton from "./moreButton";
+import { motion } from "framer-motion";
 
 interface dropsProps {
   topic: {
@@ -168,25 +169,41 @@ const Drop = ({ topic }: dropsProps) => {
       <div>
         {selectedOpinion && (
           <>
-            <div className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/90 to-red-500/95  bg-opacity-95 z-20 w-full h-screen flex justify-center items-center">
-               <div className="w-1/2 ">
+            <motion.div
+              initial={{ opacity: 0}}
+              animate={{ opacity: 1}}
+              exit={{ opacity: 0}}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95  bg-opacity-95 z-20 w-full h-screen flex justify-center items-center"
+            >
+              <div className="w-1/2 ">
                 {" "}
                 <DetailsModal opinionData={selectedOpinion} />
-              </div> 
-               <OpinionModal
+              </div>
+              <OpinionModal
                 opinionData={selectedOpinion}
                 closeModal={closeModal}
                 toggleStateIt={toggleStateIt}
                 toggleDebateIt={toggleDebateIt}
               />
-              {stateIt && <StateIt opinionData={selectedOpinion} topic={topic} toggleStateIt={toggleStateIt} />}
-              {debateIt && <DebateIt opinionData={selectedOpinion} topic={topic} toggleDebateIt={toggleDebateIt} />}
+              {stateIt && (
+                <StateIt
+                  opinionData={selectedOpinion}
+                  topic={topic}
+                  toggleStateIt={toggleStateIt}
+                />
+              )}
+              {debateIt && (
+                <DebateIt
+                  opinionData={selectedOpinion}
+                  topic={topic}
+                  toggleDebateIt={toggleDebateIt}
+                />
+              )}
               <MoreButton />
-            </div>
+            </motion.div>
 
             {/* State It */}
-            
-
           </>
         )}
       </div>

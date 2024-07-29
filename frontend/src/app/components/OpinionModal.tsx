@@ -10,6 +10,7 @@ import ProgressBar from "progressbar.js";
 import InteractionModal from "./InteractionModal";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
+import { motion } from "framer-motion";
 
 import SurveyPrompt from "./SurveyPrompt";
 import {
@@ -99,7 +100,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     setShowConfirmation(true);
     setTimeout(() => {
       setShowConfirmation(false);
-    }, 2000);
+    }, 3000);
   };
 
   const openReplies = () => {
@@ -282,39 +283,42 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     console.log("rebuttal state variable", rebuttals);
   }, []);
 
-
   const demoRebuttals = [
     {
       id: 1,
       title: "Pro-Choice Perspectives on Abortion",
       author: "Alice Johnson",
       textcontent: "rebutall text...........",
-      parentOpinionId: 1
+      parentOpinionId: 1,
     },
     {
       id: 1,
       title: "Pro-Life Arguments Against Abortion",
       author: "Bob Smith",
       textcontent: "rebutall text...........",
-      parentOpinionId: 1    },
+      parentOpinionId: 1,
+    },
     {
       id: 1,
       title: "Legal Aspects of Abortion Rights",
       author: "Catherine Lee",
       textcontent: "rebutall text...........",
-      parentOpinionId: 1    },
+      parentOpinionId: 1,
+    },
     {
       id: 1,
       title: "Ethical Considerations in Abortion Debates",
       author: "David Brown",
       textcontent: "rebutall text...........",
-      parentOpinionId: 1    },
+      parentOpinionId: 1,
+    },
     {
       id: 1,
       title: "Medical Implications of Abortion Procedures",
       author: "Eva Green",
       textcontent: "rebutall text...........",
-      parentOpinionId: 1    },
+      parentOpinionId: 1,
+    },
   ];
 
   return (
@@ -344,14 +348,14 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       </div>
       {/* Survey Container */}
       <div
-        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]   bg-opacity-95  bg-[#fff] z-30 flex justify-center shadow-lg rounded-b-md ${
+        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#fff] z-30 flex justify-center shadow-lg rounded-b-md ${
           hideOpinion ? "" : "invisible"
         }`}
       >
-        <div className="absolute -top-[5rem] left-0 w-full h-[5rem]  bg-[#fff]/90  z-40"></div>
+        <div className="absolute -top-[5rem] left-0 w-full h-[5rem]  bg-[#fff]  z-40"></div>
 
-        <div className="p-6 flex-col text-black relative">
-          <h3 className="text-6xl w-1/2 font-black my-4 p-4">Tell Us..</h3>
+        <div className="p-4 flex-col text-black relative">
+          <h3 className="text-6xl w-1/2 font-black  p-4">Tell Us..</h3>
           <SurveyPrompt prompt="Life begins at conception, and abortion is morally equivalent to taking an innocent human life." />
           <SurveyPrompt prompt="Some religions grant exceptions for abortion in cases of rape, incest, or when the mothers life is in danger, while others oppose it under any circumstances." />
           <SurveyPrompt prompt="Abortion should be a private matter between a woman and her healthcare provider." />
@@ -359,24 +363,26 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             onClick={handleButtonClick}
             className="shadow-lg rounded-full absolute bottom-8 text-white w-20 h-20 hover:scale-95 ease-in-out duration-200 bg-green-500 flex items-center justify-center"
           >
-            <FontAwesomeIcon icon={faPaperPlane} className="w-8 h-8" />
+            <FontAwesomeIcon icon={faPaperPlane} className="text-2xl" />
           </button>
         </div>
       </div>
       {showConfirmation && (
-        <div className="absolute w-full h-[100%] z-50 inset-0 bg-gradient-to-t from-blue-700 to-white/75 bg-opacity-100 flex items-center justify-center">
-          <div className="px-4 py-[10%] text-white flex flex-col ">
-            <div className="w-20 h-20 mx-auto my-4 border-4 border-green-300 rounded-full flex justify-center items-center">
-              <FontAwesomeIcon
-                icon={faCheck}
-                className="w-16 h-16 text-green-500"
-              />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="absolute w-full h-[100%] z-50 inset-0 bg-gradient-to-t from-white to-white/95 bg-opacity-100 flex items-center justify-center"
+        >
+          <div className="px-4 py-[10%]  flex flex-col ">
+            <div className="p-4  mx-auto my-4 border-4 border-green-300 bg-green-300 rounded-full flex justify-center items-center">
+              <FontAwesomeIcon icon={faCheck} className="text-3xl text-white" />
             </div>
-            <span className="mx-auto text-4xl my-2 font-black">Thanks!</span>
-
+            <span className="mx-auto text-4xl my-2 font-black">Response Recorded</span>
             <span className="mx-auto">Your response has been recorded!</span>
           </div>
-        </div>
+        </motion.div>
       )}
 
       <div className="w-full  overflow-y-auto">
@@ -400,11 +406,11 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
               <section
                 className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${
                   replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                }  transition-all ease-in-out duration-150 z-10 bg-gradient-to-bl from-purple-700 to-[#2b2b2b] rounded-lg shadow-lg text-white `}
+                }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg shadow-lg text-white `}
               >
                 <button
                   onClick={toggleStateIt}
-                  className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out   duration-200 transition rounded-tl-lg hover:scale-110 rounded-tr-lg border-b  "
+                  className="w-full p-4 text-left hover:bg-white text-black ease-in-out   duration-200 transition rounded-tl-lg hover:scale-110 rounded-tr-lg border-b  "
                 >
                   <span className="font-semibold">State It</span>
                   <p className="  text-xs">
@@ -413,7 +419,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                 </button>
                 <button
                   onClick={toggleDebateIt}
-                  className="w-full p-4 text-left hover:bg-white hover:text-black ease-in-out rounded-bl-lg rounded-br-lg hover:scale-110 duration-200 transition "
+                  className="w-full p-4 text-left text-black ease-in-out rounded-bl-lg rounded-br-lg hover:scale-110 duration-200 transition "
                 >
                   <span className="font-semibold">Debate It</span>
                   <p className=" text-xs">Give them a fierce second opinion</p>
