@@ -23,25 +23,24 @@ interface EssayPromptProps {
   };
   selectedFiles: FileExtended[];
   toggleEssay: () => void;
+  toggleConfirmation: () => void;
 }
 
 const EssayPrompt: React.FC<EssayPromptProps> = ({
   formData,
   selectedFiles,
   toggleEssay,
+  toggleConfirmation,
 }) => {
   const [confirmation, setConfirmation] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  const toggleConfirmation = () => {
-    setIsVisible(false);
-    setConfirmation(!confirmation);
+  const handleToggleConfirmation = () => {
+    setConfirmation(true); // Update to directly show confirmation
   };
 
-  // Function to handle text changes from the TextEditor component
   const handleTextEditorChange = (textContent: string) => {
     console.log("Text changed:", textContent);
-    // Handle the text content update, e.g., update state or perform some action
   };
 
   return (
@@ -52,16 +51,19 @@ const EssayPrompt: React.FC<EssayPromptProps> = ({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 500 }}
           transition={{ ease: "easeInOut", duration: 0.8 }}
-          className="bg-gradient-to-t relative w-full p-8 rounded-lg shadow-xl"
+          className="relative w-full flex justify-center items-center rounded-lg shadow-xl h-screen"
         >
-          <div className="text-base h-screen w-full text-white mx-auto">
+          {confirmation ? (
+            <Confirmation />
+          ) : (
             <TextEditor
               formData={formData}
               selectedFiles={selectedFiles}
               toggleEssay={toggleEssay}
-              onTextEditorChange={handleTextEditorChange} // Pass the callback function here
+              onTextEditorChange={handleTextEditorChange}
+              toggleConfirmation={handleToggleConfirmation}
             />
-          </div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

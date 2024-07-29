@@ -24,6 +24,7 @@ interface TextEditorProps {
   selectedFiles: FileExtended[];
   toggleEssay: () => void;
   onTextEditorChange: (textContent: string) => void;
+  toggleConfirmation: () => void; // Add toggleConfirmation to props
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({
@@ -31,6 +32,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
   selectedFiles,
   toggleEssay,
   onTextEditorChange,
+  toggleConfirmation, // Add toggleConfirmation to destructuring
 }) => {
   const [editorState, setEditorState] = useState(() => {
     const savedContent = localStorage.getItem("editorContent");
@@ -106,6 +108,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
   };
 
   const { currentUser } = useAuth();
+  const [error, setError] = useState<string | null>(null);
 
   const createOpinion = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -143,127 +146,118 @@ const TextEditor: React.FC<TextEditorProps> = ({
           throw new Error("Error creating opinion");
         }
         alert("Opinion submitted successfully.");
-        toggleEssay();
+        toggleConfirmation(); // Call your function to show the page
       } catch (error) {
         console.log("Error creating opinion: ", error);
+        setError("Failed to submit opinion. Please try again.");
       }
     } else {
       alert("Please agree to all terms before submitting.");
     }
   };
 
-  const [confirmation, setConfirmation] = useState(false);
-
-  const toggleConfirmation = () => {
-    setConfirmation(!confirmation);
-  };
-
   return (
     <div className="w-full h-full flex flex-col lg:flex-row justify-center items-center gap-x-4">
-      <h2 className="my-4 font-bold text-5xl w-1/2 hidden xl:block">
+      <h2 className="mx-auto font-bold text-5xl hidden xl:block text-white ">
         Write Your Essay
       </h2>
-      <div className="bg-white text-black relative xl:w-2/3 w-full rounded-lg h-5/6 shadow-lg">
-        <div className="w-full h-1/2">
-          <div className="text-editor  max-h-[100%] overflow-y-auto p-4">
+      <div className="bg-white text-black relative xl:w-2/3 w-[90%] xl:h-5/6 h-1/2 rounded-lg  xl:mr-4 border shadow-lg p-4 ">
+        <div className=" h-full flex flex-col justify-between">
+          <div className="max-h-[400px] overflow-y-auto ">
             <Editor
               editorState={editorState}
               onChange={setEditorState}
-              placeholder="Start writing your text here..."
+              placeholder="Write your essay..."
             />
           </div>
-        </div>
-        <div className="h-1/2 w-full  bottom-0 shadow-md  border-t">
-          <form
-            onSubmit={createOpinion}
-            className="shadow-md rounded-lg p-6 h-full md:text-base text-xs"
-          >
-            <h2 className="lg:text-base text-sm font-medium mb-4">
-              Please agree to the following terms before submitting your
-              opinion:
-            </h2>
-
-            <div className="mb-2">
-              <label className="flex items-center">
+          <form onSubmit={createOpinion} className="border-t p-4">
+            <h3 className="text-sm font-bold mb-2">
+              Please agree to the following:
+            </h3>
+            <div className="flex flex-col gap-y-1 w-full text-sm">
+              <label>
                 <input
                   type="checkbox"
                   name="respectfulLanguage"
                   checked={agreed.respectfulLanguage}
                   onChange={handleChangeEssay}
-                  className="mr-2"
                 />
-                I agree to use respectful language in my post.
+                <span className="ml-1">Respectful Language</span>
               </label>
-            </div>
-            <div className="mb-2">
-              <label className="flex items-center">
+              <label>
                 <input
                   type="checkbox"
                   name="factChecking"
                   checked={agreed.factChecking}
                   onChange={handleChangeEssay}
-                  className="mr-2"
                 />
-                I agree that my post is based on facts and accurate information.
+                <span className="ml-1">Fact Checked</span>
               </label>
-            </div>
-            <div className="mb-2">
-              <label className="flex items-center">
+              <label>
                 <input
                   type="checkbox"
                   name="noPersonalAttacks"
                   checked={agreed.noPersonalAttacks}
                   onChange={handleChangeEssay}
-                  className="mr-2"
                 />
-                I agree not to include personal attacks or hate speech in my
-                post.
+                <span className="ml-1">No Personal Attacks</span>
               </label>
-            </div>
-            <div className="mb-2">
-              <label className="flex items-center">
+              <label>
                 <input
                   type="checkbox"
                   name="originalContent"
                   checked={agreed.originalContent}
                   onChange={handleChangeEssay}
-                  className="mr-2"
                 />
-                I agree that the content I am posting is my own original work.
+                <span className="ml-1">Original Content</span>
               </label>
-            </div>
-            <div className="mb-2">
-              <label className="flex items-center">
+              <label>
                 <input
                   type="checkbox"
                   name="noPlagiarism"
                   checked={agreed.noPlagiarism}
                   onChange={handleChangeEssay}
-                  className="mr-2"
                 />
-                I agree not to plagiarize content from other sources.
+                <span className="ml-1">No Plagiarism</span>
               </label>
-            </div>
-            <div className="mb-2">
-              <label className="flex items-center">
+              <label>
                 <input
                   type="checkbox"
                   name="understandingConsequences"
                   checked={agreed.understandingConsequences}
                   onChange={handleChangeEssay}
-                  className="mr-2"
                 />
-                I understand that violating these terms may result in the
-                removal of my post or account suspension.
+                <span className="ml-1">Understanding Consequences</span>
               </label>
             </div>
-
+            {error && (
+              <div className="mt-4 p-2 bg-red-200 text-red-800 border border-red-400 rounded">
+                {error}
+              </div>
+            )}
             <button
-              onClick={toggleConfirmation}
               type="submit"
-              className="px-4 py-2 mb-4 bg-gradient-to-bl from-red-500 to-blue-500 text-white rounded-lg hover:bg-blue-600 transition ease-in-out hover:scale-95 duration-300 "
+              className="relative inline-flex mt-4 w-[100%] shadow-xl items-center justify-center py-6  overflow-hidden font-medium text-white bg-gradient-to-tl from-purple-300 to-blue-500  transition duration-300 ease-out rounded-full group"
             >
-              Drop Essay
+              <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-gradient-to-tl to-purple-300 from-red-500 group-hover:translate-x-0 ease">
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="white"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  ></path>
+                </svg>
+              </span>
+              <span className="absolute flex items-center justify-center w-full h-full transition-all duration-300 transform group-hover:translate-x-full ease">
+                Submit
+              </span>
             </button>
           </form>
         </div>

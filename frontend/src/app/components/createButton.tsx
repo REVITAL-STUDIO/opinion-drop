@@ -18,19 +18,6 @@ const CreateButton = ({ topic }: createButtonProps) => {
     setOpenCreateOpinion((open) => !open);
   };
 
-  // useEffect(() => {
-  //   if (typeof document !== 'undefined') {
-  //     if (openCreateOpinion) {
-  //       document.body.style.overflow = 'hidden';
-  //     } else {
-  //       document.body.style.overflow = 'auto';
-  //     }
-
-  //     return () => {
-  //       document.body.style.overflow = 'auto';
-  //     };
-  //   }
-  // }, [openCreateOpinion]);
 
   return (
     <div className="">
