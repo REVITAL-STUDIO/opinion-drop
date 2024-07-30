@@ -12,18 +12,47 @@ import { MdFlag } from "react-icons/md";
 import ReplyShort from "./ReplyShort";
 import { IoClose } from "react-icons/io5";
 import SurveyPrompt from "./SurveyPrompt";
-import Comment from "./comment";
+import CommentContainer from "./comment";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { json } from "stream/consumers";
+import { useAuth } from "../hooks/AuthContext";
 
-interface RepliesModalProps {
+interface OpinionCommentsProps {
+  opinionData: {
+    id: number;
+    author: string;
+    title: string;
+    textcontent: string;
+    backgroundimage: string;
+    authorprofileimage?: string;
+  };
   closeModal: () => void;
 }
 
-const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
+interface Comment {
+  id: number;
+  author: string;
+  textcontent: string;
+  parentcommentid: number | null;
+  parentcommentauthor: string | null;
+  authorprofileimage?: string;
+  likes: number;
+  createdat: string;
+}
+
+const OpinionComments: React.FC<OpinionCommentsProps> = ({ closeModal, opinionData }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
   const [currentHeight, setCurrentHeight] = useState(0);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newCommentText, setNewCommentText] = useState("");
+  const { currentUser } = useAuth();
+
+
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewCommentText(e.target.value);
+  };
 
   useEffect(() => {
     if (isDragging) {
@@ -50,6 +79,65 @@ const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
     setIsDragging(true);
     setStartY(e.clientY + currentHeight);
   };
+
+  const fetchComments = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${opinionData.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving comments");
+      }
+      const response = await res.json();
+      setComments(response.data.comments);
+    } catch (error) {
+      console.log("Error Fetching Comments: ", error);
+    }
+  };
+
+  const postComment = async () => {
+    console.log("in post comments")
+    console.log("comments opinionid ", opinionData);
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${opinionData.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: currentUser?.uid,
+            opinionId: opinionData.id,
+            content: newCommentText,
+            parentCommentId: null,
+          })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error posting comment");
+      }
+      const response = await res.json();
+      const newComment = response.data.comment
+      setComments((prevComments) => [newComment, ...prevComments]);
+      setNewCommentText("");
+      await fetchComments();
+    } catch (error) {
+      console.log("Error posting comment: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, []);
+
 
   return (
     <AnimatePresence>
@@ -83,34 +171,40 @@ const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
           </div>
           <div className="w-[80%]  overflow-x-visible">
             <h2 className="text-4xl font-bold mb-[2%] relative ">DISCUSSION</h2>
-            {/* Replies shorts */}
+            {/* Comments */}
             <div className="w-[1000px] h-[420px] overflow-auto pt-[1rem] pb-[3rem] pl-[3rem]">
               <div className="relative flex flex-col gap-8  overflow-visible w-full border-l-[2px] border-[#676767] ">
-                <Comment />
-                <Comment />
-                <Comment />
-                <Comment />
+                {comments.map((comment) => (
+                  <CommentContainer key={comment.id} comment={comment} opinionId={opinionData.id} />
+                ))}
               </div>
             </div>
             <div className="relative mt-2">
               <textarea
+                value={newCommentText}
+                onChange={handleCommentChange}
                 className="w-full h-[80px] p-2 border border-[#676767] rounded-md bg-transparent text-white placeholder-white"
                 placeholder="Write your comment here..."
               />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="absolute top-6 right-6 text-white size-6"
+              <button
+                onClick={postComment}
+                className="absolute top-6 right-6 text-white bg-transparent border-none cursor-pointer transition-transform transform hover:scale-105 hover:shadow-lg hover:bg-[#333] p-2 rounded-md"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4.5v15m7.5-7.5h-15"
-                />
-              </svg>
+                <svg
+                  className="size-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -119,4 +213,4 @@ const RepliesModal: React.FC<RepliesModalProps> = ({ closeModal }) => {
   );
 };
 
-export default RepliesModal;
+export default OpinionComments;

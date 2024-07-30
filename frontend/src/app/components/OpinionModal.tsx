@@ -270,8 +270,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         throw new Error("Error retrieving opinions");
       }
       const response = await res.json();
-      console.log("data: ", response.data);
-      console.log("rebuttals:", response.data.opinions);
       setRebuttals(response.data.opinions);
     } catch (error) {
       console.log("Error Fetching Opinions: ", error);
@@ -280,7 +278,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
 
   useEffect(() => {
     fetchRebuttals();
-    console.log("rebuttal state variable", rebuttals);
   }, []);
 
   const demoRebuttals = [

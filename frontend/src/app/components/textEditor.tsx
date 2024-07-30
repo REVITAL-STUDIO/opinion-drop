@@ -120,7 +120,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
       if (currentUser) {
         opinionData.append("userId", currentUser.uid);
       }
-      console.log("topic id from formdata: ", formData.topicId);
       opinionData.append("topicId", String(formData.topicId));
       opinionData.append("title", formData.title);
       opinionData.append("affiliation", formData.affiliation);

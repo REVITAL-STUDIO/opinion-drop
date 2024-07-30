@@ -11,9 +11,11 @@ export interface UserOpinion {
   export interface UserComment {
     id: number;
     author: string;
+    parentCommentAuthor: string;
     content: string;
     authorProfilePicture: string;
     parentCommentId: number | null;
+    likes: number;
     createdAt: Date;
     UpdatedAt: Date;
   }

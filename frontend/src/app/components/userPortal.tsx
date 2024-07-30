@@ -132,8 +132,6 @@ const UserPortal: React.FC<UserPortalProps> = ({
         throw new Error("Error retrieving opinions");
       }
       const response = await res.json();
-      console.log("data: ", response.data);
-      console.log("More Data:", response.data.opinions);
       setOpinions(response.data.opinions);
     } catch (error) {
       console.log("Error Fetching Opinions: ", error);

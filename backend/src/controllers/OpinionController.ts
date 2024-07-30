@@ -17,14 +17,12 @@ export class OpinionController {
         try {
 
             const { title, textContent, userId, topicId, parentOpinionId, images, videos, audios, documents } = req.body;
-            console.log("createopinion request body: ", req.body);
             if (!title || !textContent || !userId || !topicId) {
                 res.status(400).send('Invalid opinion data');
                 return;
             }
 
             const { file } = req;
-            console.log("Uploaded file: ", file);
 
             const opinionData = {
                 title,
@@ -165,7 +163,6 @@ export class OpinionController {
         try {
 
             const userId: string = req.params.userId;
-            console.log("userid: ", userId);
 
             if (!userId) {
                 res.status(400).send('Invalid user ID');
@@ -193,7 +190,6 @@ export class OpinionController {
         try {
 
             const opinionId: number = parseInt(req.params.opinionId, 10);
-            console.log("topicid: ", opinionId);
             if (isNaN(opinionId)) {
                 res.status(400).send('Invalid opinion ID');
                 return;

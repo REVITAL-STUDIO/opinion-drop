@@ -44,7 +44,7 @@ export class OpinionDAO {
 
     async getOpinion(opinionId: number): Promise<UserOpinion | null> {
         const query = `
-        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as textcontent, opinions.background_image as backgroundImage, 
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as textContent, opinions.background_image as backgroundImage, 
         users.username as author, users.profile_picture as authorProfileImage
         FROM opinions
         JOIN users ON opinions.user_id = users.user_id
@@ -105,7 +105,7 @@ export class OpinionDAO {
 
     async getOpinionsByTopic(topicId: number): Promise<UserOpinion[]> {
         const query = `
-        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as textContent, opinions.background_image as backgroundImage, 
                users.username as author, users.profile_picture as authorProfileImage
         FROM opinions
         JOIN users ON opinions.user_id = users.user_id
@@ -135,7 +135,7 @@ export class OpinionDAO {
 
     async getOpinionsByUser(userId: string): Promise<UserOpinion[]> {
         const query = `
-        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as text, opinions.background_image as backgroundImage, 
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as textcontent, opinions.background_image as backgroundImage, 
                users.username as author, users.profile_picture as authorProfileImage
         FROM opinions
         JOIN users ON opinions.user_id = users.user_id

@@ -41,8 +41,13 @@ router.delete('/opinions/:opinionId', opinionController.deleteOpinion.bind(opini
 
 
 // Comment Routes
-router.post('/comments', commentController.createComment.bind(commentController));
+router.post('/comments/opinion/:opinionId', commentController.createOpinionComment.bind(commentController));
 router.get('/comments/:commentId', commentController.getComment.bind(commentController));
+router.get('/comments/opinion/:opinionId', commentController.getOpinionComment.bind(commentController));
+router.get('/comments/children/:commentId', commentController.getChildComments.bind(commentController));
+router.post('/comments/userLiked/:commentId', commentController.userHasLiked.bind(commentController));
+router.put('/comments/like/:commentId', commentController.likeComment.bind(commentController));
+router.put('/comments/unlike/:commentId', commentController.unlikeComment.bind(commentController));
 router.put('/comments/:commentId', commentController.updateComment.bind(commentController));
 router.delete('/comments/:commentId', commentController.deleteComment.bind(commentController));
 

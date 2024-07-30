@@ -12,11 +12,12 @@ import {
 import Questions from "./questions";
 import DetailsModal from "./DetailsModal";
 import OpinionModal from "./OpinionModal";
-import RepliesModal from "./RepliesModal";
 import StateIt from "./stateIt";
 import DebateIt from "./debateIt";
 import MoreButton from "./moreButton";
 import { motion } from "framer-motion";
+import OpinionComments from "./OpinionComments";
+
 
 interface dropsProps {
   topic: {
@@ -39,8 +40,12 @@ const Drop = ({ topic }: dropsProps) => {
   const [showRepliesModal, setShowRepliesModal] = useState(true);
   const [stateIt, setStateIt] = useState(false);
   const [debateIt, setDebateIt] = useState(false);
-
   const [opinions, setOpinions] = useState<Opinion[]>([]);
+  const [showComments, setShowComments] = useState(false);
+
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
 
   const toggleStateIt = () => {
     setStateIt(!stateIt);
@@ -50,7 +55,6 @@ const Drop = ({ topic }: dropsProps) => {
     setDebateIt(!debateIt);
   };
 
-  console.log("Clicked:", toggleStateIt);
 
   const closeModal = () => {
     setSelectedOpinion(null);
@@ -75,8 +79,6 @@ const Drop = ({ topic }: dropsProps) => {
         throw new Error("Error retrieving opinions");
       }
       const response = await res.json();
-      console.log("data: ", response.data);
-      console.log("More Data:", response.data.opinions);
       setOpinions(response.data.opinions);
     } catch (error) {
       console.log("Error Fetching Opinions: ", error);
@@ -85,11 +87,9 @@ const Drop = ({ topic }: dropsProps) => {
 
   useEffect(() => {
     fetchOpinions();
-    console.log("opinions state variable", opinions);
   }, []);
 
   useEffect(() => {
-    console.log("opinions state variable", opinions);
   }, [opinions]);
 
   const [currdeg, setCurrdeg] = useState(0);
@@ -170,9 +170,9 @@ const Drop = ({ topic }: dropsProps) => {
         {selectedOpinion && (
           <>
             <motion.div
-              initial={{ opacity: 0}}
-              animate={{ opacity: 1}}
-              exit={{ opacity: 0}}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95  bg-opacity-95 z-20 w-full h-screen flex justify-center items-center"
             >
@@ -200,10 +200,9 @@ const Drop = ({ topic }: dropsProps) => {
                   toggleDebateIt={toggleDebateIt}
                 />
               )}
-              <MoreButton />
-            </motion.div>
+              <MoreButton toggleComments={toggleComments} showComments={showComments} />
+              {showComments && <OpinionComments closeModal={toggleComments} opinionData={selectedOpinion} />}            </motion.div>
 
-            {/* State It */}
           </>
         )}
       </div>
