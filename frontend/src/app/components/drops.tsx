@@ -44,6 +44,9 @@ const Drop = ({ topic }: dropsProps) => {
   const [debateIt, setDebateIt] = useState(false);
   const [opinions, setOpinions] = useState<Opinion[]>([]);
   const [showComments, setShowComments] = useState(false);
+  const [likes, setLikes] = useState<number>(0);
+  const [hasLiked, setHasLiked] = useState(false); // Flag to track if the user has liked
+  const [hasDisliked, setHasDisliked] = useState(false);
 
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -59,10 +62,6 @@ const Drop = ({ topic }: dropsProps) => {
 
   const closeModal = () => {
     setSelectedOpinion(null);
-  };
-
-  const closeReplies = () => {
-    setShowRepliesModal(false);
   };
 
   const fetchOpinions = async () => {
@@ -98,6 +97,19 @@ const Drop = ({ topic }: dropsProps) => {
       setCurrdeg((prev) => prev - 60);
     } else if (direction === "prev") {
       setCurrdeg((prev) => prev + 60);
+    }
+  };
+
+  const toggleIncrease = () => {
+    // If the user has not liked, add the like
+    setLikes((prevLikes) => prevLikes + 1);
+    setHasLiked(true);
+  };
+
+  const toggleDecrease = () => {
+    if (likes > 0 && !hasDisliked) {
+      setLikes((prevLikes) => prevLikes - 1);
+      setHasDisliked(false);
     }
   };
 
@@ -155,15 +167,20 @@ const Drop = ({ topic }: dropsProps) => {
                     View{" "}
                     <FontAwesomeIcon icon={faEye} className="text-xs ml-1" />
                   </button>
+                  {/* Likes and Dislikes */}
                   <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-purple-600 absolute bottom-2 right-2 flex justify-between items-center">
                     <button className="w-[1rem] h-[1rem] bg-white rounded-full flex justify-center items-center">
                       <FontAwesomeIcon
+                        onClick={() => toggleIncrease()}
                         icon={faMicrophoneLines}
                         className="text-xs text-black"
                       />
                     </button>
-                    <span className="mx-2 text-xs">20</span>
-                    <button className="w-[1rem] h-[1rem] bg-white rounded-full">
+                    <span className="mx-2 text-xs">{likes}</span>
+                    <button
+                      onClick={() => toggleDecrease()}
+                      className="w-[1rem] h-[1rem] bg-white rounded-full"
+                    >
                       <FontAwesomeIcon
                         icon={faMicrophoneLinesSlash}
                         className="text-xs  text-black"
