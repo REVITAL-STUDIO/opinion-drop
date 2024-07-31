@@ -260,7 +260,7 @@ span:hover .overlay-container {
   text-align: center;
   color: #fff;
   opacity: 0.99;
-  border-radius: 10%;
+  border-radius: 5%;
 }
 
 .next,
@@ -306,8 +306,8 @@ span:hover .overlay-container {
 @media (max-width: 500px) {
   .container {
     margin: 0 auto;
-    width: 350px;
-    height: 350px;
+    width: 400px;
+    height: 400px;
     perspective: 2000px;
     overflow: hidden;
   }
@@ -337,7 +337,7 @@ span:hover .overlay-container {
     text-align: center;
     color: #fff;
     opacity: 0.99;
-    border-radius: 10px;
+    border-radius: 5px;
   }
 
   .next {
@@ -391,7 +391,7 @@ span:hover .overlay-container {
     text-align: center;
     color: #fff;
     opacity: 0.99;
-    border-radius: 10px;
+    border-radius: 5px;
   }
 
   .next {

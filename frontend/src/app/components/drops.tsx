@@ -7,6 +7,9 @@ import {
   faAngleLeft,
   faAngleRight,
   faArrowUpFromBracket,
+  faEye,
+  faMicrophoneLines,
+  faMicrophoneLinesSlash,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import Questions from "./questions";
@@ -17,7 +20,6 @@ import DebateIt from "./debateIt";
 import MoreButton from "./moreButton";
 import { motion } from "framer-motion";
 import OpinionComments from "./OpinionComments";
-
 
 interface dropsProps {
   topic: {
@@ -55,7 +57,6 @@ const Drop = ({ topic }: dropsProps) => {
     setDebateIt(!debateIt);
   };
 
-
   const closeModal = () => {
     setSelectedOpinion(null);
   };
@@ -89,8 +90,7 @@ const Drop = ({ topic }: dropsProps) => {
     fetchOpinions();
   }, []);
 
-  useEffect(() => {
-  }, [opinions]);
+  useEffect(() => {}, [opinions]);
 
   const [currdeg, setCurrdeg] = useState(0);
   const rotate = (direction: "next" | "prev") => {
@@ -102,7 +102,7 @@ const Drop = ({ topic }: dropsProps) => {
   };
 
   return (
-    <section className=" flex  justify-center items-center mt-6">
+    <section className=" flex  justify-center items-center my-6">
       <div className="container ">
         <div
           className="carousel"
@@ -137,23 +137,39 @@ const Drop = ({ topic }: dropsProps) => {
                     src={slide.backgroundimage}
                     alt={slide.author}
                     fill
-                    className="absolute w-[100%] h-[100%] object-cover rounded-xl"
+                    className="absolute w-[100%] h-[100%] object-cover rounded-md"
                   />
                   <div className="absolute inset-0 bg-black opacity-30"></div>
 
-                  <div className="text-white text-[15px] font-black absolute bottom-[4rem] left-2 text-left line-clamp-3 leading-tight flex flex-col gap-2">
+                  <div className="text-white text-[15px] font-medium absolute bottom-[4rem] left-4 text-left line-clamp-3 leading-tight flex flex-col gap-2">
                     <p className="text-[12px]">{slide.author}</p>
 
-                    <p className="text-[24px]">{slide.title}</p>
+                    <p className="text-[18px] font-bold">{slide.title}</p>
                   </div>
                   <button
                     onClick={() => {
                       setSelectedOpinion(slide);
                     }}
-                    className="px-4 py-2 z-40 border shadow-lg bg-black text-white rounded-full text-xs absolute bottom-2 left-4"
+                    className="px-4 py-2 z-40 shadow-lg text-white hover:bg-[#ececec] bg-[#000]/70 border ease-in-out duration-200 transition hover:text-black  rounded-full text-xs  absolute bottom-2 left-2"
                   >
-                    View
+                    View{" "}
+                    <FontAwesomeIcon icon={faEye} className="text-xs ml-1" />
                   </button>
+                  <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-purple-600 absolute bottom-2 right-2 flex justify-between items-center">
+                    <button className="w-[1rem] h-[1rem] bg-white rounded-full flex justify-center items-center">
+                      <FontAwesomeIcon
+                        icon={faMicrophoneLines}
+                        className="text-xs text-black"
+                      />
+                    </button>
+                    <span className="mx-2 text-xs">20</span>
+                    <button className="w-[1rem] h-[1rem] bg-white rounded-full">
+                      <FontAwesomeIcon
+                        icon={faMicrophoneLinesSlash}
+                        className="text-xs  text-black"
+                      />
+                    </button>
+                  </div>
                 </div>
               ) : null
             )
@@ -200,9 +216,17 @@ const Drop = ({ topic }: dropsProps) => {
                   toggleDebateIt={toggleDebateIt}
                 />
               )}
-              <MoreButton toggleComments={toggleComments} showComments={showComments} />
-              {showComments && <OpinionComments closeModal={toggleComments} opinionData={selectedOpinion} />}            </motion.div>
-
+              <MoreButton
+                toggleComments={toggleComments}
+                showComments={showComments}
+              />
+              {showComments && (
+                <OpinionComments
+                  closeModal={toggleComments}
+                  opinionData={selectedOpinion}
+                />
+              )}{" "}
+            </motion.div>
           </>
         )}
       </div>

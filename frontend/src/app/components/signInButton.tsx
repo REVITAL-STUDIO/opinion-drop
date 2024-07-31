@@ -9,6 +9,7 @@ const SignInButton: React.FC = () => {
   const [openSignUp, setSignUp] = useState(false);
   const { currentUser, loading, logout } = useAuth();
   const [openUserPortal, setOpenUserPortal] = useState(false);
+  const [openNotification, setOpenNotifications] = useState(false);
 
   const toggleOpenSignUpForm = () => {
     setSignUp((e) => !e);
@@ -28,6 +29,10 @@ const SignInButton: React.FC = () => {
     } catch (error) {
       console.error("Error logging out:", error);
     }
+  };
+
+  const toggleNotification = () => {
+    setOpenNotifications((e) => !e);
   };
 
   return (
