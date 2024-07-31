@@ -47,6 +47,9 @@ const Drop = ({ topic }: dropsProps) => {
   const [likes, setLikes] = useState<number>(0);
   const [hasLiked, setHasLiked] = useState(false); // Flag to track if the user has liked
   const [hasDisliked, setHasDisliked] = useState(false);
+  const [activeButton, setActiveButton] = useState<"like" | "dislike" | null>(
+    null
+  ); // Updated type
 
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -104,6 +107,7 @@ const Drop = ({ topic }: dropsProps) => {
     // If the user has not liked, add the like
     setLikes((prevLikes) => prevLikes + 1);
     setHasLiked(true);
+    setActiveButton("like"); // Set 'like' button as active
   };
 
   const toggleDecrease = () => {
@@ -111,6 +115,7 @@ const Drop = ({ topic }: dropsProps) => {
       setLikes((prevLikes) => prevLikes - 1);
       setHasDisliked(false);
     }
+    setActiveButton("dislike"); // Set 'dislike' button as active
   };
 
   return (
@@ -169,21 +174,31 @@ const Drop = ({ topic }: dropsProps) => {
                   </button>
                   {/* Likes and Dislikes */}
                   <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-purple-600 absolute bottom-2 right-2 flex justify-between items-center">
-                    <button className="w-[1rem] h-[1rem] bg-white rounded-full flex justify-center items-center">
+                    <button
+                      className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
+                        activeButton === "like"
+                          ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
+                          : "scale-100 text-black"
+                      }`}
+                      onClick={toggleIncrease}
+                    >
                       <FontAwesomeIcon
-                        onClick={() => toggleIncrease()}
                         icon={faMicrophoneLines}
-                        className="text-xs text-black"
+                        className="text-xs t"
                       />
                     </button>
                     <span className="mx-2 text-xs">{likes}</span>
                     <button
-                      onClick={() => toggleDecrease()}
-                      className="w-[1rem] h-[1rem] bg-white rounded-full"
+                      className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
+                        activeButton === "dislike"
+                          ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
+                          : "scale-100 text-black"
+                      }`}
+                      onClick={toggleDecrease}
                     >
                       <FontAwesomeIcon
                         icon={faMicrophoneLinesSlash}
-                        className="text-xs  text-black"
+                        className="text-xs "
                       />
                     </button>
                   </div>
