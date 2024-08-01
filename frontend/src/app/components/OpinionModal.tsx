@@ -86,6 +86,11 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const { currentUser } = useAuth();
   const [userHasLiked, setUserHasLiked] = useState(false);
   const [userHasDisliked, setUserHasDisliked] = useState(false);
+  const [openRating, setOpenRating] = useState(false);
+  const [userHasRated, setUserHasRated] = useState(false);
+  const [userRating, setuserRating] = useState<null | number>(null);
+
+
 
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
@@ -289,42 +294,42 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const handleLikeOpinion = async () => {
     console.log("in handle like");
     try {
-    if (!userHasLiked) {
-      if (userHasDisliked) {
-        await unDislikeOpinion();
-        setUserHasDisliked(false);
+      if (!userHasLiked) {
+        if (userHasDisliked) {
+          await unDislikeOpinion();
+          setUserHasDisliked(false);
+        }
+        await likeOpinion();
+        setUserHasLiked(true);
       }
-      await likeOpinion();
-      setUserHasLiked(true);
-    }
-    else {
-      await unLikeOpinion();
-      setUserHasLiked(false);
-    }
-  } catch(error){
-    console.log("Error in handlelike opinion: ", error);
+      else {
+        await unLikeOpinion();
+        setUserHasLiked(false);
+      }
+    } catch (error) {
+      console.log("Error in handlelike opinion: ", error);
 
-  }
+    }
   }
 
   const handleDislikeOpinion = async () => {
     console.log("in handle like");
     try {
-    if (!userHasDisliked) {
+      if (!userHasDisliked) {
         if (userHasLiked) {
           await unLikeOpinion();
           setUserHasLiked(false);
         }
         await dislikeOpinion();
         setUserHasDisliked(true);
+      }
+      else {
+        await unDislikeOpinion();
+        setUserHasDisliked(false);
+      }
+    } catch (error) {
+      console.log("Error in handledislike opinion: ", error);
     }
-    else {
-      await unDislikeOpinion();
-      setUserHasDisliked(false);
-    }
-  } catch(error){
-    console.log("Error in handledislike opinion: ", error);
-  }
   }
 
   const likeOpinion = async () => {
@@ -641,29 +646,78 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                   </div>
                 </div>
                 <div className="w-full mx-auto">
-                  <h2 className="my-4 text-center font-semibold">
-                    How much do you agree with this Essay?
-                  </h2>
-                  <div className="w-full flex justify-center items-center">
-                    <Box sx={{ width: 300 }}>
-                      <Slider
-                        aria-label="Temperature"
-                        defaultValue={50}
-                        value={sliderValue}
-                        onChange={handleSliderChange}
-                        getAriaValueText={valuetext}
-                        valueLabelDisplay="auto"
-                        step={10}
-                        marks
-                        min={10}
-                        max={100}
-                        className="mx-auto "
-                      />
-                    </Box>
+                  <div className="w-full flex flex-col justify-center items-center">
+                    {userHasRated ?
+                      <div>
+                        {!openRating &&
+                          <div>
+                            <p>
+                              Your Rating: <span className="text-lg">50%</span>
+                            </p>
+                            <button
+                              onClick={() => setOpenRating(true)}
+                              className="font-bold  px-2 py-2 mt-2 border shadow-md rounded-full text-white flex items-center justify-center bg-blue-400"
+                            >
+                              Update Rating
+                            </button>
+                          </div>
+                        }
+                      </div>
+                      :
+                      <div className="flex flex-col items-center">
+                        <h2 className="my-4 text-center font-semibold">
+                          How much do you agree with this Essay?
+                        </h2>
+                        {!openRating &&
+                          <button
+                            onClick={() => setOpenRating(true)}
+                            className="font-bold px-2 py-2 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
+                          >
+                            Rate Opinion
+                          </button>
+                        }
+                      </div>
+                    }
+
+                    {openRating &&
+                      <div>
+                        <Box sx={{ width: 300 }}>
+                          <Slider
+                            aria-label="Temperature"
+                            defaultValue={50}
+                            value={sliderValue}
+                            onChange={handleSliderChange}
+                            getAriaValueText={valuetext}
+                            valueLabelDisplay="auto"
+                            step={10}
+                            marks
+                            min={10}
+                            max={100}
+                            className="mx-auto "
+                          />
+                        </Box>
+                        <p className="text-center text-3xl font-bold mb">
+                          {valuetext(sliderValue)}%
+                        </p>
+                      </div>
+                    }
+                    {openRating &&
+                      <button
+                        onClick={() => setOpenRating(false)}
+                        className=" text-gray-400 relative right-[15rem]"
+                      >
+                        cancel
+                      </button>
+                    }
+                    {openRating &&
+                      <button
+                        onClick={() => setOpenRating(false)}
+                        className="relative -top-10 left-[15rem] font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
+                      >
+                        Submit Rating
+                      </button>
+                    }
                   </div>
-                  <p className="text-center text-3xl font-bold mb">
-                    {valuetext(sliderValue)}%
-                  </p>
                 </div>
               </div>
             </div>
