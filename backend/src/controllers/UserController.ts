@@ -12,24 +12,6 @@ export class UserController {
 
     }
 
-    // async createUser(req: Request, res: Response): Promise<void> {
-    //     try {
-
-    //         if (!validate(req.body)) {
-    //             res.status(400).send('Invalid user data');
-    //             return;
-    //         }
-
-    //         const userData: UserSchemaType = req.body as UserSchemaType;
-
-    //         await this.userService.createUser(userData);
-    //         res.status(201).send('User created successfully');
-    //     } catch (error) {
-    //         console.error('Error in UserController createUser:', error);
-    //         res.status(500).send('Failed to create user');
-    //     }
-    // }
-
     async registerUserProvider(req: Request, res: Response) {
         const { idToken } = req.body;
 
@@ -149,24 +131,17 @@ export class UserController {
     async updateUser(req: Request, res: Response): Promise<void> {
         try {
 
-            const userId: number = parseInt(req.params.userId, 10);
-            if (isNaN(userId)) {
-                res.status(400).send('Invalid user ID');
-                return;
-            }
-
             if (!validate(req.body)) {
                 res.status(400).send('Invalid user data');
                 return;
             }
 
             const userData: UserSchemaType = req.body as UserSchemaType;
-            userData.userId = userId;
             await this.userService.updateUser(userData);
             res.status(201).send('User updated successfully');
         } catch (error) {
-            console.error('Error in UserController createUser:', error);
-            res.status(500).send('Failed to create user');
+            console.error('Error in UserController updateUser:', error);
+            res.status(500).send('Failed to update user');
         }
     }
 

@@ -7,12 +7,13 @@ export class User {
     private bio: string | null;
     private profilePicture: string | null;
     private politicalAlignment: string | null;
+    private favoriteOpinionIds: number[];
     private createdAt!: Date;
     private updatedAt!: Date;
 
 
 
-    constructor(userId: number, username: string, email: string, bio: string | null, profilePicture: string | null, politicalAlignment: string | null, createdAt?: Date, updatedAt?: Date,) {
+    constructor(userId: number, username: string, email: string, bio: string | null, profilePicture: string | null, politicalAlignment: string | null, favoriteOpinionIds? : number[], createdAt?: Date, updatedAt?: Date,) {
 
         this.username = username;
         this.email = email;
@@ -20,6 +21,7 @@ export class User {
         this.profilePicture = profilePicture ?? null;
         this.politicalAlignment = politicalAlignment ?? Constants.PoliticalAlignment.Moderate;
         this.userId = userId;
+        this.favoriteOpinionIds = favoriteOpinionIds ?? [];
         this.createdAt = createdAt ?? this.createdAt;
         this.updatedAt = updatedAt ?? this.updatedAt;
     }

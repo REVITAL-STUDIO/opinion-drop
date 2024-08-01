@@ -35,21 +35,41 @@ router.get('/opinions/:opinionId', opinionController.getOpinion.bind(opinionCont
 router.get('/opinions', opinionController.getOpinions.bind(opinionController));
 router.get('/opinions/topic/:topicId', opinionController.getOpinionsByTopic.bind(opinionController));
 router.get('/opinions/user/:userId', opinionController.getOpinionsByUser.bind(opinionController));
+router.get('/rebuttals/user/:userId', opinionController.getRebuttalsByUser.bind(opinionController));
 router.get('/opinion/rebuttals/:opinionId', opinionController.getOpinionRebuttals.bind(opinionController));
+router.get('/opinion/favorites/:userId', opinionController.getFavoriteOpinions.bind(opinionController));
 router.put('/opinions/:opinionId', opinionController.updateOpinion.bind(opinionController));
+router.put('/opinions/like/:opinionId', opinionController.likeOpinion.bind(opinionController));
+router.put('/opinions/unlike/:opinionId', opinionController.unlikeOpinion.bind(opinionController));
+router.put('/opinions/dislike/:opinionId', opinionController.dislikeOpinion.bind(opinionController));
+router.put('/opinions/undislike/:opinionId', opinionController.undislikeOpinion.bind(opinionController));
+router.put('/opinions/favorite/:opinionId', opinionController.favoriteOpinion.bind(opinionController));
+router.put('/opinions/unfavorite/:opinionId', opinionController.unfavoriteOpinion.bind(opinionController));
 router.delete('/opinions/:opinionId', opinionController.deleteOpinion.bind(opinionController));
 
 
-// Comment Routes
+// Opinion Comment Routes
 router.post('/comments/opinion/:opinionId', commentController.createOpinionComment.bind(commentController));
 router.get('/comments/:commentId', commentController.getComment.bind(commentController));
-router.get('/comments/opinion/:opinionId', commentController.getOpinionComment.bind(commentController));
-router.get('/comments/children/:commentId', commentController.getChildComments.bind(commentController));
+router.get('/comments/opinion/:opinionId', commentController.getOpinionComments.bind(commentController));
+router.get('/comments/children/:commentId', commentController.getChildOpinionComments.bind(commentController));
 router.post('/comments/userLiked/:commentId', commentController.userHasLiked.bind(commentController));
 router.put('/comments/like/:commentId', commentController.likeComment.bind(commentController));
 router.put('/comments/unlike/:commentId', commentController.unlikeComment.bind(commentController));
 router.put('/comments/:commentId', commentController.updateComment.bind(commentController));
 router.delete('/comments/:commentId', commentController.deleteComment.bind(commentController));
+// Cesspit Comment Routes
+router.post('/comments/cesspit/:topicId', commentController.createCesspitComment.bind(commentController));
+router.get('/comments/cesspit/topic/:topicId', commentController.getCesspitComments.bind(commentController));
+router.get('/comments/cesspit/children/:commentId', commentController.getChildCesspitComments.bind(commentController));
+router.post('/comments/cesspit/userLiked/:commentId', commentController.userHasLikedCesspit.bind(commentController));
+router.put('/comments/cesspit/like/:commentId', commentController.likeCesspitComment.bind(commentController));
+router.put('/comments/unlike/cesspit/:commentId', commentController.unlikeCesspitComment.bind(commentController));
+router.put('/comments/cesspit/:commentId', commentController.updateCesspitComment.bind(commentController));
+router.delete('/comments/cesspit/:commentId', commentController.deleteCesspitComment.bind(commentController));
+
+
+
 
 // Topic Routes
 router.post('/topics', topicController.createTopic.bind(topicController));
@@ -62,8 +82,8 @@ router.delete('/topics/:topicId', topicController.deleteTopic.bind(topicControll
 
 // Rating Routes
 router.post('/ratings', ratingController.createRating.bind(ratingController));
-router.get('/ratings/:ratingId', ratingController.getRating.bind(ratingController));
-router.put('/ratings/:ratingId', ratingController.updateRating.bind(ratingController));
-router.delete('/ratings/:ratingId', ratingController.deleteRating.bind(ratingController));
+router.put('/ratings', ratingController.updateRating.bind(ratingController));
+router.get('/ratings/opinion/:opinionId', ratingController.getRating.bind(ratingController));
+
 
 export default router;

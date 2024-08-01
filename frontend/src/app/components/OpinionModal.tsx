@@ -46,7 +46,7 @@ interface Rebuttal {
   title: string;
   textcontent: string;
   authorprofileimage?: string;
-  parentOpinionId: number;
+  parentopinionid: number;
 }
 
 interface Highlight {

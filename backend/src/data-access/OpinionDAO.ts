@@ -1,6 +1,6 @@
 import { Pool, PoolClient, QueryResult } from 'pg';
 import { Opinion } from '../models/Opinion';
-import { UserComment, UserOpinion } from '../utils/types/dto';
+import { UserOpinion, RebuttalsAndOpinions } from '../utils/types/dto';
 
 export class OpinionDAO {
     private pool: Pool;
@@ -152,11 +152,90 @@ export class OpinionDAO {
 
                 opinions.push(row as UserOpinion);
             }
-
+            console.log("in server opinions by user: ", opinions);
             return opinions;
         } catch (error) {
             console.error('Error executing getOpinionsByUser query:', error);
             throw new Error(`Error retrieving opinions by user: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async getFavoriteOpinions(userId: string): Promise<UserOpinion[]> {
+        const query = `
+        SELECT favorite_opinion_ids
+        FROM users
+        WHERE user_id = $1;
+        `;
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result: QueryResult = await client.query(query, [userId]);
+            const favoriteOpinionIds: number[] = result.rows[0].favorite_opinion_ids;
+
+            const opinions: UserOpinion[] = [];
+            for (const id of favoriteOpinionIds) {
+
+                const opinion = await this.getOpinion(id);
+                if (opinion) {
+                    opinions.push(opinion);
+                }
+            }
+            console.log("in server favorite opinions by user: ", opinions);
+            return opinions;
+        } catch (error) {
+            console.error('Error executing getFavoriteOpinions query:', error);
+            throw new Error(`Error retrieving favorite opinions: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async getRebuttalsByUser(userId: string): Promise<RebuttalsAndOpinions> {
+        const query = `
+        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as textcontent, opinions.background_image as backgroundImage, 
+               users.username as author, users.profile_picture as authorProfileImage, opinions.parent_opinion_id as parentOpinionId
+        FROM opinions
+        JOIN users ON opinions.user_id = users.user_id
+        WHERE parent_opinion_id IS NOT NULL AND users.user_id = $1
+    `;
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result: QueryResult = await client.query(query, [userId]);
+
+            const rebuttals: UserOpinion[] = [];
+            for (const row of result.rows) {
+
+                rebuttals.push(row as UserOpinion);
+            }
+            console.log("in server rebuttals by user: ", rebuttals);
+
+            const rebuttaledOpinions: UserOpinion[] = [];
+
+            for (const rebuttal of rebuttals) {
+                const rebuttaledOpinionId = rebuttal.parentopinionid;
+                console.log("id rebuttalledopinion: ", rebuttaledOpinionId);
+                const rebuttaledOpinion = await this.getOpinion(rebuttaledOpinionId!);
+                if (rebuttaledOpinion && !rebuttaledOpinions.find(opinion => opinion.id == rebuttaledOpinion.id)) {
+                    rebuttaledOpinions.push(rebuttaledOpinion);
+                }
+                console.log("in server rebuttaledopinions by user: ", rebuttaledOpinions);
+
+            }
+
+            return {
+                rebuttals: rebuttals,
+                rebuttaledOpinions: rebuttaledOpinions
+            };
+        } catch (error) {
+            console.error('Error executing getRebuttalsByUser query:', error);
+            throw new Error(`Error retrieving rebuttals by user: ${error}`);
         } finally {
             client && client.release();
 
@@ -218,6 +297,118 @@ export class OpinionDAO {
         } catch (error) {
             console.error('Error executing get rebuttals query:', error);
             throw new Error(`Error retrieving rebuttals: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async likeOpinion(opinionId: number, userId: string): Promise<void> {
+        const query = "UPDATE opinions SET likes = likes + 1 WHERE opinion_id = $1"
+        const likeQuery = `INSERT INTO opinion_likes (user_id, opinion_id)
+        VALUES ($1, $2)`
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            await client.query(query, [opinionId]);
+            await client.query(likeQuery, [userId, opinionId]);
+        } catch (error) {
+            console.error('Error executing like opinion query:', error);
+            throw new Error(`Error liking opinion: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async unlikeOpinion(opinionId: number, userId: string): Promise<void> {
+        const query = "UPDATE opinions SET likes = likes - 1 WHERE opinion_id = $1"
+        const unlikeQuery = `DELETE FROM opinion_likes WHERE user_id = $1 AND opinion_id = $2`
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            await client.query(query, [opinionId]);
+            await client.query(unlikeQuery, [userId, opinionId]);
+        } catch (error) {
+            console.error('Error executing like opinion query:', error);
+            throw new Error(`Error liking opinion: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async dislikeOpinion(opinionId: number, userId: string): Promise<void> {
+        const query = "UPDATE opinions SET dislikes = dislikes + 1 WHERE opinion_id = $1"
+        const dislikeQuery = `INSERT INTO opinion_dislikes (user_id, opinion_id)
+        VALUES ($1, $2)`
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            await client.query(query, [opinionId]);
+            await client.query(dislikeQuery, [userId, opinionId]);
+        } catch (error) {
+            console.error('Error executing dislike opinion query:', error);
+            throw new Error(`Error disliking opinion: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async undislikeOpinion(opinionId: number, userId: string): Promise<void> {
+        const query = "UPDATE opinions SET dislikes = dislikes - 1 WHERE opinion_id = $1"
+        const undislikeQuery = `DELETE FROM opinion_dislikes WHERE user_id = $1 AND opinion_id = $2`
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            await client.query(query, [opinionId]);
+            await client.query(undislikeQuery, [userId, opinionId]);
+        } catch (error) {
+            console.error('Error executing dislike opinion query:', error);
+            throw new Error(`Error disliking opinion: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async favoriteOpinion(opinionId: number, userId: string): Promise<void> {
+        const query = `UPDATE users SET favorite_opinion_ids = array_append(favorite_opinion_ids, $1)
+        WHERE user_id = $2`
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            await client.query(query, [opinionId, userId]);
+        } catch (error) {
+            console.error('Error executing favorite opinion query:', error);
+            throw new Error(`Error favoriting opinion: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async unfavoriteOpinion(opinionId: number, userId: string): Promise<void> {
+        const query = `UPDATE users SET favorite_opinion_ids = array_remove(favorite_opinion_ids, $1)
+        WHERE user_id = $2`
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            await client.query(query, [opinionId, userId]);
+        } catch (error) {
+            console.error('Error executing unfavorite opinion query:', error);
+            throw new Error(`Error unfavoriting opinion: ${error}`);
         } finally {
             client && client.release();
 

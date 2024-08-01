@@ -1,7 +1,7 @@
 import { Opinion } from '../models/Opinion';
 import { OpinionDAO } from '../data-access/OpinionDAO';
 import pool from '../data-access/dbconnection';
-import { UserOpinion } from '../utils/types/dto';
+import { UserOpinion, RebuttalsAndOpinions } from '../utils/types/dto';
 import { uploadImage } from '../utils/aws/uploadToS3';
 
 export class OpinionService {
@@ -127,6 +127,23 @@ export class OpinionService {
             throw new Error('Error retrieving opinions by user');
         }
     }
+    async getFavoriteOpinions(userId: string): Promise<UserOpinion[]> {
+        try {
+            return await this.opinionDAO.getFavoriteOpinions(userId);
+        } catch (error) {
+            console.error('Error in OpinionService getFavoriteOpinions:', error);
+            throw new Error('Error retrieving favorite opinions');
+        }
+    }
+
+    async getRebuttalsByUser(userId: string): Promise<RebuttalsAndOpinions> {
+        try {
+            return await this.opinionDAO.getRebuttalsByUser(userId);
+        } catch (error) {
+            console.error('Error in RebuttalService getRebuttalsByUser:', error);
+            throw new Error('Error retrieving rebuttals by user');
+        }
+    }
 
     async getOpinionRebuttals(opinionId: number): Promise<UserOpinion[]> {
         try {
@@ -134,6 +151,60 @@ export class OpinionService {
         } catch (error) {
             console.error('Error in OpinionService getOpinionRebuttals:', error);
             throw new Error('Error retrieving opinion rebuttals');
+        }
+    }
+
+    async likeOpinion(opinionId: number, userId: string): Promise<void> {
+        try {
+            await this.opinionDAO.likeOpinion(opinionId, userId);
+        } catch (error) {
+            console.error('Error in OpinionService likeOpinion:', error);
+            throw new Error('Error liking opinion ');
+        }
+    }
+
+    async unlikeOpinion(opinionId: number, userId: string): Promise<void> {
+        try {
+            await this.opinionDAO.unlikeOpinion(opinionId, userId);
+        } catch (error) {
+            console.error('Error in OpinionService unlikeOpinion:', error);
+            throw new Error('Error unliking opinion ');
+        }
+    }
+
+    async dislikeOpinion(opinionId: number, userId: string): Promise<void> {
+        try {
+            await this.opinionDAO.dislikeOpinion(opinionId, userId);
+        } catch (error) {
+            console.error('Error in OpinionService dislikeOpinion:', error);
+            throw new Error('Error disliking opinion ');
+        }
+    }
+
+    async undislikeOpinion(opinionId: number, userId: string): Promise<void> {
+        try {
+            await this.opinionDAO.undislikeOpinion(opinionId, userId);
+        } catch (error) {
+            console.error('Error in OpinionService undislikeOpinion:', error);
+            throw new Error('Error undisliking opinion ');
+        }
+    }
+
+    async favoriteOpinion(opinionId: number, userId: string): Promise<void> {
+        try {
+            await this.opinionDAO.favoriteOpinion(opinionId, userId);
+        } catch (error) {
+            console.error('Error in OpinionService favoriteOpinion:', error);
+            throw new Error('Error favoriting opinion ');
+        }
+    }
+
+    async unfavoriteOpinion(opinionId: number, userId: string): Promise<void> {
+        try {
+            await this.opinionDAO.unfavoriteOpinion(opinionId, userId);
+        } catch (error) {
+            console.error('Error in OpinionService unfavoriteOpinion:', error);
+            throw new Error('Error unfavoriting opinion ');
         }
     }
 

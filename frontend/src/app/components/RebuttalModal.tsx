@@ -29,7 +29,7 @@ interface RebuttalModalProps {
     title: string;
     textcontent: string;
     profilePicture?: string;
-    parentOpinionId: number
+    parentopinionid: number | null;
   };
   closeModal?: () => void;
 }

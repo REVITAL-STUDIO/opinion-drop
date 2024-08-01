@@ -28,6 +28,8 @@ CREATE TABLE opinions (
     videos TEXT[],
     documents TEXT[],
     audios TEXT[],
+    likes INTEGER NOT NULL DEFAULT 0,
+    dislikes INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -61,7 +63,32 @@ CREATE TABLE topics (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
+CREATE TABLE comment_likes (
+    user_id TEXT NOT NULL,
+    comment_id INT NOT NULL,
+    liked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, comment_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id), 
+    FOREIGN KEY (comment_id) REFERENCES comments(comment_id) 
+);
 
+CREATE TABLE opinion_likes (
+    user_id TEXT NOT NULL,
+    opinion_id INT NOT NULL,
+    liked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, opinion_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id), 
+    FOREIGN KEY (opinion_id) REFERENCES opinions(opinion_id) 
+);
+
+CREATE TABLE opinion_dislikes (
+    user_id TEXT NOT NULL,
+    opinion_id INT NOT NULL,
+    disliked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, opinion_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id), 
+    FOREIGN KEY (opinion_id) REFERENCES opinions(opinion_id) 
+);
 
 
 

@@ -9,30 +9,6 @@ export class UserDAO {
     }
 
 
-    // async createUser(newUser: User): Promise<void> {
-    //     const query = "INSERT INTO users (username, email, bio, profile_picture, political_alignment) VALUES ($1, $2, $3, $4, $5)"
-    //     const userData = newUser.getUserData();
-    //     const values = [
-    //         userData.username,
-    //         userData.email,
-    //         userData.bio,
-    //         userData.profilePicture,
-    //         userData.politicalAlignment,
-    //     ];
-
-    //     let client: PoolClient | undefined;
-
-    //     try {
-    //         client = await this.pool.connect();
-    //         await client.query(query, values);
-    //     } catch (error) {
-    //         console.error('Error executing create user query:', error);
-    //         throw new Error(`Error creating user: ${error}`);
-    //     } finally {
-    //         client && client.release();
-
-    //     }
-    // }
 
     async createUser(firebaseUUID: string, email: string): Promise<User | null> {
         const query = `

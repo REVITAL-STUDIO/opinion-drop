@@ -186,6 +186,62 @@ export class OpinionController {
         }
     }
 
+    async getFavoriteOpinions(req: Request, res: Response): Promise<void> {
+        try {
+
+            const userId: string = req.params.userId;
+
+            if (!userId) {
+                res.status(400).send('Invalid user ID');
+                return;
+            }
+
+            const opinions = await this.opinionService.getFavoriteOpinions(userId);
+            res.status(200).json({
+                status: 'success',
+                message: 'favorite opinions retrieved successfully',
+                data: {
+                    count: opinions.length,
+                    opinions: opinions
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController getFavoriteOpinions:', error);
+            res.status(500).json({
+                status: 'error',
+                message: 'Failed to retrieve favorite opinions'
+            });
+        }
+    }
+
+    async getRebuttalsByUser(req: Request, res: Response): Promise<void> {
+        try {
+
+            const userId: string = req.params.userId;
+
+            if (!userId) {
+                res.status(400).send('Invalid user ID');
+                return;
+            }
+            const rebuttalsAndOpinions = await this.opinionService.getRebuttalsByUser(userId);
+            res.status(200).json({
+                status: 'success',
+                message: 'user rebuttals retrieved successfully',
+                count: rebuttalsAndOpinions.rebuttals.length,
+                data: {
+                    rebuttals: rebuttalsAndOpinions.rebuttals,
+                    rebuttaledOpinions: rebuttalsAndOpinions.rebuttaledOpinions
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController getRebuttalsByUser:', error);
+            res.status(500).json({
+                status: 'error',
+                message: 'Failed to retrieve rebuttals'
+            });
+        }
+    }
+
     async getOpinionRebuttals(req: Request, res: Response): Promise<void> {
         try {
 
@@ -213,6 +269,114 @@ export class OpinionController {
         }
     }
 
+    async likeOpinion(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const userId: string = req.body.userId
+            await this.opinionService.likeOpinion(opinionId, userId);
+            res.status(200).send('Opinion liked successfully');
+
+        } catch (error) {
+            console.error('Error in OpinionController likeOpinion:', error);
+            res.status(500).send('Failed to like opinion');
+        }
+    }
+
+    async unlikeOpinion(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const userId: string = req.body.userId
+            await this.opinionService.unlikeOpinion(opinionId, userId);
+            res.status(200).send('Opinion unliked successfully');
+
+        } catch (error) {
+            console.error('Error in OpinionController unlikeOpinion:', error);
+            res.status(500).send('Failed to unlike opinion');
+        }
+    }
+
+    async dislikeOpinion(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const userId: string = req.body.userId
+            await this.opinionService.dislikeOpinion(opinionId, userId);
+            res.status(200).send('Opinion disliked successfully');
+
+        } catch (error) {
+            console.error('Error in OpinionController dislikeOpinion:', error);
+            res.status(500).send('Failed to dislike opinion');
+        }
+    }
+
+    async undislikeOpinion(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const userId: string = req.body.userId
+            await this.opinionService.undislikeOpinion(opinionId, userId);
+            res.status(200).send('Opinion undisliked successfully');
+
+        } catch (error) {
+            console.error('Error in OpinionController undislikeOpinion:', error);
+            res.status(500).send('Failed to undislike opinion');
+        }
+    }
+
+    async favoriteOpinion(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const userId: string = req.body.userId
+            await this.opinionService.likeOpinion(opinionId, userId);
+            res.status(200).send('Opinion favorited successfully');
+
+        } catch (error) {
+            console.error('Error in OpinionController favoriteOpinion:', error);
+            res.status(500).send('Failed to favorite opinion');
+        }
+    }
+
+    async unfavoriteOpinion(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const userId: string = req.body.userId
+            await this.opinionService.likeOpinion(opinionId, userId);
+            res.status(200).send('Opinion favorited successfully');
+
+        } catch (error) {
+            console.error('Error in OpinionController favoriteOpinion:', error);
+            res.status(500).send('Failed to favorite opinion');
+        }
+    }
+
     async updateOpinion(req: Request, res: Response): Promise<void> {
         try {
             const opinionId: number = parseInt(req.params.opinionId, 10);
@@ -235,6 +399,8 @@ export class OpinionController {
             res.status(500).send('Failed to update opinion');
         }
     }
+
+    
 
     async deleteOpinion(req: Request, res: Response): Promise<void> {
         try {

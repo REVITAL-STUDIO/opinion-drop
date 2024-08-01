@@ -33,13 +33,14 @@ export class RatingController {
     async getRating(req: Request, res: Response): Promise<void> {
         try {
 
-            const ratingId: number = parseInt(req.params.ratingId, 10);
-            if (isNaN(ratingId)) {
+            const opinionId: number = parseInt(req.params.ratingId, 10);
+            if (isNaN(opinionId)) {
                 res.status(400).send('Invalid rating ID');
                 return;
             }
 
-            const rating = await this.ratingService.getRating(ratingId);
+            const userId: string = req.body.userId
+            const rating = await this.ratingService.getRating(opinionId, userId);
             if (rating) {
                 res.status(200).json(rating);
             } else {
@@ -54,21 +55,15 @@ export class RatingController {
     async updateRating(req: Request, res: Response): Promise<void> {
         try {
 
-            const ratingId: number = parseInt(req.params.ratingId, 10);
-            if (isNaN(ratingId)) {
-                res.status(400).send('Invalid rating ID');
-                return;
-            }
-
             if (!validate(req.body)) {
                 res.status(400).send('Invalid rating data');
                 return;
             }
 
             const ratingData: RatingSchemaType = req.body as RatingSchemaType;
-            ratingData.ratingId = ratingId;
+
             await this.ratingService.updateRating(ratingData);
-            res.status(201).send('Rating updated successfully');
+            res.status(201).send('Rating created successfully');
         } catch (error) {
             console.error('Error in RatingController createRating:', error);
             res.status(500).send('Failed to create rating');

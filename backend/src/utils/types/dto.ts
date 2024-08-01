@@ -3,10 +3,15 @@ export interface UserOpinion {
     title: string;
     text: string;
     backgroundImage: string;
-    parentOpinionId: number | null;
+    parentopinionid: number | null;
     author: string;
     authorProfileImage: string;
   }
+
+  export interface RebuttalsAndOpinions {
+    rebuttals: UserOpinion[];
+    rebuttaledOpinions: UserOpinion[];
+}
 
   export interface UserComment {
     id: number;
@@ -14,8 +19,9 @@ export interface UserOpinion {
     parentCommentAuthor: string;
     content: string;
     authorProfilePicture: string;
-    parentCommentId: number | null;
+    parentcommentid: number | null;
     likes: number;
     createdAt: Date;
     UpdatedAt: Date;
   }
+
