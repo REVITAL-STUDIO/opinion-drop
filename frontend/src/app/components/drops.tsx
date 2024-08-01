@@ -52,7 +52,10 @@ const Drop = ({ topic }: dropsProps) => {
   const [hasDisliked, setHasDisliked] = useState(false);
   const [activeButton, setActiveButton] = useState<"like" | "dislike" | null>(
     null
-  ); // Updated type
+  ); 
+
+  //logic for Society Percentage
+  
 
   const toggleComments = () => {
     setShowComments(!showComments);
