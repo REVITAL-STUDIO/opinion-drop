@@ -48,6 +48,7 @@ const SignInButton: React.FC = () => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (openNotification) {
       document.addEventListener("click", handleClickOutside);
@@ -106,7 +107,7 @@ const SignInButton: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="p-4 xl:w-[27%] w-[90%] right-4 absolute top-full rounded-md bg-[#2b2b2b] shadow-md"
+                className="p-4 xl:w-[30%] w-[90%] right-4 absolute top-full rounded-md bg-[#2b2b2b] shadow-md"
               >
                 <div className="flex justify-between items-center  ">
                   <h2 className="text-2xl font-bold ml-4 border rounded-full p-4">
