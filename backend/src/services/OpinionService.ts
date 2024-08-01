@@ -163,6 +163,15 @@ export class OpinionService {
         }
     }
 
+    async userHasLiked(commentId: number, userId: string): Promise<boolean> {
+        try {
+            return await this.opinionDAO.userHasLiked(commentId, userId);
+        } catch (error) {
+            console.error('Error in OpinionService userHasLiked:', error);
+            throw new Error('Error retrieving user has liked');
+        }
+    }
+
     async unlikeOpinion(opinionId: number, userId: string): Promise<void> {
         try {
             await this.opinionDAO.unlikeOpinion(opinionId, userId);
@@ -178,6 +187,15 @@ export class OpinionService {
         } catch (error) {
             console.error('Error in OpinionService dislikeOpinion:', error);
             throw new Error('Error disliking opinion ');
+        }
+    }
+
+    async userHasDisliked(commentId: number, userId: string): Promise<boolean> {
+        try {
+            return await this.opinionDAO.userHasDisliked(commentId, userId);
+        } catch (error) {
+            console.error('Error in OpinionService userHasDisliked:', error);
+            throw new Error('Error retrieving user has disliked');
         }
     }
 

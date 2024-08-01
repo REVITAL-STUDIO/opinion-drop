@@ -287,6 +287,29 @@ export class OpinionController {
         }
     }
 
+    async userHasLiked(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const userId: string = req.body.userId
+            const hasLiked: boolean = await this.opinionService.userHasLiked(opinionId, userId);
+            res.status(201).send({
+                status: 'success',
+                message: 'has liked received succussfully',
+                data: {
+                    userHasLiked: hasLiked
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController userHasLiked:', error);
+            res.status(500).send('Failed to retrieve has liked');
+        }
+    }
+
     async unlikeOpinion(req: Request, res: Response): Promise<void> {
         try {
 
@@ -320,6 +343,29 @@ export class OpinionController {
         } catch (error) {
             console.error('Error in OpinionController dislikeOpinion:', error);
             res.status(500).send('Failed to dislike opinion');
+        }
+    }
+
+    async userHasDisliked(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid comment ID');
+                return;
+            }
+            const userId: string = req.body.userId
+            const hasDisliked: boolean = await this.opinionService.userHasDisliked(opinionId, userId);
+            res.status(201).send({
+                status: 'success',
+                message: 'has disliked received succussfully',
+                data: {
+                    userHasDisliked: hasDisliked
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController userHasDisliked:', error);
+            res.status(500).send('Failed to retrieve has disliked');
         }
     }
 

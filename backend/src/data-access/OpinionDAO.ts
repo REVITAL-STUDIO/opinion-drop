@@ -322,6 +322,28 @@ export class OpinionDAO {
         }
     }
 
+    async userHasLiked(commentId: number, userId: string): Promise<boolean> {
+        const query = `SELECT liked_at FROM opinion_likes WHERE opinion_id = $1 AND user_id = $2`
+
+        let client: PoolClient | undefined;
+         let hasLiked: boolean = false;
+        try {
+            client = await this.pool.connect();
+            const resp = await client.query(query, [commentId, userId]);
+            if(resp.rows[0]){
+                hasLiked = true;
+            }
+            return hasLiked;
+        } catch (error) {
+            console.error('Error executing hasLiked query:', error);
+            throw new Error(`Error retrieving hasliked: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+    
+
     async unlikeOpinion(opinionId: number, userId: string): Promise<void> {
         const query = "UPDATE opinions SET likes = likes - 1 WHERE opinion_id = $1"
         const unlikeQuery = `DELETE FROM opinion_likes WHERE user_id = $1 AND opinion_id = $2`
@@ -354,6 +376,27 @@ export class OpinionDAO {
         } catch (error) {
             console.error('Error executing dislike opinion query:', error);
             throw new Error(`Error disliking opinion: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async userHasDisliked(commentId: number, userId: string): Promise<boolean> {
+        const query = `SELECT disliked_at FROM opinion_dislikes WHERE opinion_id = $1 AND user_id = $2`
+
+        let client: PoolClient | undefined;
+         let hasLiked: boolean = false;
+        try {
+            client = await this.pool.connect();
+            const resp = await client.query(query, [commentId, userId]);
+            if(resp.rows[0]){
+                hasLiked = true;
+            }
+            return hasLiked;
+        } catch (error) {
+            console.error('Error executing hasDisliked query:', error);
+            throw new Error(`Error retrieving hasDisliked: ${error}`);
         } finally {
             client && client.release();
 
