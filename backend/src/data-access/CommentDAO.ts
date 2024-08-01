@@ -1,6 +1,7 @@
 import { Pool, PoolClient, QueryResult } from 'pg';
 import { Comment } from '../models/Comment';
 import { UserComment } from '../utils/types/dto';
+import { CesspitComment } from '../models/CesspitComment';
 
 export class CommentDAO {
     private pool: Pool;
@@ -151,7 +152,7 @@ export class CommentDAO {
         }
     }
 
-    async getChildComments(commentId: number): Promise<UserComment[]> {
+    async getChildOpinionComments(commentId: number): Promise<UserComment[]> {
         const query = `
         SELECT 
             c.comment_id as id, 
@@ -291,6 +292,222 @@ export class CommentDAO {
         } catch (error) {
             console.error('Error executing delete comment query:', error);
             throw new Error(`Error deleting comment: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async createCesspitComment(newComment: CesspitComment): Promise<UserComment> {
+        const query = `
+                    INSERT INTO cesspit_comments (user_id, topic_id, content, parent_comment_id)
+                    VALUES ($1, $2, $3, $4)
+                    RETURNING 
+                        comment_id AS id, 
+                        user_id AS userId, 
+                        opinion_id AS opinionId, 
+                        content As textContent, 
+                        likes,
+                        parent_comment_id AS parentCommentId, 
+                        created_at AS createdAt
+                    `;
+
+        const commentData = newComment.getCommentData();
+        console.log("comment data: ", commentData);
+        const values = [
+            commentData.userId,
+            commentData.topicId,
+            commentData.content,
+            commentData.parentCommentId,
+        ];
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result = await client.query(query, values);
+            const newComment: UserComment = result.rows[0];
+            console.log("new comment returning back: ", newComment);
+            return newComment
+        } catch (error) {
+            console.error('Error executing create comment query:', error);
+            throw new Error(`Error creating comment: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async getCesspitComments(topicId: number): Promise<UserComment[]> {
+        const query = `
+        SELECT cesspit_comments.comment_id as id, cesspit_comments.content as textContent, 
+               users.username as author, users.profile_picture as authorProfileImage, cesspit_comments.parent_comment_id as parentcommentid, cesspit_comments.likes, cesspit_comments.created_At as createdAt
+        FROM cesspit_comments
+        JOIN users ON cesspit_comments.user_id = users.user_id
+        WHERE parent_comment_id IS NULL AND topic_id = $1
+        ORDER BY cesspit_comments.created_at DESC
+    `;
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result: QueryResult = await client.query(query, [topicId]);
+
+            const comments: UserComment[] = [];
+            for (const row of result.rows) {
+
+                comments.push(row as UserComment);
+            }
+
+            return comments;
+        } catch (error) {
+            console.error('Error executing getCesspitComments query:', error);
+            throw new Error(`Error retrieving cesspit comments for opinion: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async getChildCesspitComments(commentId: number): Promise<UserComment[]> {
+        const query = `
+        SELECT 
+            c.comment_id as id, 
+            c.user_id as userId, 
+            c.topic_id as topicId, 
+            c.parent_comment_id as parentCommentId, 
+            c.content as textContent, 
+            c.likes as likes, 
+            c.created_at as createdAt, 
+            c.updated_at as updatedAt,
+            u.username as author,  
+            p_author.username as parentCommentAuthor  
+        FROM cesspit_comments c
+        JOIN users u ON c.user_id = u.user_id  
+        LEFT JOIN cesspit_comments parent_c ON c.parent_comment_id = parent_c.comment_id 
+        LEFT JOIN users p_author ON parent_c.user_id = p_author.user_id  
+        WHERE c.parent_comment_id IS NOT NULL AND c.parent_comment_id = $1
+        ORDER BY c.created_at ASC
+        `;
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result: QueryResult = await client.query(query, [commentId]);
+
+            const comments: UserComment[] = [];
+            for (const row of result.rows) {
+
+                comments.push(row as UserComment);
+            }
+
+            return comments;
+        } catch (error) {
+            console.error('Error executing getCesspitComments query:', error);
+            throw new Error(`Error retrieving comments for cesspit: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async likeCesspitComment(commentId: number, userId: string): Promise<void> {
+        const query = "UPDATE cesspit_comments SET likes = likes + 1 WHERE comment_id = $1"
+        const likeQuery = `INSERT INTO cesspit_comment_likes (user_id, comment_id)
+        VALUES ($1, $2)`
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            await client.query(query, [commentId]);
+            await client.query(likeQuery, [userId, commentId]);
+        } catch (error) {
+            console.error('Error executing like cesspit comment query:', error);
+            throw new Error(`Error liking cesspit comment: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async unlikeCesspitComment(commentId: number, userId: string): Promise<void> {
+        const query = "UPDATE cesspit_comments SET likes = likes - 1 WHERE comment_id = $1"
+        const unlikeQuery = `DELETE FROM cesspit_comment_likes WHERE user_id = $1 AND comment_id = $2`
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            await client.query(query, [commentId]);
+            await client.query(unlikeQuery, [userId, commentId]);
+        } catch (error) {
+            console.error('Error executing like cesspit comment query:', error);
+            throw new Error(`Error liking cesspit comment: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async userHasLikedCesspit(commentId: number, userId: string): Promise<boolean> {
+        const query = `SELECT liked_at FROM cesspit_comment_likes WHERE comment_id = $1 AND user_id = $2`
+
+        let client: PoolClient | undefined;
+         let hasLiked: boolean = false;
+        try {
+            client = await this.pool.connect();
+            const resp = await client.query(query, [commentId, userId]);
+            if(resp.rows[0]){
+                hasLiked = true;
+            }
+            return hasLiked;
+        } catch (error) {
+            console.error('Error executing hasLikedCesspit query:', error);
+            throw new Error(`Error retrieving haslikedCesspit: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async updateCesspitComment(comment: CesspitComment): Promise<void> {
+        const query = "UPDATE cesspit_comments SET content = $1 WHERE comment_id = $2"
+        const commentData = comment.getCommentData();
+
+        const values = [
+            commentData.content,
+            commentData.commentId
+        ];
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const resp = await client.query(query, values);
+            if (resp.rowCount == 0) {
+                throw new Error(`Cesspit Comment with ID ${commentData.commentId} does not exist.`);
+            }
+        } catch (error) {
+            console.error('Error executing update cesspit comment query:', error);
+            throw new Error(`Error updating cesspit comment: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async deleteCesspitComment(commentId: number): Promise<void> {
+        const query = "DELETE FROM cesspit_comments WHERE comment_id = $1"
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            await client.query(query, [commentId]);
+        } catch (error) {
+            console.error('Error executing delete cesspit comment query:', error);
+            throw new Error(`Error deleting cesspit comment: ${error}`);
         } finally {
             client && client.release();
 

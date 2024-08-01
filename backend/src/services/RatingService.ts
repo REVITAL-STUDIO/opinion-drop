@@ -11,7 +11,7 @@ export class RatingService {
     
 
     async createRating(ratingData: {
-        userId: number,
+        userId: string,
         opinionId: number,
         value: number,
     }): Promise<void> {
@@ -28,9 +28,9 @@ export class RatingService {
         }
     }
 
-    async getRating(ratingId: number): Promise<Rating | null> {
+    async getUserRating(opinionId: number, userId: string): Promise<Rating | null> {
         try {
-            return await this.ratingDAO.getRating(ratingId);
+            return await this.ratingDAO.getUserRating(opinionId, userId);
         } catch (error) {
             console.error('Error in RatingService getRating:', error);
             throw new Error('Error retrieving rating');
@@ -39,7 +39,7 @@ export class RatingService {
 
     async updateRating(ratingData: {
         ratingId?: number
-        userId: number,
+        userId: string,
         opinionId: number,
         value: number,
     }): Promise<void> {

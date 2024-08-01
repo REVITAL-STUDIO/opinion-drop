@@ -20,6 +20,7 @@ import {
 import OpenRebuttal from "./RebuttalModal";
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import StateIt from "./stateIt";
+import { useAuth } from "../hooks/AuthContext";
 
 function valuetext(value: number) {
   return `${value}`;
@@ -45,7 +46,7 @@ interface Rebuttal {
   title: string;
   textcontent: string;
   authorprofileimage?: string;
-  parentOpinionId: number;
+  parentopinionid: number;
 }
 
 interface Highlight {
@@ -81,6 +82,16 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   );
   const [openDiscussion, setOpenDiscussion] = useState(false);
   const [sliderValue, setSliderValue] = useState<number>(50);
+  const { currentUser } = useAuth();
+  const [userHasLiked, setUserHasLiked] = useState(false);
+  const [userHasDisliked, setUserHasDisliked] = useState(false);
+  const [openRating, setOpenRating] = useState(false);
+  const [userHasRated, setUserHasRated] = useState(false);
+  const [userRating, setuserRating] = useState<null | number>(null);
+  const [userRatingId, setuserRatingId] = useState<null | number>(null);
+
+
+
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     setSliderValue(newValue as number);
@@ -121,13 +132,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.id === currentHighlightId
             ? {
-                ...highlight,
-                container: updateHighlightContainer(
-                  highlight.container,
-                  emoji,
-                  "emoji"
-                ),
-              }
+              ...highlight,
+              container: updateHighlightContainer(
+                highlight.container,
+                emoji,
+                "emoji"
+              ),
+            }
             : highlight
         )
       );
@@ -141,13 +152,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.id === currentHighlightId
             ? {
-                ...highlight,
-                container: updateHighlightContainer(
-                  highlight.container,
-                  comment,
-                  "comment"
-                ),
-              }
+              ...highlight,
+              container: updateHighlightContainer(
+                highlight.container,
+                comment,
+                "comment"
+              ),
+            }
             : highlight
         )
       );
@@ -279,6 +290,305 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     fetchRebuttals();
   }, []);
 
+
+  const handleLikeOpinion = async () => {
+    console.log("in handle like");
+    try {
+      if (!userHasLiked) {
+        if (userHasDisliked) {
+          await unDislikeOpinion();
+          setUserHasDisliked(false);
+        }
+        await likeOpinion();
+        setUserHasLiked(true);
+      }
+      else {
+        await unLikeOpinion();
+        setUserHasLiked(false);
+      }
+    } catch (error) {
+      console.log("Error in handlelike opinion: ", error);
+
+    }
+  }
+
+  const handleDislikeOpinion = async () => {
+    console.log("in handle like");
+    try {
+      if (!userHasDisliked) {
+        if (userHasLiked) {
+          await unLikeOpinion();
+          setUserHasLiked(false);
+        }
+        await dislikeOpinion();
+        setUserHasDisliked(true);
+      }
+      else {
+        await unDislikeOpinion();
+        setUserHasDisliked(false);
+      }
+    } catch (error) {
+      console.log("Error in handledislike opinion: ", error);
+    }
+  }
+
+  const likeOpinion = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/like/${opinionData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error liking opinion");
+      }
+    } catch (error) {
+      console.log("Error liking Opinion: ", error);
+    }
+  };
+
+  const unLikeOpinion = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/unlike/${opinionData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error unliking opinion");
+      }
+      const response = await res.json();
+    } catch (error) {
+      console.log("Error unliking opinion: ", error);
+    }
+  }
+
+  const hasUserLiked = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/userLiked/${opinionData.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving has liked");
+      }
+      const response = await res.json();
+      console.log("response hasuserliked: ", response);
+      return response.data.userHasLiked;
+
+    } catch (error) {
+      console.log("Error retrieving hasliked: ", error);
+    }
+  }
+
+  const dislikeOpinion = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/dislike/${opinionData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error disliking opinion");
+      }
+    } catch (error) {
+      console.log("Error disliking Opinion: ", error);
+    }
+  };
+
+  const unDislikeOpinion = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/undislike/${opinionData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error undisliking opinion");
+      }
+    } catch (error) {
+      console.log("Error undisliking Opinion: ", error);
+    }
+  };
+
+  const hasUserDisliked = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/userDisliked/${opinionData.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving has liked");
+      }
+      const response = await res.json();
+      console.log("response hasuserDisliked: ", response);
+      return response.data.userHasDisliked;
+
+    } catch (error) {
+      console.log("Error retrieving hasdisliked: ", error);
+    }
+  }
+
+  useEffect(() => {
+    const loadLiked = async () => {
+      const hasLiked: boolean = await hasUserLiked();
+      const hasDisliked: boolean = await hasUserDisliked();
+      console.log("hasliked: ", hasLiked);
+      console.log("hasDisliked: ", hasDisliked);
+      setUserHasLiked(hasLiked);
+      setUserHasDisliked(hasDisliked);
+    }
+    if (opinionData) {
+      loadLiked();
+      getUserRating();
+    }
+
+
+  }, [opinionData]);
+
+  const getUserRating = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/ratings/userRated/${opinionData.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving rating");
+      }
+      const response = await res.json();
+      console.log("response hasuserliked: ", response.data.userHasRated);
+      if (response.data.userHasRated) {
+        setuserRating(response.data.rating.value)
+        setuserRatingId(response.data.rating.ratingId)
+      }
+      setUserHasRated(response.data.userHasRated);
+
+    } catch (error) {
+      console.log("Error retrieving user rating: ", error);
+    }
+  }
+
+  const rateOpinion = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/ratings`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: currentUser?.uid,
+            opinionId: opinionData.id,
+            value: sliderValue
+          })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error rating opinion");
+      }
+      const response = await res.json();
+      console.log("response hasuserliked: ", response.data.userHasRated);
+      setuserRating(response.data.rating.value)
+      setuserRatingId(response.data.rating.ratingId)
+      setUserHasRated(response.data.userHasRated);
+
+    } catch (error) {
+      console.log("Error rating opinion: ", error);
+    }
+  }
+
+  const updateRating = async () => {
+    try {
+      console.log("in update rating ratingId: ", userRatingId);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/ratings`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ratingId: userRatingId,
+            userId: currentUser?.uid,
+            opinionId: opinionData.id,
+            value: sliderValue
+          })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error updating");
+      }
+      const response = await res.json();
+      setuserRating(response.data.rating.value)
+
+    } catch (error) {
+      console.log("Error rating opinion: ", error);
+    }
+  }
+
+  const handleRateOpinion = async () => {
+    try {
+      await rateOpinion()
+    }
+    catch (error) {
+      console.log(error);
+    }
+    setOpenRating(false);
+  }
+
+  const handleUpdateRating = async () => {
+    try {
+      await updateRating()
+    }
+    catch (error) {
+      console.log(error);
+    }
+    setOpenRating(false);
+  }
+
+  useEffect(() => {
+
+  }, [userRating]);
+
   const demoRebuttals = [
     {
       id: 1,
@@ -317,25 +627,26 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     },
   ];
 
+
+
+
   return (
     <div className="z-30  w-[45%] h-[750px] bg-white p-6 shadow-lg relative rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <a
-          className={`cursor-pointer ${
-            selectedTab === "Opinion"
-              ? "border-b-[4px] border-[#606060] "
-              : "border-b-0"
-          }`}
+          className={`cursor-pointer ${selectedTab === "Opinion"
+            ? "border-b-[4px] border-[#606060] "
+            : "border-b-0"
+            }`}
           onClick={() => setSelectedTab("Opinion")}
         >
           Opinion
         </a>
         <a
-          className={`cursor-pointer ${
-            selectedTab === "Rebuttal"
-              ? "border-b-[4px] border-[#606060] "
-              : "border-b-0"
-          }`}
+          className={`cursor-pointer ${selectedTab === "Rebuttal"
+            ? "border-b-[4px] border-[#606060] "
+            : "border-b-0"
+            }`}
           onClick={() => setSelectedTab("Rebuttal")}
         >
           Rebuttal
@@ -343,9 +654,8 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       </div>
       {/* Survey Container */}
       <div
-        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${
-          hideOpinion ? "" : "invisible"
-        }`}
+        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${hideOpinion ? "" : "invisible"
+          }`}
       >
         <div className="absolute -top-[5rem] left-0 w-full   bg-[#2b2b2b] rounded-md text-white p-4  z-40">
           <h3 className="text-5xl  font-bold  p-4 mt-4">Tell Us..</h3>
@@ -395,16 +705,14 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             >
               Reply
               <IoIosArrowDropdown
-                className={`${
-                  replyMenu ? "rotate-0" : "-rotate-180"
-                } transition ease-in-out duration-150`}
+                className={`${replyMenu ? "rotate-0" : "-rotate-180"
+                  } transition ease-in-out duration-150`}
               />
             </button>
             {replyMenu && (
               <section
-                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${
-                  replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg shadow-lg text-white `}
+                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                  }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg shadow-lg text-white `}
               >
                 <button
                   onClick={toggleStateIt}
@@ -443,38 +751,95 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                     Does this essay belong in this topic?
                   </h1>
                   <div className="p-4 mx-auto mt-[2%] rounded-full w-[50%] flex justify-evenly items-center">
-                    <button className="w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition bg-white text-3xl shadow-lg">
+                    <button onClick={() => handleLikeOpinion()} className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasLiked ? 'bg-green-500 scale-105' : 'bg-white'}`}>
                       👍
                     </button>
-                    <button className="w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  bg-white text-3xl shadow-lg">
+                    <button onClick={() => handleDislikeOpinion()} className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasDisliked ? 'bg-red-500 scale-105' : 'bg-white'}`}>
                       👎
                     </button>
                   </div>
                 </div>
                 <div className="w-full mx-auto">
-                  <h2 className="my-4 text-center font-semibold">
-                    How much do you agree with this Essay?
-                  </h2>
-                  <div className="w-full flex justify-center items-center">
-                    <Box sx={{ width: 300 }}>
-                      <Slider
-                        aria-label="Temperature"
-                        defaultValue={50}
-                        value={sliderValue}
-                        onChange={handleSliderChange}
-                        getAriaValueText={valuetext}
-                        valueLabelDisplay="auto"
-                        step={10}
-                        marks
-                        min={10}
-                        max={100}
-                        className="mx-auto "
-                      />
-                    </Box>
+                  <div className="w-full flex flex-col justify-center items-center">
+                    {userHasRated ?
+                      <div>
+                        {!openRating &&
+                          <div>
+                            <p>
+                              Your Rating: <span className="text-lg">{userRating}%</span>
+                            </p>
+                            <button
+                              onClick={() => setOpenRating(true)}
+                              className="font-bold  px-2 py-2 mt-2 border shadow-md rounded-full text-white flex items-center justify-center bg-blue-400"
+                            >
+                              Update Rating
+                            </button>
+                          </div>
+                        }
+                      </div>
+                      :
+                      <div className="flex flex-col items-center">
+                        <h2 className="my-4 text-center font-semibold">
+                          How much do you agree with this Essay?
+                        </h2>
+                        {!openRating &&
+                          <button
+                            onClick={() => setOpenRating(true)}
+                            className="font-bold px-2 py-2 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
+                          >
+                            Rate Opinion
+                          </button>
+                        }
+                      </div>
+                    }
+
+                    {openRating &&
+                      <div>
+                        <Box sx={{ width: 300 }}>
+                          <Slider
+                            aria-label="Temperature"
+                            defaultValue={50}
+                            value={sliderValue}
+                            onChange={handleSliderChange}
+                            getAriaValueText={valuetext}
+                            valueLabelDisplay="auto"
+                            step={10}
+                            marks
+                            min={10}
+                            max={100}
+                            className="mx-auto "
+                          />
+                        </Box>
+                        <p className="text-center text-3xl font-bold mb">
+                          {valuetext(sliderValue)}%
+                        </p>
+                      </div>
+                    }
+                    {openRating &&
+                      <button
+                        onClick={() => setOpenRating(false)}
+                        className=" text-gray-400 relative right-[15rem]"
+                      >
+                        cancel
+                      </button>
+                    }
+                    {openRating && !userHasRated &&
+                      <button
+                        onClick={() => handleRateOpinion()}
+                        className="relative -top-10 left-[15rem] font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
+                      >
+                        Submit Rating
+                      </button>
+                    }
+                    {openRating && userHasRated &&
+                      <button
+                        onClick={() => handleUpdateRating()}
+                        className="relative -top-10 left-[15rem] font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
+                      >
+                        Submit Rating
+                      </button>
+                    }
                   </div>
-                  <p className="text-center text-3xl font-bold mb">
-                    {valuetext(sliderValue)}%
-                  </p>
                 </div>
               </div>
             </div>

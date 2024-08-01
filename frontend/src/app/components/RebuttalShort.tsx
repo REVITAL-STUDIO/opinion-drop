@@ -10,7 +10,7 @@ interface RebuttalShortProps {
     author: string;
     title: string;
     textcontent: string;
-    parentOpinionId: number;
+    parentopinionid: number | null;
   };
 }
 

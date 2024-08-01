@@ -32,15 +32,15 @@ export class RatingDAO {
         }
     }
 
-    async getRating(ratingId: number): Promise<Rating | null> {
-        const query = "SELECT * FROM ratings WHERE rating_id = $1"
+    async getUserRating(opinionId: number, userId: string): Promise<Rating | null> {
+        const query = "SELECT * FROM ratings WHERE opinion_id = $1 AND user_id = $2"
 
 
         let client: PoolClient | undefined;
 
         try {
             client = await this.pool.connect();
-            const result: QueryResult = await client.query(query, [ratingId]);
+            const result: QueryResult = await client.query(query, [opinionId, userId]);
             if (result.rows.length == 0) {
                 return null; 
             }

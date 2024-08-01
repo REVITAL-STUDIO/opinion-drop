@@ -11,7 +11,7 @@ interface Comment {
   parentcommentauthor: string | null;
   authorprofileimage?: string;
   likes: number;
-  createdat: Date;
+  createdat: string;
 }
 
 interface ChildCommentProps {
