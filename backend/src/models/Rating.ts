@@ -1,7 +1,7 @@
 export class Rating {
 
     private ratingId!: number;
-    private userId: number;
+    private userId: string;
     private opinionId: number;
     private value: number;
     private createdAt!: Date;
@@ -9,7 +9,7 @@ export class Rating {
 
 
 
-    constructor(userId: number, opinionId: number, value: number, ratingId?: number, createdAt?: Date, ) {
+    constructor(userId: string, opinionId: number, value: number, ratingId?: number, createdAt?: Date, ) {
 
         this.userId = userId;
         this.opinionId = opinionId;

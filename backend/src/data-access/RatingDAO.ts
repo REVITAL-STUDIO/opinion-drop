@@ -32,7 +32,7 @@ export class RatingDAO {
         }
     }
 
-    async getRating(opinionId: number, userId: string): Promise<Rating | null> {
+    async getUserRating(opinionId: number, userId: string): Promise<Rating | null> {
         const query = "SELECT * FROM ratings WHERE opinion_id = $1 AND user_id = $2"
 
 

@@ -89,6 +89,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const [openRating, setOpenRating] = useState(false);
   const [userHasRated, setUserHasRated] = useState(false);
   const [userRating, setuserRating] = useState<null | number>(null);
+  const [userRatingId, setuserRatingId] = useState<null | number>(null);
 
 
 
@@ -440,7 +441,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const hasUserDisliked = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/userdisliked/${opinionData.id}`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/userDisliked/${opinionData.id}`,
         {
           method: "POST",
           headers: {
@@ -472,10 +473,122 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     }
     if (opinionData) {
       loadLiked();
+      getUserRating();
     }
 
 
   }, [opinionData]);
+
+  const getUserRating = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/ratings/userRated/${opinionData.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving rating");
+      }
+      const response = await res.json();
+      console.log("response hasuserliked: ", response.data.userHasRated);
+      if (response.data.userHasRated) {
+        setuserRating(response.data.rating.value)
+        setuserRatingId(response.data.rating.ratingId)
+      }
+      setUserHasRated(response.data.userHasRated);
+
+    } catch (error) {
+      console.log("Error retrieving user rating: ", error);
+    }
+  }
+
+  const rateOpinion = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/ratings`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: currentUser?.uid,
+            opinionId: opinionData.id,
+            value: sliderValue
+          })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error rating opinion");
+      }
+      const response = await res.json();
+      console.log("response hasuserliked: ", response.data.userHasRated);
+      setuserRating(response.data.rating.value)
+      setuserRatingId(response.data.rating.ratingId)
+      setUserHasRated(response.data.userHasRated);
+
+    } catch (error) {
+      console.log("Error rating opinion: ", error);
+    }
+  }
+
+  const updateRating = async () => {
+    try {
+      console.log("in update rating ratingId: ", userRatingId);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/ratings`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ratingId: userRatingId,
+            userId: currentUser?.uid,
+            opinionId: opinionData.id,
+            value: sliderValue
+          })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error updating");
+      }
+      const response = await res.json();
+      setuserRating(response.data.rating.value)
+
+    } catch (error) {
+      console.log("Error rating opinion: ", error);
+    }
+  }
+
+  const handleRateOpinion = async () => {
+    try {
+      await rateOpinion()
+    }
+    catch (error) {
+      console.log(error);
+    }
+    setOpenRating(false);
+  }
+
+  const handleUpdateRating = async () => {
+    try {
+      await updateRating()
+    }
+    catch (error) {
+      console.log(error);
+    }
+    setOpenRating(false);
+  }
+
+  useEffect(() => {
+
+  }, [userRating]);
 
   const demoRebuttals = [
     {
@@ -652,7 +765,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                         {!openRating &&
                           <div>
                             <p>
-                              Your Rating: <span className="text-lg">50%</span>
+                              Your Rating: <span className="text-lg">{userRating}%</span>
                             </p>
                             <button
                               onClick={() => setOpenRating(true)}
@@ -709,9 +822,17 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                         cancel
                       </button>
                     }
-                    {openRating &&
+                    {openRating && !userHasRated &&
                       <button
-                        onClick={() => setOpenRating(false)}
+                        onClick={() => handleRateOpinion()}
+                        className="relative -top-10 left-[15rem] font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
+                      >
+                        Submit Rating
+                      </button>
+                    }
+                    {openRating && userHasRated &&
+                      <button
+                        onClick={() => handleUpdateRating()}
                         className="relative -top-10 left-[15rem] font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
                       >
                         Submit Rating

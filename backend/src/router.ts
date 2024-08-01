@@ -27,7 +27,6 @@ router.put('/users/:userId', userController.updateUser.bind(userController));
 router.delete('/users/:userId', userController.deleteUser.bind(userController));
 
 
-
 // Opinion Routes
 router.post('/opinions',upload.single('backgroundImage'), opinionController.createOpinion.bind(opinionController));
 router.post('/opinions/rebuttal',upload.single('backgroundImage'), opinionController.createOpinion.bind(opinionController));
@@ -44,7 +43,7 @@ router.put('/opinions/unlike/:opinionId', opinionController.unlikeOpinion.bind(o
 router.post('/opinions/userliked/:opinionId', opinionController.userHasLiked.bind(opinionController));
 router.put('/opinions/dislike/:opinionId', opinionController.dislikeOpinion.bind(opinionController));
 router.put('/opinions/undislike/:opinionId', opinionController.undislikeOpinion.bind(opinionController));
-router.post('/opinions/userdisliked/:opinionId', opinionController.userHasDisliked.bind(opinionController));
+router.post('/opinions/userDisliked/:opinionId', opinionController.userHasDisliked.bind(opinionController));
 router.put('/opinions/favorite/:opinionId', opinionController.favoriteOpinion.bind(opinionController));
 router.put('/opinions/unfavorite/:opinionId', opinionController.unfavoriteOpinion.bind(opinionController));
 router.delete('/opinions/:opinionId', opinionController.deleteOpinion.bind(opinionController));
@@ -85,7 +84,7 @@ router.delete('/topics/:topicId', topicController.deleteTopic.bind(topicControll
 // Rating Routes
 router.post('/ratings', ratingController.createRating.bind(ratingController));
 router.put('/ratings', ratingController.updateRating.bind(ratingController));
-router.get('/ratings/opinion/:opinionId', ratingController.getRating.bind(ratingController));
+router.post('/ratings/userRated/:opinionId', ratingController.getUserRating.bind(ratingController));
 
 
 export default router;

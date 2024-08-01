@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { RatingService } from '../services/RatingService';
-import { validate, RatingSchemaType } from '../utils/validation/schemas/RatingSchema'; 
+import { validate, RatingSchemaType } from '../utils/validation/schemas/RatingSchema';
 
 
 export class RatingController {
@@ -30,24 +30,28 @@ export class RatingController {
         }
     }
 
-    async getRating(req: Request, res: Response): Promise<void> {
+    async getUserRating(req: Request, res: Response): Promise<void> {
         try {
 
-            const opinionId: number = parseInt(req.params.ratingId, 10);
+            const opinionId: number = parseInt(req.params.opinionId, 10);
             if (isNaN(opinionId)) {
                 res.status(400).send('Invalid rating ID');
                 return;
             }
 
             const userId: string = req.body.userId
-            const rating = await this.ratingService.getRating(opinionId, userId);
-            if (rating) {
-                res.status(200).json(rating);
-            } else {
-                res.status(404).send('Rating not found');
-            }
+            const rating = await this.ratingService.getUserRating(opinionId, userId);
+            const userHasRated: boolean = rating ? true : false
+            res.status(200).json({
+                status: 'success',
+                message: 'user rating retrieved',
+                data: {
+                    userHasRated: userHasRated,
+                    rating: rating
+                }
+            });            
         } catch (error) {
-            console.error('Error in RatingController getRating:', error);
+            console.error('Error in RatingController getUserRating:', error);
             res.status(500).send('Failed to retrieve rating');
         }
     }
