@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextEditor from "./textEditor";
 import { Editor, EditorState } from "draft-js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../hooks/AuthContext";
+import Confirmation from "./confirmaton";
 
 interface StateItProps {
   opinionData: {
@@ -13,17 +14,17 @@ interface StateItProps {
     textcontent: string;
     backgroundimage: string;
     authorprofileimage?: string;
-  }; 
-   topic: {
+  };
+  topic: {
     name: string;
     id: number;
   };
   toggleStateIt: () => void;
-
 }
 
-const StateIt = ({opinionData, topic, toggleStateIt}: StateItProps) => {
+const StateIt = ({ opinionData, topic, toggleStateIt }: StateItProps) => {
   const [rebuttalTitle, setRebuttalTitle] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false); // State to control Confirmation display
 
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -41,18 +42,14 @@ const StateIt = ({opinionData, topic, toggleStateIt}: StateItProps) => {
     setAgreed({ ...agreed, [name]: checked });
   };
 
-
   const [close, setClose] = useState(false);
 
-  
   const { currentUser } = useAuth();
 
   const createRebuttal = async (event: React.FormEvent) => {
-
     event.preventDefault();
 
     if (Object.values(agreed).every(Boolean)) {
-
       const textContent = editorState.getCurrentContent().getPlainText();
       const rebuttalData = new FormData();
 
@@ -65,8 +62,6 @@ const StateIt = ({opinionData, topic, toggleStateIt}: StateItProps) => {
       rebuttalData.append("title", rebuttalTitle);
       rebuttalData.append("textContent", textContent);
       rebuttalData.append("parentOpinionId", String(opinionData.id));
-
-      
 
       console.log("FormData contents:");
       rebuttalData.forEach((value, key) => {
@@ -84,7 +79,7 @@ const StateIt = ({opinionData, topic, toggleStateIt}: StateItProps) => {
         if (!res.ok) {
           throw new Error("Error creating opinion");
         }
-        alert("Opinion submitted successfully.");
+        setShowConfirmation(true); // Show confirmation component on success
       } catch (error) {
         console.log("Error creating opinion: ", error);
       }
@@ -93,18 +88,29 @@ const StateIt = ({opinionData, topic, toggleStateIt}: StateItProps) => {
     }
   };
 
-  if (close) {
-    return null; // Don't render anything if close is true
-  }
+  useEffect(() => {
+    if (showConfirmation) {
+      const timer = setTimeout(() => {
+        setShowConfirmation(false);
+        setClose(true);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showConfirmation]);
+
+  useEffect(() => {
+    if (close) {
+      toggleStateIt();
+    }
+  }, [close, toggleStateIt]);
 
   return (
     <section className="w-full h-full top-0 left-0 gap-x-4 flex justify-center items-center absolute bg-gradient-to-tr from-purple-500/100 to-blue-500/95 z-40">
       <button
         onClick={() => setClose(true)}
-        className="absolute left-8 top-8 flex items-center text-white gap-x-4"
+        className="w-12 h-12 shadow-lg flex justify-center bg-[#000]/20 hover:scale-90 duration-200 ease-in-out transition items-center rounded-full absolute top-4 left-4"
       >
-        <FontAwesomeIcon icon={faArrowLeft} className=" text-xl" />
-        <span className="text-xl ">Exit</span>
+        <FontAwesomeIcon icon={faArrowLeft} className=" text-xl text-white" />
       </button>
       <div className="w-1/2 mx-auto mt-[2%] p-4">
         {" "}
@@ -120,7 +126,7 @@ const StateIt = ({opinionData, topic, toggleStateIt}: StateItProps) => {
         </p>
       </div>
       <div className="bg-white text-black mt-[2%] relative  w-1/2 rounded-lg h-2/3 shadow-lg mr-4">
-        <div className="mb-4">
+        <div className="mb-4 p-4">
           <label htmlFor="rebuttalTitle" className="block mb-2 font-medium">
             Rebuttal Title:
           </label>
@@ -134,7 +140,7 @@ const StateIt = ({opinionData, topic, toggleStateIt}: StateItProps) => {
             placeholder="Enter a title for your rebuttal"
           />
         </div>
-        <div className="text-editor h-1/2 p-4">
+        <div className="text-editor max-h-[250px] overflow-y-auto p-4">
           <Editor
             editorState={editorState}
             onChange={setEditorState}
@@ -212,6 +218,12 @@ const StateIt = ({opinionData, topic, toggleStateIt}: StateItProps) => {
             </button>
           </form>
         </div>
+        {showConfirmation && (
+          <div className="fixed top-0 left-0 w-full h-screen bg-black/75 z-40 flex justify-center items-center">
+            <Confirmation />
+          </div>
+        )}{" "}
+        {/* Show Confirmation component */}
       </div>
     </section>
   );

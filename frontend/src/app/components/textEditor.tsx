@@ -24,7 +24,7 @@ interface TextEditorProps {
   selectedFiles: FileExtended[];
   toggleEssay: () => void;
   onTextEditorChange: (textContent: string) => void;
-  toggleConfirmation: () => void; // Add toggleConfirmation to props
+  handleToggleConfirmation: () => void; // Add toggleConfirmation to props
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({
@@ -32,7 +32,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
   selectedFiles,
   toggleEssay,
   onTextEditorChange,
-  toggleConfirmation, // Add toggleConfirmation to destructuring
+  handleToggleConfirmation, // Add toggleConfirmation to destructuring
 }) => {
   const [editorState, setEditorState] = useState(() => {
     const savedContent = localStorage.getItem("editorContent");
@@ -144,8 +144,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
         if (!res.ok) {
           throw new Error("Error creating opinion");
         }
-        alert("Opinion submitted successfully.");
-        toggleConfirmation(); // Call your function to show the page
       } catch (error) {
         console.log("Error creating opinion: ", error);
         setError("Failed to submit opinion. Please try again.");
@@ -153,6 +151,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     } else {
       alert("Please agree to all terms before submitting.");
     }
+    handleToggleConfirmation();
   };
 
   return (

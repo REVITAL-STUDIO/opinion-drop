@@ -23,21 +23,20 @@ interface EssayPromptProps {
   };
   selectedFiles: FileExtended[];
   toggleEssay: () => void;
-  toggleConfirmation: () => void;
+  closeEssayPrompt: () => void;
+  handleToggleConfirmation: () => void;
+  confirmation: boolean;
 }
 
 const EssayPrompt: React.FC<EssayPromptProps> = ({
   formData,
   selectedFiles,
   toggleEssay,
-  toggleConfirmation,
+  handleToggleConfirmation,
+  confirmation,
+  closeEssayPrompt
 }) => {
-  const [confirmation, setConfirmation] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-
-  const handleToggleConfirmation = () => {
-    setConfirmation(true); // Update to directly show confirmation
-  };
 
   const handleTextEditorChange = (textContent: string) => {
     console.log("Text changed:", textContent);
@@ -56,13 +55,25 @@ const EssayPrompt: React.FC<EssayPromptProps> = ({
           {confirmation ? (
             <Confirmation />
           ) : (
-            <TextEditor
-              formData={formData}
-              selectedFiles={selectedFiles}
-              toggleEssay={toggleEssay}
-              onTextEditorChange={handleTextEditorChange}
-              toggleConfirmation={handleToggleConfirmation}
-            />
+            <>
+              <button
+                onClick={closeEssayPrompt}
+                className="p-8 absolute top-0 left-8 flex gap-x-8 z-10"
+              >
+                <div className="arrow">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </button>
+              <TextEditor
+                formData={formData}
+                selectedFiles={selectedFiles}
+                toggleEssay={toggleEssay}
+                onTextEditorChange={handleTextEditorChange}
+                handleToggleConfirmation={handleToggleConfirmation} // Pass handleSubmit to TextEditor
+              />
+            </>
           )}
         </motion.div>
       )}

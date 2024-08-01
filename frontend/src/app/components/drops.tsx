@@ -6,11 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleLeft,
   faAngleRight,
+  faArrowLeft,
   faArrowUpFromBracket,
   faEye,
   faMicrophoneLines,
   faMicrophoneLinesSlash,
   faPlus,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import Questions from "./questions";
 import DetailsModal from "./DetailsModal";
@@ -20,6 +22,7 @@ import DebateIt from "./debateIt";
 import MoreButton from "./moreButton";
 import { motion } from "framer-motion";
 import OpinionComments from "./OpinionComments";
+import { IoClose } from "react-icons/io5";
 
 interface dropsProps {
   topic: {
@@ -224,6 +227,15 @@ const Drop = ({ topic }: dropsProps) => {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95  bg-opacity-95 z-20 w-full h-screen flex justify-center items-center"
             >
+              <button
+                onClick={closeModal}
+                className="w-12 h-12 shadow-lg flex justify-center bg-[#000]/20 hover:scale-90 duration-200 ease-in-out transition items-center rounded-full absolute top-4 left-4"
+              >
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  className=" text-xl text-white"
+                />
+              </button>{" "}
               <div className="w-1/2 ">
                 {" "}
                 <DetailsModal opinionData={selectedOpinion} />

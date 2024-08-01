@@ -18,6 +18,7 @@ const CreateButton = ({ topic }: createButtonProps) => {
     setOpenCreateOpinion((open) => !open);
   };
 
+  
 
   return (
     <div className="">
@@ -27,9 +28,7 @@ const CreateButton = ({ topic }: createButtonProps) => {
       >
         Drop Opinion +
       </button>
-      {openCreateOpinion && (
-        <OpinionCreate topic={topic} toggleCreate={toggleCreate} />
-      )}
+      {openCreateOpinion && <OpinionCreate topic={topic} toggleCreate={toggleCreate} />}
     </div>
   );
 };

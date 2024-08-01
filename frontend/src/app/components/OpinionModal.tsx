@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { IoIosArrowDropdown, IoIosSend } from "react-icons/io";
-import { IoClose } from "react-icons/io5";
 import RebuttalShort from "./RebuttalShort";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaPaperPlane, FaFlag, FaX } from "react-icons/fa6";
@@ -321,7 +320,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   return (
     <div className="z-30  w-[45%] h-[750px] bg-white p-6 shadow-lg relative rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
-        <IoClose onClick={closeModal} className="cursor-pointer z-100" />
         <a
           className={`cursor-pointer ${
             selectedTab === "Opinion"
@@ -345,39 +343,42 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       </div>
       {/* Survey Container */}
       <div
-        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#fff] z-30 flex justify-center shadow-lg rounded-b-md ${
+        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${
           hideOpinion ? "" : "invisible"
         }`}
       >
-        <div className="absolute -top-[5rem] left-0 w-full h-[5rem]  bg-[#fff]  z-40"></div>
-
-        <div className="p-4 flex-col text-black relative">
-          <h3 className="text-6xl w-1/2 font-black  p-4">Tell Us..</h3>
+        <div className="absolute -top-[5rem] left-0 w-full   bg-[#2b2b2b] rounded-md text-white p-4  z-40">
+          <h3 className="text-5xl  font-bold  p-4 mt-4">Tell Us..</h3>
+          <p className="p-4 text-gray-300">This Survey is to help us personalize your User Experience. </p>
+        </div>
+        <div className=" flex flex-col justify-center text-white relative">
           <SurveyPrompt prompt="Life begins at conception, and abortion is morally equivalent to taking an innocent human life." />
           <SurveyPrompt prompt="Some religions grant exceptions for abortion in cases of rape, incest, or when the mothers life is in danger, while others oppose it under any circumstances." />
           <SurveyPrompt prompt="Abortion should be a private matter between a woman and her healthcare provider." />
-          <button
-            onClick={handleButtonClick}
-            className="shadow-lg rounded-full absolute bottom-8 text-white w-20 h-20 hover:scale-95 ease-in-out duration-200 bg-green-500 flex items-center justify-center"
-          >
-            <FontAwesomeIcon icon={faPaperPlane} className="text-2xl" />
-          </button>
         </div>
+        <button
+            onClick={handleButtonClick}
+            className="shadow-lg rounded-xl absolute bottom-8 left-4 text-white p-4  gap-x-4 hover:scale-95 ease-in-out duration-200 bg-gradient-to-br from-gray-400 to-blue-300 flex items-center justify-center"
+          >
+            <FontAwesomeIcon icon={faPaperPlane} className="text-2xl" /> Send
+          </button>
       </div>
       {showConfirmation && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="absolute w-full h-[100%] z-50 inset-0 bg-gradient-to-t from-white to-white/95 bg-opacity-100 flex items-center justify-center"
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="absolute w-full h-[100%] z-50 inset-0 bg-gradient-to-t from-[#2b2b2b] to-[#2b2b2b]/95 bg-opacity-100 rounded-md flex items-center justify-center"
         >
           <div className="px-4 py-[10%]  flex flex-col ">
             <div className="p-4  mx-auto my-4 border-4 border-green-300 bg-green-300 rounded-full flex justify-center items-center">
               <FontAwesomeIcon icon={faCheck} className="text-3xl text-white" />
             </div>
-            <span className="mx-auto text-4xl my-2 font-black">Response Recorded</span>
-            <span className="mx-auto">Your response has been recorded!</span>
+            <span className="mx-auto text-4xl my-2 font-bold text-white">
+              Response Recorded
+            </span>
+            <span className="mx-auto text-white">Your response has been recorded!</span>
           </div>
         </motion.div>
       )}
@@ -431,7 +432,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           {selectedTab == "Opinion" && (
             <div>
               <div className="relative mx-4 px-4">
-                <p className="opinion-text text-sm indent-3">
+                <p className="opinion-text text-sm my-4 indent-3">
                   {opinionData.textcontent}
                 </p>
               </div>

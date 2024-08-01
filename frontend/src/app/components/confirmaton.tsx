@@ -18,7 +18,7 @@ const Confirmation = () => {
         <h2 className=" text-center text-base p-4 text-black">
           Great, Thanks for your Opinion!
         </h2>
-        <p className="text-center text-sm p-4 text-gray-300">
+        <p className="text-center text-sm p-4 text-gray-400">
           Your response will be posted and viewable immediately
         </p>
       </motion.section>

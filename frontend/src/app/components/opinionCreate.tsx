@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import FileUpload from "./FileUpload";
 interface OpinionCreateProps {
   toggleCreate: () => void;
+
   topic: {
     name: string;
     id: number;
@@ -90,26 +91,34 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
     }
   };
 
+  const [confirmation, setConfirmation] = useState(false);
+
+  const handleToggleConfirmation = () => {
+    setConfirmation(true);
+    setTimeout(() => {
+      setConfirmation(false);
+      toggleCreate(); // Close the modal after 2 seconds
+    }, 2000);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-     if (selectedFiles.length === 0) {
-       alert("Please drop a file to continue.");
-       return;
-     }
+    if (selectedFiles.length === 0) {
+      return;
+    }
 
-     if (!selectedAffiliation) {
-       alert("Please select an affiliation.");
-       return;
-     }
+    if (!selectedAffiliation) {
+      return;
+    }
 
-     const data = {
-       ...formData,
-       affiliation: selectedAffiliation,
-       files: selectedFiles,
-     };
+    const data = {
+      ...formData,
+      affiliation: selectedAffiliation,
+      files: selectedFiles,
+    };
 
-     console.log("Submitted data:", data);
+    console.log("Submitted data:", data);
 
     setEssay(true);
     setIsVisible(false);
@@ -127,11 +136,6 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
 
     setEssay(false);
   };
-  const [confirmation, setConfirmation] = useState(false);
-
-  const handleToggleConfirmation = () => {
-    setConfirmation(!confirmation);
-  };
 
   return (
     <motion.section
@@ -139,11 +143,11 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ ease: "easeInOut", duration: 0.8 }}
-      className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-90 z-50"
+      className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-white bg-opacity-90 z-50"
     >
       <button
         onClick={toggleCreate}
-        className={`w-12 h-12 shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 ${
+        className={`w-12 h-12 shadow-lg flex justify-center bg-[#000]/20 hover:scale-90 duration-200 ease-in-out transition items-center rounded-full absolute top-4 left-4 ${
           essay ? "hidden" : "block"
         }`}
       >
@@ -265,21 +269,13 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
           </>
         ) : essay ? (
           <>
-            <button
-              onClick={closeEssayPrompt}
-              className="p-8 absolute top-0 left-8 flex gap-x-8 z-10"
-            >
-              <div className="arrow">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </button>
             <EssayPrompt
               formData={formData}
               selectedFiles={selectedFiles}
               toggleEssay={() => setEssay(false)}
-              toggleConfirmation={handleToggleConfirmation}
+              handleToggleConfirmation={handleToggleConfirmation}
+              confirmation={confirmation}
+              closeEssayPrompt={closeEssayPrompt}
             />
           </>
         ) : null}
