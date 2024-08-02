@@ -2,12 +2,13 @@
 
 import {
   faArrowRightFromBracket,
+  faEye,
   faGears,
   faSquareH,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Settings from "./settings";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
@@ -33,7 +34,7 @@ interface Opinion {
   textcontent: string;
   backgroundimage: string;
   authorprofileimage?: string;
-  parentopinionid: number | null
+  parentopinionid: number | null;
 }
 
 const UserPortal: React.FC<UserPortalProps> = ({
@@ -51,8 +52,9 @@ const UserPortal: React.FC<UserPortalProps> = ({
   const [showComments, setShowComments] = useState(false);
   const [stateIt, setStateIt] = useState(false);
   const [debateIt, setDebateIt] = useState(false);
-  const [selectedRebuttal, setSelectedRebuttal] = useState<Opinion | null>(null);
-
+  const [selectedRebuttal, setSelectedRebuttal] = useState<Opinion | null>(
+    null
+  );
 
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -66,7 +68,6 @@ const UserPortal: React.FC<UserPortalProps> = ({
     setDebateIt(!debateIt);
   };
 
-
   const closeModal = () => {
     setSelectedOpinion(null);
   };
@@ -74,59 +75,6 @@ const UserPortal: React.FC<UserPortalProps> = ({
   const closeRebuttal = () => {
     setSelectedRebuttal(null);
   };
-
-  const slides = [
-    {
-      id: 1,
-      backgroundimage: "/Images/pexels-itfeelslikefilm-590496.jpg",
-      author: "Jessica Wynters",
-      title: "Viability As A Time Limit",
-      textcontent: `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
-        adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
-        adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....
-        `,
-    },
-    {
-      id: 2,
-      author: "David Barnes",
-      backgroundimage: "/Images/gun-control.jpg",
-      title: "How Many?",
-      textcontent: `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
-      adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
-      adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....
-      `,
-    },
-    {
-      id: 3,
-      author: "Sarah Lee",
-      backgroundimage: "/Images/poverty.webp",
-      title: "Born to Chains",
-      textcontent: `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
-      adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
-      adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....
-      `,
-    },
-    {
-      id: 4,
-      author: "Zach Levi",
-      backgroundimage: "/Images/pexels-photo-26700261.webp",
-      title: "America, the Land of Free?",
-      textcontent: `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
-      adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
-      adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....
-      `,
-    },
-    {
-      id: 5,
-      author: "Zhang Lee",
-      backgroundimage: "/Images/pexels-photo-270220.webp",
-      title: "Cops to King Pin",
-      textcontent: `Korem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
-      adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos
-      adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.....
-      `,
-    },
-  ];
 
   const [openSettings, setOpenSettings] = useState(false);
 
@@ -195,7 +143,6 @@ const UserPortal: React.FC<UserPortalProps> = ({
       const response = await res.json();
       setRebuttals(response.data.rebuttals);
       setRebuttaledOpinions(response.data.rebuttaledOpinions);
-
     } catch (error) {
       console.log("Error Fetching Opinions: ", error);
     }
@@ -207,17 +154,30 @@ const UserPortal: React.FC<UserPortalProps> = ({
     console.log("user opinions state variable", opinions);
   }, []);
 
-
   const getSelectedRebuttal = async (rebuttaledOpinion: Opinion) => {
-    for (const rebuttal of rebuttals){
-      if (rebuttal.parentopinionid == rebuttaledOpinion.id){
+    for (const rebuttal of rebuttals) {
+      if (rebuttal.parentopinionid == rebuttaledOpinion.id) {
         setSelectedRebuttal(rebuttal);
         return;
       }
     }
-  }
+  };
 
+  const [close, setClose] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      setClose(true);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -228,9 +188,9 @@ const UserPortal: React.FC<UserPortalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ ease: "easeInOut", duration: 0.5 }}
-            className="fixed top-0 left-0 bg-gradient-to-t via-blue-500  from-red-300 to-gray-200 w-full h-screen flex flex-col xl:flex-row"
+            className="fixed top-0 left-0 bg-gradient-to-t via-gray-300  from-red-200 to-blue-200 w-full h-screen flex flex-col xl:flex-row"
           >
-            <div className="w-1/6 h-full hidden xl:block">
+            <div className="w-1/6 h-full hidden xl:block border-r">
               <div className="p-4 flex  items-center mt-[15%]">
                 <Image
                   src="/Images/opinion-drop-logo.png"
@@ -240,24 +200,32 @@ const UserPortal: React.FC<UserPortalProps> = ({
                   className="px-4 hidden xl:block"
                 />
               </div>
-              <div className="flex xl:flex-col  flex-row text-black gap-y-4 p-4">
+              <div className="flex xl:flex-col font-light flex-row text-black gap-y-4 p-4">
+                <div className="p-4 mt-[4%] rounded-full w-fit flex items-center gap-x-4">
+                  <div className="w-[4rem] h-[4rem] rounded-full shadow-md bg-white"></div>
+                  {/* <h1 className="lg:text-xl text-lg text-black ">
+                  Welcome,{" "}
+                  <span className="font-semibold">{currentUser?.username}</span>
+                  !
+                </h1> */}
+                </div>
                 <button
                   onClick={closeMenuFunction}
-                  className="p-4 w-fit text-base text-left font-semibold  hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition  flex items-center gap-x-4"
+                  className="p-4 w-fit text-base text-left   hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition  flex items-center gap-x-4"
                 >
                   <FontAwesomeIcon icon={faSquareH} /> Home
                 </button>
 
                 <button
                   onClick={toggleSettings}
-                  className="p-4 w-fit text-base text-left font-semibold hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition flex items-center gap-x-4"
+                  className="p-4 w-fit text-base text-left  hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition flex items-center gap-x-4"
                 >
                   <FontAwesomeIcon icon={faGears} className="" />
                   Settings
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="p-4 w-fit text-base text-left font-semibold text-black hover:text-red-600 duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4"
+                  className="p-4 w-fit text-base text-left  text-black hover:text-red-600 duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4"
                 >
                   <FontAwesomeIcon icon={faArrowRightFromBracket} /> Log Out
                 </button>
@@ -271,16 +239,18 @@ const UserPortal: React.FC<UserPortalProps> = ({
            space-x-reverse `}
               >
                 <span
-                  className={`block w-3/4 my-0.5 border-4  rounded-full ${menuOpen
-                    ? "rotate-45 transition-transform duration-300 ease-in-out border-[#000]"
-                    : "transition-transform duration-300 ease-in-out border-[#000]"
-                    }`}
+                  className={`block w-3/4 my-0.5 border-4  rounded-full ${
+                    menuOpen
+                      ? "rotate-45 transition-transform duration-300 ease-in-out border-[#000]"
+                      : "transition-transform duration-300 ease-in-out border-[#000]"
+                  }`}
                 ></span>
                 <span
-                  className={`block w-3/4 my-0.5 border-4  rounded-full ${menuOpen
-                    ? "-rotate-45 w-3/4 absolute top-2/5 transition-transform duration-300 ease-in-out border-[#000]"
-                    : "transition-transform duration-300 ease-in-out border-[#000]"
-                    }`}
+                  className={`block w-3/4 my-0.5 border-4  rounded-full ${
+                    menuOpen
+                      ? "-rotate-45 w-3/4 absolute top-2/5 transition-transform duration-300 ease-in-out border-[#000]"
+                      : "transition-transform duration-300 ease-in-out border-[#000]"
+                  }`}
                 ></span>
               </button>
               <AnimatePresence>
@@ -300,7 +270,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
                       className="lg:hidden absolute top-0 left-0 bottom-0 w-full min-h-screen bg-gradient-to-b to-red-500 via-purple-300 from-blue-300 p-4 gap-y-8"
                     >
                       {/* Explore */}
-                      <section className="p-4  rounded-md  justify-center items-center mt-[25%]">
+                      <section className="p-4  rounded-md  justify-center items-center mt-[25%] ">
                         <div className="flex flex-col justify-center w-full">
                           <ul className="flex flex-col gap-y-4 p-4 text-2xl font-medium text-black font-cheapSignage ">
                             <h2 className="font-dmSans my-4">Explore</h2>
@@ -333,30 +303,26 @@ const UserPortal: React.FC<UserPortalProps> = ({
                 )}
               </AnimatePresence>
             </div>
-            <div className="lg::w-5/6 w-full h-full text-white px-2">
+            <div className="lg::w-5/6 w-full h-full text-white px-2 mt-[2%]">
               {/* UserName */}
-              <div className="p-4 mt-[4%] rounded-full w-fit flex items-center gap-x-4">
-                <div className="w-[4rem] h-[4rem] rounded-full shadow-md bg-white"></div>
-                <h1 className="lg:text-3xl text-lg text-black ">
-                  Welcome,{" "}
-                  <span className="font-bold">{currentUser?.username}</span>!
-                </h1>
-              </div>
-              <div className="border-[#C5C5C5] text-lg flex justify-end items-center gap-12 pr-8">
+
+              <div className=" text-black text-lg flex  items-center gap-x-8 ml-4 p-4">
                 <a
-                  className={`cursor-pointer ${selectedTab === "Summary"
-                    ? "border-b-[2px] border-white "
-                    : "border-b-0"
-                    }`}
+                  className={`cursor-pointer ${
+                    selectedTab === "Summary"
+                      ? "border-b-[1px] border-black "
+                      : "border-b-0"
+                  }`}
                   onClick={() => setSelectedTab("Summary")}
                 >
                   Summary
                 </a>
                 <a
-                  className={`cursor-pointer ${selectedTab === "Notifications"
-                    ? "border-b-[2px] border-white "
-                    : "border-b-0"
-                    }`}
+                  className={`cursor-pointer ${
+                    selectedTab === "Notifications"
+                      ? "border-b-[2px] border-white "
+                      : "border-b-0"
+                  }`}
                   onClick={() => setSelectedTab("Notifications")}
                 >
                   Notifications
@@ -364,17 +330,15 @@ const UserPortal: React.FC<UserPortalProps> = ({
               </div>
 
               <div>
-
-                {selectedTab == "Summary" &&
-                  <div>
+                {selectedTab == "Summary" && (
+                  <div className="border-t mt-4">
                     {/* User Summary */}
-                    <div className="mt-[4%]  w-full rounded-3xl text-white  border-2 border-gray-800">
-                      <h2 className="xl:text-lg text-base w-fit font-semibold  text-black   p-4 rounded-full">
-                        Account Summary
-                      </h2>
-                      <div className="mt-3 h-[30rem] overflow-y-auto overflow-scroll flex flex-col gap-[3rem] p-3">
-                        <div>
-                          <h1 className="text-xl">Your Opinions</h1>
+                    <div className="  w-full rounded-3xl  p-4">
+                      <div className=" max-h-[700px] overflow-y-auto overflow-scroll flex flex-col gap-[3rem] p-4 ">
+                        <div className="bg-white p-4 rounded-2xl shadow-md">
+                          <h1 className="text-4xl font-light p-4 rounded-full text-black  w-fit">
+                            Opinions
+                          </h1>
                           <div className="my-4 grid xl:grid-cols-3 grid-cols-2 gap-2 mx-auto">
                             {opinions.length === 0 ? (
                               <div className="col-span-full text-center p-4">
@@ -395,26 +359,27 @@ const UserPortal: React.FC<UserPortalProps> = ({
                               opinions.map((slide, index) => (
                                 <div
                                   key={index}
-                                  className="relative group xl:p-[25%] p-[50%] border rounded-2xl overflow-hidden shadow-md"
+                                  className="relative group xl:p-[15%] p-[50%] border rounded-2xl overflow-hidden shadow-md"
                                 >
                                   <Image
                                     src={slide.backgroundimage}
                                     alt={slide.author}
                                     fill
-                                    className="w-[100%] h-[100%] object-cover object-center brightness-75"
+                                    className="w-[100%] h-[100%] object-cover text-black object-center brightness-75"
                                   />
                                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-70">
-                                    <div className="flex items-center justify-between h-full w-full px-4 py-2">
+                                    <div className="flex items-center justify-center h-full w-full px-4 py-2">
                                       <button
-                                        className="text-white px-4 py-2 rounded-full shadow-md hover:bg-gray-400 transition-colors duration-300"
-                                        onClick={() => setSelectedOpinion(slide)}
+                                        className="text-white w-[2rem] h-[2rem] rounded-full shadow-md border transition-colors duration-300"
+                                        onClick={() =>
+                                          setSelectedOpinion(slide)
+                                        }
                                       >
-                                        View Opinion
+                                        <FontAwesomeIcon
+                                          icon={faEye}
+                                          className="text-base"
+                                        />
                                       </button>
-                                      <div className="text-white mt-4">
-                                        <p className="text-lg font-semibold">Likes: 12</p>
-                                        <p className="text-lg font-semibold">Society Rating: 70%</p>
-                                      </div>
                                     </div>
                                   </div>
                                   <h2 className="font-semibold absolute bottom-4 left-4 mx-auto xl:text-base text-sm text-left text-white">
@@ -425,15 +390,17 @@ const UserPortal: React.FC<UserPortalProps> = ({
                             )}
                           </div>
                         </div>
-                        <div>
-                          <h1 className="text-xl">Your Rebuttals</h1>
+                        <div className="bg-white p-4 rounded-2xl shadow-md">
+                          <h1 className="text-4xl font-light p-4 rounded-full text-black  w-fit">
+                            Rebuttals
+                          </h1>
                           <div className="my-4 grid xl:grid-cols-3 grid-cols-2 gap-2 mx-auto">
                             {rebuttalledOpinions.length === 0 ? (
                               <div className="col-span-full text-center p-4">
                                 <p className="lg:text-3xl text-xl font-bold text-gray-700 mb-2">
                                   No Rebuttals Yet
                                 </p>
-                                <p className="lg:text-xl text-lg text-gray-300 mb-4">
+                                <p className=" text-base text-gray-300 mb-4">
                                   Directly Respond to the viewpoints of others!
                                 </p>
                                 <button
@@ -459,13 +426,17 @@ const UserPortal: React.FC<UserPortalProps> = ({
                                     <div className="flex items-center justify-between h-full w-full px-4 py-2">
                                       <button
                                         className="text-white px-4 py-2 rounded-full shadow-md hover:bg-gray-400 transition-colors duration-300"
-                                        onClick={() => setSelectedOpinion(slide)}
+                                        onClick={() =>
+                                          setSelectedOpinion(slide)
+                                        }
                                       >
                                         View Opinion
                                       </button>
                                       <button
                                         className="text-white px-4 py-2 rounded-full shadow-md hover:bg-gray-400 transition-colors duration-300"
-                                        onClick={() => getSelectedRebuttal(slide)}
+                                        onClick={() =>
+                                          getSelectedRebuttal(slide)
+                                        }
                                       >
                                         View Your Rebuttal
                                       </button>
@@ -479,15 +450,17 @@ const UserPortal: React.FC<UserPortalProps> = ({
                             )}
                           </div>
                         </div>
-                        <div>
-                          <h1 className="text-xl">Your Favorites</h1>
+                        <div className="bg-white p-4 rounded-2xl shadow-md">
+                          <h1 className="text-4xl font-light p-4 rounded-full text-black  w-fit">
+                            Favorites
+                          </h1>
                           <div className="my-4 grid xl:grid-cols-3 grid-cols-2 gap-2 mx-auto">
                             {favOpinions.length === 0 ? (
                               <div className="col-span-full text-center p-4">
                                 <p className="lg:text-3xl text-xl font-bold text-gray-700 mb-2">
                                   No Favorites
                                 </p>
-                                <p className="lg:text-xl text-lg text-gray-300 mb-4">
+                                <p className="text-base text-gray-300 mb-4">
                                   Explore the views of the people!
                                 </p>
                                 <button
@@ -513,13 +486,19 @@ const UserPortal: React.FC<UserPortalProps> = ({
                                     <div className="flex items-center justify-between h-full w-full px-4 py-2">
                                       <button
                                         className="text-white px-4 py-2 rounded-full shadow-md hover:bg-gray-400 transition-colors duration-300"
-                                        onClick={() => setSelectedOpinion(slide)}
+                                        onClick={() =>
+                                          setSelectedOpinion(slide)
+                                        }
                                       >
                                         View Opinion
                                       </button>
                                       <div className="text-white mt-4">
-                                        <p className="text-lg font-semibold">Likes: 12</p>
-                                        <p className="text-lg font-semibold">Society Rating: 70%</p>
+                                        <p className="text-lg font-semibold">
+                                          Likes: 12
+                                        </p>
+                                        <p className="text-lg font-semibold">
+                                          Society Rating: 70%
+                                        </p>
                                       </div>
                                     </div>
                                   </div>
@@ -534,39 +513,45 @@ const UserPortal: React.FC<UserPortalProps> = ({
                       </div>
                     </div>
                   </div>
-                }
+                )}
 
-                {selectedTab == "Notifications" &&
-                  <div>Notifications</div>
-                }
-
-
+                {selectedTab == "Notifications" && <div></div>}
               </div>
             </div>
             {openSettings && <Settings />}
           </motion.section>
           {selectedOpinion && (
             <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95  bg-opacity-95  w-full h-screen flex justify-center items-center z-20"
-              >
-                <div className="w-1/2 ">
-                  {" "}
-                  <DetailsModal opinionData={selectedOpinion} />
-                </div>
-                <OpinionModal
-                  opinionData={selectedOpinion}
-                  closeModal={closeModal}
-                  toggleStateIt={toggleStateIt}
-                  toggleDebateIt={toggleDebateIt}
-                />
-                <MoreButton toggleComments={toggleComments} showComments={showComments} />
-                {showComments && <OpinionComments closeModal={toggleComments} opinionData={selectedOpinion} />}            </motion.div>
-
+              {!close && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95 text-black bg-opacity-95  w-full h-screen flex justify-center items-center z-20"
+                >
+                  <div className="w-1/2 ">
+                    {" "}
+                    <DetailsModal opinionData={selectedOpinion} />
+                  </div>
+                  <OpinionModal
+                    opinionData={selectedOpinion}
+                    closeModal={closeModal}
+                    toggleStateIt={toggleStateIt}
+                    toggleDebateIt={toggleDebateIt}
+                  />
+                  <MoreButton
+                    toggleComments={toggleComments}
+                    showComments={showComments}
+                  />
+                  {showComments && (
+                    <OpinionComments
+                      closeModal={toggleComments}
+                      opinionData={selectedOpinion}
+                    />
+                  )}{" "}
+                </motion.div>
+              )}
             </>
           )}
           {selectedRebuttal && (
@@ -581,7 +566,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
               </button>
             </div>
           )}
-        </AnimatePresence >
+        </AnimatePresence>
       )}
     </>
   );

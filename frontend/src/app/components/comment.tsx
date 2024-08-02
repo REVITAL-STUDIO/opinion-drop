@@ -38,15 +38,15 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
   const [textIsExpanded, setTextIsExpanded] = useState(false);
   const textMaxChar = 600;
 
-  const handleChildCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChildCommentChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setNewChildCommentText(e.target.value);
   };
 
   const toggleExpandedText = () => {
     setTextIsExpanded(!textIsExpanded);
   };
-
-
 
   const toggleChildComments = () => {
     setShowChildComments(!showChildComments);
@@ -88,7 +88,7 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
         throw new Error("Error retrieving child comments");
       }
       const response = await res.json();
-      console.log("fetchChildCommentsReplies response ")
+      console.log("fetchChildCommentsReplies response ");
       return response.data.comments;
     } catch (error) {
       console.log("Error Fetching Child Comments: ", error);
@@ -103,33 +103,34 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
 
     for (const childComment of childComments) {
       console.log("in child for loop: ", childComment);
-      const replies: Comment[] = await fetchChildCommentsReplies(childComment.id)
+      const replies: Comment[] = await fetchChildCommentsReplies(
+        childComment.id
+      );
       childReplies = [...childReplies, ...replies];
     }
-    console.log("All replies of child comments: ", childReplies)
+    console.log("All replies of child comments: ", childReplies);
 
     childComments = [...childComments, ...childReplies];
     setChildComments(childComments);
     setNumChildComments(childComments.length);
-  }
+  };
 
   useEffect(() => {
     const loadLiked = async () => {
       const hasliked: boolean = await hasUserLiked(comment.id);
       console.log("hasliked: ", hasliked);
       setUserHasLiked(hasliked);
-    }
+    };
     if (comment) {
       getAllChildComments();
       loadLiked();
     }
-
-
   }, [comment]);
 
-
-  const postChildComment = async (textcontent: string, parentCommentId: number) => {
-
+  const postChildComment = async (
+    textcontent: string,
+    parentCommentId: number
+  ) => {
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${opinionId}`,
@@ -143,18 +144,21 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
             opinionId: opinionId,
             content: textcontent,
             parentCommentId: parentCommentId,
-          })
+          }),
         }
       );
       if (!res.ok) {
         throw new Error("Error posting comment");
       }
       const response = await res.json();
-      const newChildComment = response.data.comment
-      setChildComments((prevChildComments) => [newChildComment, ...prevChildComments]);
+      const newChildComment = response.data.comment;
+      setChildComments((prevChildComments) => [
+        newChildComment,
+        ...prevChildComments,
+      ]);
       setNewChildCommentText("");
       await getAllChildComments();
-      setOpenReplyTextBox(false)
+      setOpenReplyTextBox(false);
     } catch (error) {
       console.log("Error posting comment: ", error);
     }
@@ -169,7 +173,7 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
@@ -178,11 +182,10 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
       const response = await res.json();
       console.log("response hasuserliked: ", response);
       return response.data.userHasLiked;
-
     } catch (error) {
       console.log("Error retrieving hasliked: ", error);
     }
-  }
+  };
 
   const likeComment = async (commentId: number) => {
     try {
@@ -193,18 +196,17 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
         throw new Error("Error liking comment");
       }
       const response = await res.json();
-
     } catch (error) {
       console.log("Error liking comment: ", error);
     }
-  }
+  };
 
   const unlikeComment = async (commentId: number) => {
     try {
@@ -215,41 +217,37 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
         throw new Error("Error unliking comment");
       }
       const response = await res.json();
-
     } catch (error) {
       console.log("Error unliking comment: ", error);
     }
-  }
+  };
 
   const handleLikeComment = async (comment: Comment, userHasLiked: boolean) => {
     if (!userHasLiked) {
       try {
         await likeComment(comment.id);
-      }
-      catch (error) {
+      } catch (error) {
         console.log("Error liking comment");
       }
       comment.likes++;
       setUserHasLiked(true);
-    }
-    else {
+    } else {
       try {
         await unlikeComment(comment.id);
-      }
-      catch (error) {
+      } catch (error) {
         console.log("Error unliking comment");
       }
       comment.likes--;
       setUserHasLiked(false);
     }
-  }
+  };
 
   return (
     <div key={comment.id} className="w-full relative ">
@@ -266,18 +264,23 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
             <h2 className="text-sm text-[#fff] font-semibold">
               {comment.author}
             </h2>
-            <p className="text-xs text-[#fff] font-bold">{timeAgo(comment.createdat)}</p>
+            <p className="text-xs text-[#fff] font-bold">
+              {timeAgo(comment.createdat)}
+            </p>
           </div>
         </div>
         <div className="ml-[3%] py-[2rem] flex flex-col items-start gap-2">
-          <p
-            className={` w-[100%] text-[0.9rem] text-white`}
-          >
-            {textIsExpanded ? comment.textcontent : truncateText(comment.textcontent, textMaxChar)}
+          <p className={` w-[100%] text-[0.9rem] text-white`}>
+            {textIsExpanded
+              ? comment.textcontent
+              : truncateText(comment.textcontent, textMaxChar)}
           </p>
           {comment.textcontent.length > textMaxChar && (
-            <button onClick={toggleExpandedText} className="font-semibold text-sm text-gray-400">
-              {textIsExpanded ? 'Show less' : 'Read more'}
+            <button
+              onClick={toggleExpandedText}
+              className="font-semibold text-sm text-gray-400"
+            >
+              {textIsExpanded ? "Show less" : "Read more"}
             </button>
           )}
         </div>
@@ -290,8 +293,9 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
             >
               <FontAwesomeIcon
                 icon={faHeart}
-                className={`w-5 h-5 ${userHasLiked ? "text-red-500" : "text-white"
-                  } `}
+                className={`w-5 h-5 ${
+                  userHasLiked ? "text-red-500" : "text-white"
+                } `}
               />
               <p>{comment.likes}</p>
             </button>
@@ -324,7 +328,9 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
                 Cancel
               </button>
               <button
-                onClick={() => postChildComment(newChildCommentText, comment.id)}
+                onClick={() =>
+                  postChildComment(newChildCommentText, comment.id)
+                }
                 type="button"
                 className="py-2.5 px-4 text-sm font-medium text-center text-white bg-gray-700 rounded-full hover:bg-gray-800 active:bg-gray-700"
               >
@@ -339,13 +345,17 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
         >
           {numChildComments === 1 && (
             <>
-              <FontAwesomeIcon icon={showChildComments ? faChevronUp : faChevronDown} />
+              <FontAwesomeIcon
+                icon={showChildComments ? faChevronUp : faChevronDown}
+              />
               {" 1 reply"}
             </>
           )}
           {numChildComments > 1 && (
             <>
-              <FontAwesomeIcon icon={showChildComments ? faChevronUp : faChevronDown} />
+              <FontAwesomeIcon
+                icon={showChildComments ? faChevronUp : faChevronDown}
+              />
               {` ${numChildComments} replies`}
             </>
           )}
@@ -355,6 +365,7 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
         <>
           {childComments.map((childComment) => (
             <ChildComment
+              key={childComment.id} // Add the key prop here
               comment={childComment}
               postChildComment={postChildComment}
               rootCommentId={comment.id}

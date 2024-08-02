@@ -10,10 +10,23 @@ import CommentMainFile from "./components/commentMainFIle";
 import Comment from "./components/comment";
 
 export default function Home() {
+  const dummyComment: Comment = {
+    id: 1,
+    author: "Author Name",
+    textcontent: "This is a comment.",
+    parentcommentid: null,
+    parentcommentauthor: null,
+    authorprofileimage: "https://via.placeholder.com/150",
+    likes: 0,
+    createdat: new Date().toISOString(),
+  };
+
+  const opinionId = 123; // Example opinionId
+
   return (
     <main>
       <Hero />
-      {/* <CommentMainFile /> */}
+      <Cesspit comment={dummyComment} opinionId={opinionId} />
     </main>
   );
 }

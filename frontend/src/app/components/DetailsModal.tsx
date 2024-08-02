@@ -1,11 +1,6 @@
 "use client";
-import React from "react";
-import { Icon } from "@iconify/react";
-
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { useState } from "react";
-import { BiUpvote } from "react-icons/bi";
-import { BiDownvote } from "react-icons/bi";
 
 interface OpinionModalProps {
   opinionData: {
@@ -19,7 +14,7 @@ interface OpinionModalProps {
 
 const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
   return (
-    <div className="z-30 relative py-[15%] w-[50%] mx-auto bg-black/50 text-white p-4 shadow-lg rounded">
+    <div className="z-30 py-[15%] w-[50%] mx-auto bg-black/50 relative text-white p-4 shadow-lg rounded">
       <div className="absolute inset-0 w-full h-full -z-10 rounded">
         <Image
           src={opinionData.backgroundimage}

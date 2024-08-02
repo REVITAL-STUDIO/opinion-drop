@@ -90,9 +90,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const [userRating, setuserRating] = useState<null | number>(null);
   const [userRatingId, setuserRatingId] = useState<null | number>(null);
 
-
-
-
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     setSliderValue(newValue as number);
   };
@@ -132,13 +129,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.id === currentHighlightId
             ? {
-              ...highlight,
-              container: updateHighlightContainer(
-                highlight.container,
-                emoji,
-                "emoji"
-              ),
-            }
+                ...highlight,
+                container: updateHighlightContainer(
+                  highlight.container,
+                  emoji,
+                  "emoji"
+                ),
+              }
             : highlight
         )
       );
@@ -152,13 +149,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.id === currentHighlightId
             ? {
-              ...highlight,
-              container: updateHighlightContainer(
-                highlight.container,
-                comment,
-                "comment"
-              ),
-            }
+                ...highlight,
+                container: updateHighlightContainer(
+                  highlight.container,
+                  comment,
+                  "comment"
+                ),
+              }
             : highlight
         )
       );
@@ -290,7 +287,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     fetchRebuttals();
   }, []);
 
-
   const handleLikeOpinion = async () => {
     console.log("in handle like");
     try {
@@ -301,16 +297,14 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         }
         await likeOpinion();
         setUserHasLiked(true);
-      }
-      else {
+      } else {
         await unLikeOpinion();
         setUserHasLiked(false);
       }
     } catch (error) {
       console.log("Error in handlelike opinion: ", error);
-
     }
-  }
+  };
 
   const handleDislikeOpinion = async () => {
     console.log("in handle like");
@@ -322,15 +316,14 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         }
         await dislikeOpinion();
         setUserHasDisliked(true);
-      }
-      else {
+      } else {
         await unDislikeOpinion();
         setUserHasDisliked(false);
       }
     } catch (error) {
       console.log("Error in handledislike opinion: ", error);
     }
-  }
+  };
 
   const likeOpinion = async () => {
     try {
@@ -341,7 +334,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
@@ -361,7 +354,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
@@ -371,7 +364,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     } catch (error) {
       console.log("Error unliking opinion: ", error);
     }
-  }
+  };
 
   const hasUserLiked = async () => {
     try {
@@ -382,7 +375,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
@@ -391,11 +384,10 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       const response = await res.json();
       console.log("response hasuserliked: ", response);
       return response.data.userHasLiked;
-
     } catch (error) {
       console.log("Error retrieving hasliked: ", error);
     }
-  }
+  };
 
   const dislikeOpinion = async () => {
     try {
@@ -406,7 +398,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
@@ -426,7 +418,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
@@ -446,7 +438,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
@@ -455,11 +447,10 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       const response = await res.json();
       console.log("response hasuserDisliked: ", response);
       return response.data.userHasDisliked;
-
     } catch (error) {
       console.log("Error retrieving hasdisliked: ", error);
     }
-  }
+  };
 
   useEffect(() => {
     const loadLiked = async () => {
@@ -469,13 +460,11 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       console.log("hasDisliked: ", hasDisliked);
       setUserHasLiked(hasLiked);
       setUserHasDisliked(hasDisliked);
-    }
+    };
     if (opinionData) {
       loadLiked();
       getUserRating();
     }
-
-
   }, [opinionData]);
 
   const getUserRating = async () => {
@@ -487,7 +476,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
@@ -496,15 +485,14 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       const response = await res.json();
       console.log("response hasuserliked: ", response.data.userHasRated);
       if (response.data.userHasRated) {
-        setuserRating(response.data.rating.value)
-        setuserRatingId(response.data.rating.ratingId)
+        setuserRating(response.data.rating.value);
+        setuserRatingId(response.data.rating.ratingId);
       }
       setUserHasRated(response.data.userHasRated);
-
     } catch (error) {
       console.log("Error retrieving user rating: ", error);
     }
-  }
+  };
 
   const rateOpinion = async () => {
     try {
@@ -518,8 +506,8 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           body: JSON.stringify({
             userId: currentUser?.uid,
             opinionId: opinionData.id,
-            value: sliderValue
-          })
+            value: sliderValue,
+          }),
         }
       );
       if (!res.ok) {
@@ -527,14 +515,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       }
       const response = await res.json();
       console.log("response hasuserliked: ", response.data.userHasRated);
-      setuserRating(response.data.rating.value)
-      setuserRatingId(response.data.rating.ratingId)
+      setuserRating(response.data.rating.value);
+      setuserRatingId(response.data.rating.ratingId);
       setUserHasRated(response.data.userHasRated);
-
     } catch (error) {
       console.log("Error rating opinion: ", error);
     }
-  }
+  };
 
   const updateRating = async () => {
     try {
@@ -550,103 +537,59 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             ratingId: userRatingId,
             userId: currentUser?.uid,
             opinionId: opinionData.id,
-            value: sliderValue
-          })
+            value: sliderValue,
+          }),
         }
       );
       if (!res.ok) {
         throw new Error("Error updating");
       }
       const response = await res.json();
-      setuserRating(response.data.rating.value)
-
+      setuserRating(response.data.rating.value);
     } catch (error) {
       console.log("Error rating opinion: ", error);
     }
-  }
+  };
 
   const handleRateOpinion = async () => {
     try {
-      await rateOpinion()
-    }
-    catch (error) {
+      await rateOpinion();
+    } catch (error) {
       console.log(error);
     }
     setOpenRating(false);
-  }
+  };
 
   const handleUpdateRating = async () => {
     try {
-      await updateRating()
-    }
-    catch (error) {
+      await updateRating();
+    } catch (error) {
       console.log(error);
     }
     setOpenRating(false);
-  }
+  };
 
-  useEffect(() => {
-
-  }, [userRating]);
-
-  const demoRebuttals = [
-    {
-      id: 1,
-      title: "Pro-Choice Perspectives on Abortion",
-      author: "Alice Johnson",
-      textcontent: "rebutall text...........",
-      parentOpinionId: 1,
-    },
-    {
-      id: 1,
-      title: "Pro-Life Arguments Against Abortion",
-      author: "Bob Smith",
-      textcontent: "rebutall text...........",
-      parentOpinionId: 1,
-    },
-    {
-      id: 1,
-      title: "Legal Aspects of Abortion Rights",
-      author: "Catherine Lee",
-      textcontent: "rebutall text...........",
-      parentOpinionId: 1,
-    },
-    {
-      id: 1,
-      title: "Ethical Considerations in Abortion Debates",
-      author: "David Brown",
-      textcontent: "rebutall text...........",
-      parentOpinionId: 1,
-    },
-    {
-      id: 1,
-      title: "Medical Implications of Abortion Procedures",
-      author: "Eva Green",
-      textcontent: "rebutall text...........",
-      parentOpinionId: 1,
-    },
-  ];
-
-
-
+  useEffect(() => {}, [userRating]);
 
   return (
-    <div className="z-30  w-[45%] h-[750px] bg-white p-6 shadow-lg relative rounded-md">
+    <div className="z-30  w-[45%] h-[750px] bg-white text-black p-6 shadow-lg relative rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <a
-          className={`cursor-pointer ${selectedTab === "Opinion"
-            ? "border-b-[4px] border-[#606060] "
-            : "border-b-0"
-            }`}
+          className={`cursor-pointer ${
+            selectedTab === "Opinion"
+              ? "border-b-[4px] border-[#606060] "
+              : "border-b-0"
+          }`}
           onClick={() => setSelectedTab("Opinion")}
         >
           Opinion
         </a>
         <a
-          className={`cursor-pointer ${selectedTab === "Rebuttal"
-            ? "border-b-[4px] border-[#606060] "
-            : "border-b-0"
-            }`}
+          className={`cursor-pointer ${
+            selectedTab === "Rebuttal"
+              ? "border-b-[4px] border-[#606060] "
+              : "border-b-0"
+          }`}
           onClick={() => setSelectedTab("Rebuttal")}
         >
           Rebuttal
@@ -654,12 +597,15 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       </div>
       {/* Survey Container */}
       <div
-        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${hideOpinion ? "" : "invisible"
-          }`}
+        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${
+          hideOpinion ? "" : "invisible"
+        }`}
       >
         <div className="absolute -top-[5rem] left-0 w-full   bg-[#2b2b2b] rounded-md text-white p-4  z-40">
           <h3 className="text-5xl  font-bold  p-4 mt-4">Tell Us..</h3>
-          <p className="p-4 text-gray-300">This Survey is to help us personalize your User Experience. </p>
+          <p className="p-4 text-gray-300">
+            This Survey is to help us personalize your User Experience.{" "}
+          </p>
         </div>
         <div className=" flex flex-col justify-center text-white relative">
           <SurveyPrompt prompt="Life begins at conception, and abortion is morally equivalent to taking an innocent human life." />
@@ -667,11 +613,11 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           <SurveyPrompt prompt="Abortion should be a private matter between a woman and her healthcare provider." />
         </div>
         <button
-            onClick={handleButtonClick}
-            className="shadow-lg rounded-xl absolute bottom-8 left-4 text-white p-4  gap-x-4 hover:scale-95 ease-in-out duration-200 bg-gradient-to-br from-gray-400 to-blue-300 flex items-center justify-center"
-          >
-            <FontAwesomeIcon icon={faPaperPlane} className="text-2xl" /> Send
-          </button>
+          onClick={handleButtonClick}
+          className="shadow-lg rounded-xl absolute bottom-8 left-4 text-white p-4  gap-x-4 hover:scale-95 ease-in-out duration-200 bg-gradient-to-br from-gray-400 to-blue-300 flex items-center justify-center"
+        >
+          <FontAwesomeIcon icon={faPaperPlane} className="text-2xl" /> Send
+        </button>
       </div>
       {showConfirmation && (
         <motion.div
@@ -688,7 +634,9 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             <span className="mx-auto text-4xl my-2 font-bold text-white">
               Response Recorded
             </span>
-            <span className="mx-auto text-white">Your response has been recorded!</span>
+            <span className="mx-auto text-white">
+              Your response has been recorded!
+            </span>
           </div>
         </motion.div>
       )}
@@ -705,14 +653,16 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             >
               Reply
               <IoIosArrowDropdown
-                className={`${replyMenu ? "rotate-0" : "-rotate-180"
-                  } transition ease-in-out duration-150`}
+                className={`${
+                  replyMenu ? "rotate-0" : "-rotate-180"
+                } transition ease-in-out duration-150`}
               />
             </button>
             {replyMenu && (
               <section
-                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                  }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg shadow-lg text-white `}
+                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${
+                  replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg shadow-lg text-white `}
               >
                 <button
                   onClick={toggleStateIt}
@@ -751,22 +701,33 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                     Does this essay belong in this topic?
                   </h1>
                   <div className="p-4 mx-auto mt-[2%] rounded-full w-[50%] flex justify-evenly items-center">
-                    <button onClick={() => handleLikeOpinion()} className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasLiked ? 'bg-green-500 scale-105' : 'bg-white'}`}>
+                    <button
+                      onClick={() => handleLikeOpinion()}
+                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${
+                        userHasLiked ? "bg-green-500 scale-105" : "bg-white"
+                      }`}
+                    >
                       👍
                     </button>
-                    <button onClick={() => handleDislikeOpinion()} className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasDisliked ? 'bg-red-500 scale-105' : 'bg-white'}`}>
+                    <button
+                      onClick={() => handleDislikeOpinion()}
+                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${
+                        userHasDisliked ? "bg-red-500 scale-105" : "bg-white"
+                      }`}
+                    >
                       👎
                     </button>
                   </div>
                 </div>
                 <div className="w-full mx-auto">
                   <div className="w-full flex flex-col justify-center items-center">
-                    {userHasRated ?
+                    {userHasRated ? (
                       <div>
-                        {!openRating &&
+                        {!openRating && (
                           <div>
                             <p>
-                              Your Rating: <span className="text-lg">{userRating}%</span>
+                              Your Rating:{" "}
+                              <span className="text-lg">{userRating}%</span>
                             </p>
                             <button
                               onClick={() => setOpenRating(true)}
@@ -775,25 +736,25 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                               Update Rating
                             </button>
                           </div>
-                        }
+                        )}
                       </div>
-                      :
+                    ) : (
                       <div className="flex flex-col items-center">
                         <h2 className="my-4 text-center font-semibold">
                           How much do you agree with this Essay?
                         </h2>
-                        {!openRating &&
+                        {!openRating && (
                           <button
                             onClick={() => setOpenRating(true)}
-                            className="font-bold px-2 py-2 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
+                            className="font-normal text-sm px-4 py-2 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
                           >
                             Rate Opinion
                           </button>
-                        }
+                        )}
                       </div>
-                    }
+                    )}
 
-                    {openRating &&
+                    {openRating && (
                       <div>
                         <Box sx={{ width: 300 }}>
                           <Slider
@@ -814,31 +775,32 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                           {valuetext(sliderValue)}%
                         </p>
                       </div>
-                    }
-                    {openRating &&
+                    )}
+
+                    {openRating && !userHasRated && (
+                      <button
+                        onClick={() => handleRateOpinion()}
+                        className="relative mt-4 px-4 py-2  h-10   shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
+                      >
+                        Submit Rating
+                      </button>
+                    )}
+                    {openRating && userHasRated && (
+                      <button
+                        onClick={() => handleUpdateRating()}
+                        className=" mt-4 shadow-sm rounded-full px-4 py-2 text-white flex items-center justify-center gap-x-2 border bg-blue-400"
+                      >
+                        Submit Rating
+                      </button>
+                    )}
+                    {openRating && (
                       <button
                         onClick={() => setOpenRating(false)}
-                        className=" text-gray-400 relative right-[15rem]"
+                        className=" text-gray-400 mt-4 relative"
                       >
                         cancel
                       </button>
-                    }
-                    {openRating && !userHasRated &&
-                      <button
-                        onClick={() => handleRateOpinion()}
-                        className="relative -top-10 left-[15rem] font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
-                      >
-                        Submit Rating
-                      </button>
-                    }
-                    {openRating && userHasRated &&
-                      <button
-                        onClick={() => handleUpdateRating()}
-                        className="relative -top-10 left-[15rem] font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-blue-400"
-                      >
-                        Submit Rating
-                      </button>
-                    }
+                    )}
                   </div>
                 </div>
               </div>
