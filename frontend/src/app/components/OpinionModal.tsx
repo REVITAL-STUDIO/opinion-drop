@@ -38,6 +38,8 @@ interface OpinionModalProps {
   closeModal: () => void;
   toggleStateIt: () => void;
   toggleDebateIt: () => void;
+  hasSubmittedSurvey: boolean;
+  survey: Survey;
 }
 
 interface Rebuttal {
@@ -55,11 +57,23 @@ interface Highlight {
   text: string;
 }
 
+interface SurveyQuestion {
+  questionId: number;
+  questionText: string;
+}
+
+export interface Survey {
+  surveyId: number;
+  questions: SurveyQuestion[];
+}
+
 const OpinionModal: React.FC<OpinionModalProps> = ({
   opinionData,
   closeModal,
   toggleStateIt,
   toggleDebateIt,
+  hasSubmittedSurvey,
+  survey,
 }) => {
   const [selectedTab, setSelectedTab] = useState("Opinion");
   const [hideOpinion, setHideOpinion] = useState(true);
@@ -89,6 +103,19 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const [userHasRated, setUserHasRated] = useState(false);
   const [userRating, setuserRating] = useState<null | number>(null);
   const [userRatingId, setuserRatingId] = useState<null | number>(null);
+  const [answers, setAnswers] = useState<{ [questionId: number]: number }>({});
+  const [numLikes, setNumLikes] = useState<number>(0);
+  const [numDislikes, setNumDislikes] = useState<number>(0);
+
+
+  const handleAnswerChange = (questionId: number, value: number) => {
+    setAnswers(prevAnswers => ({
+      ...prevAnswers,
+      [questionId]: value
+    }));
+    console.log("answers object: ", answers);
+  };
+
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     setSliderValue(newValue as number);
@@ -102,13 +129,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     setOpenDiscussion(false);
   };
 
-  const handleButtonClick = () => {
-    setHideOpinion(false);
-    setShowConfirmation(true);
-    setTimeout(() => {
-      setShowConfirmation(false);
-    }, 3000);
-  };
+
 
   const openReplies = () => {
     setReplyMenu((e) => !e);
@@ -260,6 +281,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         document.removeEventListener("mouseup", handleTextSelect);
       };
     }
+
   }, [highlightEnabled]);
 
   const fetchRebuttals = async () => {
@@ -283,7 +305,51 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     }
   };
 
+  const getNumOpinionLikes = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/numlikes/${opinionData.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving opinion like count");
+      }
+      const response = await res.json();
+      setNumLikes(response.data.numLikes);
+    } catch (error) {
+      console.log("Error Fetching Opinion like count: ", error);
+    }
+  };
+
+  const getNumDislikes = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/numDislikes/${opinionData.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving opinion dislike count");
+      }
+      const response = await res.json();
+      setNumDislikes(response.data.numDislikes);
+    } catch (error) {
+      console.log("Error Fetching Opinion dislike count: ", error);
+    }
+  };
+
   useEffect(() => {
+    getNumDislikes();
+    getNumOpinionLikes();
     fetchRebuttals();
   }, []);
 
@@ -456,8 +522,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     const loadLiked = async () => {
       const hasLiked: boolean = await hasUserLiked();
       const hasDisliked: boolean = await hasUserDisliked();
-      console.log("hasliked: ", hasLiked);
-      console.log("hasDisliked: ", hasDisliked);
       setUserHasLiked(hasLiked);
       setUserHasDisliked(hasDisliked);
     };
@@ -567,9 +631,79 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       console.log(error);
     }
     setOpenRating(false);
+  }
+
+
+  const submitSurvey = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/surveys/submit`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: currentUser?.uid,
+            surveyId: survey.surveyId,
+            answers: answers
+          })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error submitting survey");
+      }
+      setHideOpinion(false);
+      setShowConfirmation(true);
+      setTimeout(() => {
+        setShowConfirmation(false);
+      }, 3000);
+
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   };
 
-  useEffect(() => {}, [userRating]);
+  const demoRebuttals = [
+    {
+      id: 1,
+      title: "Pro-Choice Perspectives on Abortion",
+      author: "Alice Johnson",
+      textcontent: "rebutall text...........",
+      parentOpinionId: 1,
+    },
+    {
+      id: 1,
+      title: "Pro-Life Arguments Against Abortion",
+      author: "Bob Smith",
+      textcontent: "rebutall text...........",
+      parentOpinionId: 1,
+    },
+    {
+      id: 1,
+      title: "Legal Aspects of Abortion Rights",
+      author: "Catherine Lee",
+      textcontent: "rebutall text...........",
+      parentOpinionId: 1,
+    },
+    {
+      id: 1,
+      title: "Ethical Considerations in Abortion Debates",
+      author: "David Brown",
+      textcontent: "rebutall text...........",
+      parentOpinionId: 1,
+    },
+    {
+      id: 1,
+      title: "Medical Implications of Abortion Procedures",
+      author: "Eva Green",
+      textcontent: "rebutall text...........",
+      parentOpinionId: 1,
+    },
+  ];
+
+
+
 
   return (
     <div className="z-30  w-[45%] h-[750px] bg-white text-black p-6 shadow-lg relative rounded-md">
@@ -596,29 +730,28 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         </a>
       </div>
       {/* Survey Container */}
-      <div
-        className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${
-          hideOpinion ? "" : "invisible"
-        }`}
-      >
-        <div className="absolute -top-[5rem] left-0 w-full   bg-[#2b2b2b] rounded-md text-white p-4  z-40">
-          <h3 className="text-5xl  font-bold  p-4 mt-4">Tell Us..</h3>
-          <p className="p-4 text-gray-300">
-            This Survey is to help us personalize your User Experience.{" "}
-          </p>
-        </div>
-        <div className=" flex flex-col justify-center text-white relative">
-          <SurveyPrompt prompt="Life begins at conception, and abortion is morally equivalent to taking an innocent human life." />
-          <SurveyPrompt prompt="Some religions grant exceptions for abortion in cases of rape, incest, or when the mothers life is in danger, while others oppose it under any circumstances." />
-          <SurveyPrompt prompt="Abortion should be a private matter between a woman and her healthcare provider." />
-        </div>
-        <button
-          onClick={handleButtonClick}
-          className="shadow-lg rounded-xl absolute bottom-8 left-4 text-white p-4  gap-x-4 hover:scale-95 ease-in-out duration-200 bg-gradient-to-br from-gray-400 to-blue-300 flex items-center justify-center"
+      {!hasSubmittedSurvey && currentUser &&
+        <div
+          className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${hideOpinion ? "" : "invisible"
+            }`}
         >
-          <FontAwesomeIcon icon={faPaperPlane} className="text-2xl" /> Send
-        </button>
-      </div>
+          <div className="absolute -top-[5rem] left-0 w-full   bg-[#2b2b2b] rounded-md text-white p-4  z-40">
+            <h3 className="text-5xl  font-bold  p-4 mt-4">Tell Us..</h3>
+            <p className="p-4 text-gray-300">This Survey is to help us personalize your User Experience. </p>
+          </div>
+          <div className=" flex flex-col justify-center text-white relative">
+            {survey.questions.map((question, index) => (
+              <SurveyPrompt key={index} onChange={handleAnswerChange} questionId={question.questionId} prompt={question.questionText} />
+            ))}
+          </div>
+          <button
+            onClick={submitSurvey}
+            className="shadow-lg rounded-xl absolute bottom-8 left-4 text-white p-4  gap-x-4 hover:scale-95 ease-in-out duration-200 bg-gradient-to-br from-gray-400 to-blue-300 flex items-center justify-center"
+          >
+            <FontAwesomeIcon icon={faPaperPlane} className="text-2xl" /> Send
+          </button>
+        </div>
+      }
       {showConfirmation && (
         <motion.div
           initial={{ opacity: 0 }}
