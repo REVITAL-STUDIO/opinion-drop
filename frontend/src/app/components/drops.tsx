@@ -23,6 +23,7 @@ import MoreButton from "./moreButton";
 import { motion } from "framer-motion";
 import OpinionComments from "./OpinionComments";
 import { IoClose } from "react-icons/io5";
+import { useAuth } from "../hooks/AuthContext";
 
 interface dropsProps {
   topic: {
@@ -40,6 +41,16 @@ interface Opinion {
   authorprofileimage?: string;
 }
 
+interface SurveyQuestion {
+  questionId: number;
+  questionText: string;
+}
+
+export interface Survey {
+  surveyId: number;
+  questions: SurveyQuestion[];
+}
+
 const Drop = ({ topic }: dropsProps) => {
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
   const [showRepliesModal, setShowRepliesModal] = useState(true);
@@ -54,8 +65,13 @@ const Drop = ({ topic }: dropsProps) => {
   const [activeButton, setActiveButton] = useState<"like" | "dislike" | null>(
     null
   );
+  const { currentUser } = useAuth();
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [survey, setSurvey] = useState<Survey | null>(null);
+
 
   //logic for Society Percentage
+
 
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -98,7 +114,7 @@ const Drop = ({ topic }: dropsProps) => {
     fetchOpinions();
   }, []);
 
-  useEffect(() => {}, [opinions]);
+  useEffect(() => { }, [opinions]);
 
   const [currdeg, setCurrdeg] = useState(0);
   const rotate = (direction: "next" | "prev") => {
@@ -160,6 +176,75 @@ const Drop = ({ topic }: dropsProps) => {
     setSelectedOpinion(opinion);
     setClose(false); // Reset the close state
   };
+
+  const hasSubmittedSurvey = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/surveys/userSubmitted/${survey?.surveyId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving has submitted");
+      }
+
+      const response = await res.json();
+      return response.data.userHasSubmitted;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
+  const fetchSurvey = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/surveys/topic/${topic.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving survey");
+      }
+
+      const response = await res.json();
+      console.log("survey received", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
+
+  useEffect(() => {
+    const loadSurvey = async () => {
+      if (!survey) {
+        const surveyData = await fetchSurvey();
+        console.log("surveyData: ", surveyData);
+        setSurvey(surveyData);
+      }
+    };
+  
+    const checkSurvey = async () => {
+      if (survey) {
+        const submitted = await hasSubmittedSurvey();
+        console.log("hasSubmittedSurvey: ", submitted);
+        setHasSubmitted(submitted);
+        console.log("state survey: ", survey);
+      }
+    };
+  
+    loadSurvey();
+    checkSurvey();
+  }, [survey]); 
 
   return (
     <section className=" flex  justify-center items-center my-6">
@@ -262,7 +347,7 @@ const Drop = ({ topic }: dropsProps) => {
         <FontAwesomeIcon icon={faAngleRight} className="w-5 h-5" />{" "}
       </div>
       <div>
-        {selectedOpinion && (
+        {selectedOpinion && survey && (
           <>
             {!close && (
               <motion.div
@@ -281,7 +366,9 @@ const Drop = ({ topic }: dropsProps) => {
                     opinionData={selectedOpinion}
                     toggleStateIt={toggleStateIt}
                     toggleDebateIt={toggleDebateIt}
-                  />
+                    hasSubmittedSurvey={hasSubmitted}
+                survey={survey}
+              />
                 </div>
                 <div ref={moreButtonRef}>
                   <MoreButton

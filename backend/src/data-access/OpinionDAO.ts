@@ -326,11 +326,11 @@ export class OpinionDAO {
         const query = `SELECT liked_at FROM opinion_likes WHERE opinion_id = $1 AND user_id = $2`
 
         let client: PoolClient | undefined;
-         let hasLiked: boolean = false;
+        let hasLiked: boolean = false;
         try {
             client = await this.pool.connect();
             const resp = await client.query(query, [commentId, userId]);
-            if(resp.rows[0]){
+            if (resp.rows[0]) {
                 hasLiked = true;
             }
             return hasLiked;
@@ -342,7 +342,7 @@ export class OpinionDAO {
 
         }
     }
-    
+
 
     async unlikeOpinion(opinionId: number, userId: string): Promise<void> {
         const query = "UPDATE opinions SET likes = likes - 1 WHERE opinion_id = $1"
@@ -357,6 +357,27 @@ export class OpinionDAO {
         } catch (error) {
             console.error('Error executing like opinion query:', error);
             throw new Error(`Error liking opinion: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async getNumLikes(opinionId: number): Promise<number> {
+        const query = `SELECT COUNT(*) AS numlikes
+        FROM opinion_likes
+        WHERE opinion_id = $1;`
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result = await client.query(query, [opinionId]);
+            const numLikes = parseInt(result.rows[0].numlikes, 10);
+            return numLikes;
+        } catch (error) {
+            console.error('Error executing get likes query:', error);
+            throw new Error(`Error geting like count: ${error}`);
         } finally {
             client && client.release();
 
@@ -386,11 +407,11 @@ export class OpinionDAO {
         const query = `SELECT disliked_at FROM opinion_dislikes WHERE opinion_id = $1 AND user_id = $2`
 
         let client: PoolClient | undefined;
-         let hasLiked: boolean = false;
+        let hasLiked: boolean = false;
         try {
             client = await this.pool.connect();
             const resp = await client.query(query, [commentId, userId]);
-            if(resp.rows[0]){
+            if (resp.rows[0]) {
                 hasLiked = true;
             }
             return hasLiked;
@@ -416,6 +437,27 @@ export class OpinionDAO {
         } catch (error) {
             console.error('Error executing dislike opinion query:', error);
             throw new Error(`Error disliking opinion: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+    async getNumDislikes(opinionId: number): Promise<number> {
+        const query = `SELECT COUNT(*) AS numdislikes
+        FROM opinion_dislikes
+        WHERE opinion_id = $1;`
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result = await client.query(query, [opinionId]);
+            const numDislikes = parseInt(result.rows[0].numdislikes, 10);
+            return numDislikes;
+        } catch (error) {
+            console.error('Error executing get dislikes query:', error);
+            throw new Error(`Error geting dislike count: ${error}`);
         } finally {
             client && client.release();
 

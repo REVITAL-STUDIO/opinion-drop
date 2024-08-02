@@ -181,6 +181,24 @@ export class OpinionService {
         }
     }
 
+    async getNumLikes(opinionId: number): Promise<number> {
+        try {
+            return await this.opinionDAO.getNumLikes(opinionId);
+        } catch (error) {
+            console.error('Error in OpinionService getNumLikes:', error);
+            throw new Error('Error getting like count');
+        }
+    }
+
+    async getNumDislikes(opinionId: number): Promise<number> {
+        try {
+            return await this.opinionDAO.getNumDislikes(opinionId);
+        } catch (error) {
+            console.error('Error in OpinionService getNumDislikes:', error);
+            throw new Error('Error getting dislike count');
+        }
+    }
+
     async dislikeOpinion(opinionId: number, userId: string): Promise<void> {
         try {
             await this.opinionDAO.dislikeOpinion(opinionId, userId);

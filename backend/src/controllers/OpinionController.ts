@@ -297,7 +297,7 @@ export class OpinionController {
             }
             const userId: string = req.body.userId
             const hasLiked: boolean = await this.opinionService.userHasLiked(opinionId, userId);
-            res.status(201).send({
+            res.status(200).send({
                 status: 'success',
                 message: 'has liked received succussfully',
                 data: {
@@ -325,6 +325,50 @@ export class OpinionController {
         } catch (error) {
             console.error('Error in OpinionController unlikeOpinion:', error);
             res.status(500).send('Failed to unlike opinion');
+        }
+    }
+
+    async getNumLikes(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const numLikes = await this.opinionService.getNumLikes(opinionId);
+            res.status(200).send({
+                status: 'success',
+                message: 'likes count received succussfully',
+                data: {
+                    numLikes: numLikes
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController getNumLikes:', error);
+            res.status(500).send('Failed to get like count');
+        }
+    }
+
+    async getNumDislikes(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const numDislikes = await this.opinionService.getNumDislikes(opinionId);
+            res.status(200).send({
+                status: 'success',
+                message: 'dislikes count received succussfully',
+                data: {
+                    numDislikes: numDislikes
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController getNumDislikes:', error);
+            res.status(500).send('Failed to get dislike count');
         }
     }
 

@@ -5,6 +5,7 @@ import { CommentController } from './controllers/CommentController';
 import { TopicController } from './controllers/TopicController';
 import { RatingController } from './controllers/RatingController';
 import multer from 'multer';
+import { SurveyController } from './controllers/SurveyController';
 
 const upload = multer();
 const router = Router();
@@ -15,6 +16,8 @@ const opinionController = new OpinionController();
 const commentController = new CommentController();
 const topicController = new TopicController();
 const ratingController = new RatingController();
+const surveyController = new SurveyController();
+
 
 
 // User Routes
@@ -36,14 +39,16 @@ router.get('/opinions/topic/:topicId', opinionController.getOpinionsByTopic.bind
 router.get('/opinions/user/:userId', opinionController.getOpinionsByUser.bind(opinionController));
 router.get('/rebuttals/user/:userId', opinionController.getRebuttalsByUser.bind(opinionController));
 router.get('/opinion/rebuttals/:opinionId', opinionController.getOpinionRebuttals.bind(opinionController));
-router.get('/opinion/favorites/:userId', opinionController.getFavoriteOpinions.bind(opinionController));
+router.get('/opinions/favorites/:userId', opinionController.getFavoriteOpinions.bind(opinionController));
 router.put('/opinions/:opinionId', opinionController.updateOpinion.bind(opinionController));
 router.put('/opinions/like/:opinionId', opinionController.likeOpinion.bind(opinionController));
 router.put('/opinions/unlike/:opinionId', opinionController.unlikeOpinion.bind(opinionController));
 router.post('/opinions/userliked/:opinionId', opinionController.userHasLiked.bind(opinionController));
+router.get('/opinions/numLikes/:opinionId', opinionController.getNumLikes.bind(opinionController));
 router.put('/opinions/dislike/:opinionId', opinionController.dislikeOpinion.bind(opinionController));
 router.put('/opinions/undislike/:opinionId', opinionController.undislikeOpinion.bind(opinionController));
 router.post('/opinions/userDisliked/:opinionId', opinionController.userHasDisliked.bind(opinionController));
+router.get('/opinions/numDislikes/:opinionId', opinionController.getNumDislikes.bind(opinionController));
 router.put('/opinions/favorite/:opinionId', opinionController.favoriteOpinion.bind(opinionController));
 router.put('/opinions/unfavorite/:opinionId', opinionController.unfavoriteOpinion.bind(opinionController));
 router.delete('/opinions/:opinionId', opinionController.deleteOpinion.bind(opinionController));
@@ -79,12 +84,17 @@ router.get('/topics', topicController.getTopics.bind(topicController));
 router.put('/topics/:topicId', topicController.updateTopic.bind(topicController));
 router.delete('/topics/:topicId', topicController.deleteTopic.bind(topicController));
 
-
-
 // Rating Routes
 router.post('/ratings', ratingController.createRating.bind(ratingController));
 router.put('/ratings', ratingController.updateRating.bind(ratingController));
 router.post('/ratings/userRated/:opinionId', ratingController.getUserRating.bind(ratingController));
+
+//Survey Routes 
+router.get('/surveys/topic/:topicId', surveyController.getSurveyByTopic.bind(surveyController));
+router.post('/surveys/submit', surveyController.submitResponse.bind(surveyController));
+router.post('/surveys/userSubmitted/:surveyId', surveyController.hasUserSubmittedSurvey.bind(surveyController));
+
+
 
 
 export default router;
