@@ -14,8 +14,11 @@ const CreateButton = ({ topic }: createButtonProps) => {
   const [openCreateOpinion, setOpenCreateOpinion] = useState(false);
 
   const toggleCreate = () => {
-    console.log("topic in create button: ", topic);
-    setOpenCreateOpinion((open) => !open);
+    setOpenCreateOpinion(prevOpen => {
+      console.log('Current state:', prevOpen);
+      return !prevOpen;
+    });
+    console.log('Button clicked, openCreateOpinion:', openCreateOpinion);
   };
 
   
@@ -28,7 +31,7 @@ const CreateButton = ({ topic }: createButtonProps) => {
       >
         Drop Opinion +
       </button>
-      {openCreateOpinion && <OpinionCreate topic={topic} toggleCreate={toggleCreate} />}
+      {openCreateOpinion && <OpinionCreate key={topic.id} topic={topic} toggleCreate={toggleCreate} />}
     </div>
   );
 };

@@ -63,22 +63,8 @@ const Hero = () => {
         fill
         className="absolute w-[100%] h-[100%] object-cover object-center blur-md brightness-50"
       />
-      <Nav />
-      {topics.length > 0 ? (
-        topics.map((topic) => <OpinionShowcase key={topic.id} topic={topic} />)
-      ) : (
-        <div className="item ">
-          <button className="border w-[6rem] h-[6rem] rounded-full  shadow-md flex justify-center items-center text-black">
-            <FontAwesomeIcon
-              icon={faPlus}
-              className="w-[2rem] h-[2rem] text-white"
-            />
-          </button>
-          <p className="text-sm mt-2 w-2/3 p-4">
-            Be the first to share your opinion!{" "}
-          </p>{" "}
-        </div>
-      )}
+      {topics.length > 0 &&
+        topics.map((topic) => <OpinionShowcase key={topic.id} topic={topic} />)}
     </section>
   );
 };

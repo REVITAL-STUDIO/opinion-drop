@@ -1,32 +1,34 @@
-import Image from "next/image";
-import Nav from "./components/nav";
+"use client";
 import Hero from "./components/hero";
 import Drop from "./components/drops";
 import Cesspit from "./components/theCesspit";
-import UserPortal from "./components/userPortal";
-import UserSignIn from "./components/userSignIn";
-import CommentForm from "./components/CommentForm";
-import CommentMainFile from "./components/commentMainFIle";
-import Comment from "./components/comment";
+import { useEffect, useState } from "react";
 
-export default function Home() {
-  const dummyComment: Comment = {
-    id: 1,
-    author: "Author Name",
-    textcontent: "This is a comment.",
-    parentcommentid: null,
-    parentcommentauthor: null,
-    authorprofileimage: "https://via.placeholder.com/150",
-    likes: 0,
-    createdat: new Date().toISOString(),
+
+
+interface dropsProps {
+  topic: {
+    name: string;
+    id: number;
   };
+}
 
-  const opinionId = 123; // Example opinionId
+interface Opinion {
+  id: number;
+  author: string;
+  title: string;
+  textcontent: string;
+  backgroundimage: string;
+  authorprofileimage?: string;
+}
+export default function Home() {
+  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
+
 
   return (
     <main>
       <Hero />
-      <Cesspit comment={dummyComment} opinionId={opinionId} />
+      <Cesspit opinionData={selectedOpinion} />
     </main>
   );
 }

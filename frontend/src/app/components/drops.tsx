@@ -48,6 +48,7 @@ const Drop = ({ topic }: dropsProps) => {
   const [opinions, setOpinions] = useState<Opinion[]>([]);
   const [showComments, setShowComments] = useState(false);
   const [likes, setLikes] = useState<number>(0);
+  const [dislikes, setDislikes] = useState<number>(0);
   const [hasLiked, setHasLiked] = useState(false); // Flag to track if the user has liked
   const [hasDisliked, setHasDisliked] = useState(false);
   const [activeButton, setActiveButton] = useState<"like" | "dislike" | null>(
@@ -117,10 +118,47 @@ const Drop = ({ topic }: dropsProps) => {
 
   const toggleDecrease = () => {
     if (likes > 0 && !hasDisliked) {
-      setLikes((prevLikes) => prevLikes - 1);
+      setDislikes((prevLikes) => prevLikes + 1);
       setHasDisliked(false);
     }
     setActiveButton("dislike"); // Set 'dislike' button as active
+  };
+
+  const [close, setClose] = useState(false);
+  const detailsModalRef = useRef<HTMLDivElement>(null);
+  const opinionModalRef = useRef<HTMLDivElement>(null);
+  const moreButtonRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      detailsModalRef.current &&
+      !detailsModalRef.current.contains(event.target as Node) &&
+      opinionModalRef.current &&
+      !opinionModalRef.current.contains(event.target as Node) &&
+      moreButtonRef.current &&
+      !moreButtonRef.current.contains(event.target as Node)
+    ) {
+      setClose(true);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleOpenModal = (opinion: Opinion) => {
+    setSelectedOpinion(opinion);
+    setClose(false); // Reset the close state
   };
 
   return (
@@ -161,51 +199,55 @@ const Drop = ({ topic }: dropsProps) => {
                     fill
                     className="absolute w-[100%] h-[100%] object-cover rounded-md"
                   />
-                  <div className="absolute inset-0 bg-black opacity-30"></div>
-
-                  <div className="text-white text-[15px] font-medium absolute bottom-[4rem] left-4 text-left line-clamp-3 leading-tight flex flex-col gap-2">
+                  <div className="absolute inset-0 bg-black opacity-40"></div>
+                  <div className="text-white font-medium absolute top-1/2 left-4 text-left line-clamp-3 leading-tight flex flex-col gap-2">
                     <p className="text-[12px]">{slide.author}</p>
 
                     <p className="text-[18px] font-bold">{slide.title}</p>
                   </div>
-                  <button
-                    onClick={() => {
-                      setSelectedOpinion(slide);
-                    }}
-                    className="px-4 py-2 z-40 shadow-lg text-white hover:bg-[#ececec] bg-[#000]/70 border ease-in-out duration-200 transition hover:text-black  rounded-full text-xs  absolute bottom-2 left-2"
-                  >
-                    View{" "}
-                    <FontAwesomeIcon icon={faEye} className="text-xs ml-1" />
-                  </button>
-                  {/* Likes and Dislikes */}
-                  <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-purple-600 absolute bottom-2 right-2 flex justify-between items-center">
+                  <div className="flex  justify-between px-2 w-full  gap-y-1 absolute bottom-2 ">
                     <button
-                      className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
-                        activeButton === "like"
-                          ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
-                          : "scale-100 text-black"
-                      }`}
-                      onClick={toggleIncrease}
+                      onClick={() => {
+                        handleOpenModal(slide);
+                      }}
+                      className="w-[2rem] h-[2rem] z-40 shadow-lg text-black hover:bg-[#ececec] bg-[#ececec]/90  ease-in-out duration-400 transition hover:text-black  rounded-full text-xs   bottom-2 left-2"
                     >
-                      <FontAwesomeIcon
-                        icon={faMicrophoneLines}
-                        className="text-xs t"
-                      />
+                      
+                      <FontAwesomeIcon icon={faEye} className="text-[10px] " />
                     </button>
-                    <span className="mx-2 text-xs">{likes}</span>
-                    <button
-                      className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
-                        activeButton === "dislike"
-                          ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
-                          : "scale-100 text-black"
-                      }`}
-                      onClick={toggleDecrease}
-                    >
-                      <FontAwesomeIcon
-                        icon={faMicrophoneLinesSlash}
-                        className="text-xs "
-                      />
-                    </button>
+                    {/* Likes and Dislikes */}
+                    <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-gradient-to-tl from-purple-200 to-white  bottom-2 right-2 flex justify-between items-center">
+                      <button
+                        className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
+                          activeButton === "like"
+                            ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
+                            : "scale-100 text-black"
+                        }`}
+                        onClick={toggleIncrease}
+                      >
+                        <FontAwesomeIcon
+                          icon={faMicrophoneLines}
+                          className="text-xs t"
+                        />
+                      </button>
+                      <span className="mx-2 text-[10px] text-black">{likes}</span>
+                      <button
+                        className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
+                          activeButton === "dislike"
+                            ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
+                            : "scale-100 text-black"
+                        }`}
+                        onClick={toggleDecrease}
+                      >
+                        <FontAwesomeIcon
+                          icon={faMicrophoneLinesSlash}
+                          className="text-xs "
+                        />
+                      </button>
+                      <span className="mx-2 text-[10px] text-black">
+                        {dislikes}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ) : null
@@ -222,57 +264,38 @@ const Drop = ({ topic }: dropsProps) => {
       <div>
         {selectedOpinion && (
           <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95  bg-opacity-95 z-20 w-full h-screen flex justify-center items-center"
-            >
-              <button
-                onClick={closeModal}
-                className="w-12 h-12 shadow-lg flex justify-center bg-[#000]/20 hover:scale-90 duration-200 ease-in-out transition items-center rounded-full absolute top-4 left-4"
+            {!close && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95 text-black bg-opacity-95  w-full h-screen flex justify-center items-center z-20"
               >
-                <FontAwesomeIcon
-                  icon={faXmark}
-                  className=" text-xl text-white"
-                />
-              </button>{" "}
-              <div className="w-1/2 ">
-                {" "}
-                <DetailsModal opinionData={selectedOpinion} />
-              </div>
-              <OpinionModal
-                opinionData={selectedOpinion}
-                closeModal={closeModal}
-                toggleStateIt={toggleStateIt}
-                toggleDebateIt={toggleDebateIt}
-              />
-              {stateIt && (
-                <StateIt
-                  opinionData={selectedOpinion}
-                  topic={topic}
-                  toggleStateIt={toggleStateIt}
-                />
-              )}
-              {debateIt && (
-                <DebateIt
-                  opinionData={selectedOpinion}
-                  topic={topic}
-                  toggleDebateIt={toggleDebateIt}
-                />
-              )}
-              <MoreButton
-                toggleComments={toggleComments}
-                showComments={showComments}
-              />
-              {showComments && (
-                <OpinionComments
-                  closeModal={toggleComments}
-                  opinionData={selectedOpinion}
-                />
-              )}{" "}
-            </motion.div>
+                <div ref={detailsModalRef} className="w-1/2 ">
+                  {" "}
+                  <DetailsModal opinionData={selectedOpinion} />
+                </div>
+                <div className="w-1/2" ref={opinionModalRef}>
+                  <OpinionModal
+                    opinionData={selectedOpinion}
+                    toggleStateIt={toggleStateIt}
+                    toggleDebateIt={toggleDebateIt}
+                  />
+                </div>
+                <div ref={moreButtonRef}>
+                  <MoreButton
+                    toggleComments={toggleComments}
+                    showComments={showComments}
+                  />
+                  {showComments && (
+                    <OpinionComments
+                      opinionData={selectedOpinion}
+                    />
+                  )}
+                </div>
+              </motion.div>
+            )}
           </>
         )}
       </div>

@@ -22,7 +22,7 @@ interface ChildCommentProps {
   hasUserLiked: (commentId: number) => Promise<any>;
 }
 
-const ChildComment = ({
+const CesspitChildComment = ({
   comment,
   postChildComment,
   rootCommentId,
@@ -159,4 +159,4 @@ const ChildComment = ({
   );
 };
 
-export default ChildComment;
+export default CesspitChildComment;

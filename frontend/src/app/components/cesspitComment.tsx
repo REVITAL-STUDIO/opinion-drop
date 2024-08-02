@@ -11,6 +11,7 @@ import ChildComment from "./ChildComment";
 import { useAuth } from "../hooks/AuthContext";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { timeAgo, truncateText } from "../utils/commentUtils";
+import CesspitChildComment from "./cesspitChildComments";
 
 interface Comment {
   id: number;
@@ -27,7 +28,7 @@ interface CommentProps {
   opinionId: number;
 }
 
-const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
+const CesspitComment: React.FC<CommentProps> = ({ comment, opinionId }) => {
   const [openReplyTextBox, setOpenReplyTextBox] = useState(false);
   const [showChildComments, setShowChildComments] = useState(false);
   const [childComments, setChildComments] = useState<Comment[]>([]);
@@ -361,7 +362,7 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
       {showChildComments && (
         <>
           {childComments.map((childComment) => (
-            <ChildComment
+            <CesspitChildComment
               key={childComment.id} // Add the key prop here
               comment={childComment}
               postChildComment={postChildComment}
@@ -376,4 +377,4 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
   );
 };
 
-export default Comment;
+export default CesspitComment;

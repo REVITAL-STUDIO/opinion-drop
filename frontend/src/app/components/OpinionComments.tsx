@@ -4,18 +4,13 @@ import React, {
   useEffect,
   MouseEvent as ReactMouseEvent,
 } from "react";
-import { IoIosArrowUp } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import { GoGraph } from "react-icons/go";
 import { BiLike } from "react-icons/bi";
 import { MdFlag } from "react-icons/md";
-import ReplyShort from "./ReplyShort";
-import { IoClose } from "react-icons/io5";
-import SurveyPrompt from "./SurveyPrompt";
+
 import CommentContainer from "./comment";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { json } from "stream/consumers";
 import { useAuth } from "../hooks/AuthContext";
 
 interface OpinionCommentsProps {
@@ -27,7 +22,6 @@ interface OpinionCommentsProps {
     backgroundimage: string;
     authorprofileimage?: string;
   };
-  closeModal: () => void;
 }
 
 interface Comment {
@@ -41,14 +35,13 @@ interface Comment {
   createdat: string;
 }
 
-const OpinionComments: React.FC<OpinionCommentsProps> = ({ closeModal, opinionData }) => {
+const OpinionComments: React.FC<OpinionCommentsProps> = ({ opinionData }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
   const [currentHeight, setCurrentHeight] = useState(0);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newCommentText, setNewCommentText] = useState("");
   const { currentUser } = useAuth();
-
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewCommentText(e.target.value);
@@ -95,6 +88,7 @@ const OpinionComments: React.FC<OpinionCommentsProps> = ({ closeModal, opinionDa
         throw new Error("Error retrieving comments");
       }
       const response = await res.json();
+      console.log("response", response)
       setComments(response.data.comments);
     } catch (error) {
       console.log("Error Fetching Comments: ", error);
@@ -102,7 +96,7 @@ const OpinionComments: React.FC<OpinionCommentsProps> = ({ closeModal, opinionDa
   };
 
   const postComment = async () => {
-    console.log("in post comments")
+    console.log("in post comments");
     console.log("comments opinionid ", opinionData);
 
     try {
@@ -118,14 +112,14 @@ const OpinionComments: React.FC<OpinionCommentsProps> = ({ closeModal, opinionDa
             opinionId: opinionData.id,
             content: newCommentText,
             parentCommentId: null,
-          })
+          }),
         }
       );
       if (!res.ok) {
         throw new Error("Error posting comment");
       }
       const response = await res.json();
-      const newComment = response.data.comment
+      const newComment = response.data.comment;
       setComments((prevComments) => [newComment, ...prevComments]);
       setNewCommentText("");
       await fetchComments();
@@ -137,7 +131,6 @@ const OpinionComments: React.FC<OpinionCommentsProps> = ({ closeModal, opinionDa
   useEffect(() => {
     fetchComments();
   }, []);
-
 
   return (
     <AnimatePresence>
@@ -153,29 +146,35 @@ const OpinionComments: React.FC<OpinionCommentsProps> = ({ closeModal, opinionDa
             <div className="flex flex-col gap-8">
               <div className="flex gap-[3rem] items-center">
                 <IoEyeOutline className="w-[3.5rem] h-[3.5rem]" />
-                <p className="text-lg">1.2 million views</p>
+                <p className="text-sm">1.2 million views</p>
               </div>
               <div className="flex gap-[3rem] items-center">
                 <GoGraph className="w-[3.5rem] h-[3.5rem]" />
-                <p className="text-lg">800k Ratings</p>
+                <p className="text-sm">800k Ratings</p>
               </div>
               <div className="flex gap-[3rem] items-center">
                 <BiLike className="w-[3.5rem] h-[3.5rem]" />
-                <p className="text-lg">400 Likes</p>
+                <p className="text-sm">400 Likes</p>
               </div>
               <div className="flex gap-[3rem] items-center">
                 <MdFlag className="w-[3.5rem] h-[3.5rem] text-[#E81B23]" />
-                <p className="text-lg">1.2k FLAGGED AS MISINFORMATION</p>
+                <p className="text-sm">1.2k FLAGGED AS MISINFORMATION</p>
               </div>
             </div>
           </div>
           <div className="w-[80%]  overflow-x-visible">
-            <h2 className="text-4xl font-bold mb-[2%] relative ">DISCUSSION</h2>
+            <h2 className="text-2xl font-normal mb-[4%] relative ">
+              Discussion
+            </h2>
             {/* Comments */}
-            <div className="w-[1000px] h-[420px] overflow-auto pt-[1rem] pb-[3rem] pl-[3rem]">
-              <div className="relative flex flex-col gap-8  overflow-visible w-full border-l-[2px] border-[#676767] ">
+            <div className="w-[100%] h-[650px] overflow-y-auto ">
+              <div className="relative flex flex-col gap-8  overflow-visible w-full  border-[#676767] ">
                 {comments.map((comment) => (
-                  <CommentContainer key={comment.id} comment={comment} opinionId={opinionData.id} />
+                  <CommentContainer
+                    key={comment.id}
+                    comment={comment}
+                    opinionId={opinionData.id}
+                  />
                 ))}
               </div>
             </div>

@@ -35,7 +35,6 @@ interface OpinionModalProps {
     backgroundimage: string;
     authorprofileimage?: string;
   };
-  closeModal: () => void;
   toggleStateIt: () => void;
   toggleDebateIt: () => void;
 }
@@ -57,7 +56,6 @@ interface Highlight {
 
 const OpinionModal: React.FC<OpinionModalProps> = ({
   opinionData,
-  closeModal,
   toggleStateIt,
   toggleDebateIt,
 }) => {
@@ -572,7 +570,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   useEffect(() => {}, [userRating]);
 
   return (
-    <div className="z-30  w-[45%] h-[750px] bg-white text-black p-6 shadow-lg relative rounded-md">
+    <div className="z-30  w-[75%] h-[750px] bg-white text-black p-6 shadow-lg relative rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <a
           className={`cursor-pointer ${

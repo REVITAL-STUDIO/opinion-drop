@@ -17,7 +17,8 @@ interface OpinionShowcaseProps {
 
 export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
   return (
-    <div className="relative w-full">
+    <div className="relative w-full min-h-screen ">
+      <Nav />
       <Questions />
       <Drop topic={topic} />
       <CreateButton topic={topic} />

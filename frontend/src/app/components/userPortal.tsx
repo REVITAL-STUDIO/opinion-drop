@@ -68,10 +68,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
     setDebateIt(!debateIt);
   };
 
-  const closeModal = () => {
-    setSelectedOpinion(null);
-  };
-
+  
   const closeRebuttal = () => {
     setSelectedRebuttal(null);
   };
@@ -164,10 +161,19 @@ const UserPortal: React.FC<UserPortalProps> = ({
   };
 
   const [close, setClose] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const detailsModalRef = useRef<HTMLDivElement>(null);
+  const opinionModalRef = useRef<HTMLDivElement>(null);
+  const moreButtonRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+    if (
+      detailsModalRef.current &&
+      !detailsModalRef.current.contains(event.target as Node) &&
+      opinionModalRef.current &&
+      !opinionModalRef.current.contains(event.target as Node) &&
+      moreButtonRef.current &&
+      !moreButtonRef.current.contains(event.target as Node)
+    ) {
       setClose(true);
     }
   };
@@ -178,6 +184,18 @@ const UserPortal: React.FC<UserPortalProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleOpenModal = (opinion: Opinion) => {
+    setSelectedOpinion(opinion);
+    setClose(false); // Reset the close state
+  };
 
   return (
     <>
@@ -334,7 +352,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
                   <div className="border-t mt-4">
                     {/* User Summary */}
                     <div className="  w-full rounded-3xl  p-4">
-                      <div className=" max-h-[700px] overflow-y-auto overflow-scroll flex flex-col gap-[3rem] p-4 ">
+                      <div className=" max-h-[800px] overflow-y-auto overflow-scroll flex flex-col gap-[3rem] p-4 ">
                         <div className="bg-white p-4 rounded-2xl shadow-md">
                           <h1 className="text-4xl font-light p-4 rounded-full text-black  w-fit">
                             Opinions
@@ -372,7 +390,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
                                       <button
                                         className="text-white w-[2rem] h-[2rem] rounded-full shadow-md border transition-colors duration-300"
                                         onClick={() =>
-                                          setSelectedOpinion(slide)
+                                          handleOpenModal(slide)
                                         }
                                       >
                                         <FontAwesomeIcon
@@ -530,26 +548,29 @@ const UserPortal: React.FC<UserPortalProps> = ({
                   transition={{ duration: 0.5, ease: "easeOut" }}
                   className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95 text-black bg-opacity-95  w-full h-screen flex justify-center items-center z-20"
                 >
-                  <div className="w-1/2 ">
+                  <div ref={detailsModalRef} className="w-1/2 ">
                     {" "}
                     <DetailsModal opinionData={selectedOpinion} />
                   </div>
-                  <OpinionModal
-                    opinionData={selectedOpinion}
-                    closeModal={closeModal}
-                    toggleStateIt={toggleStateIt}
-                    toggleDebateIt={toggleDebateIt}
-                  />
-                  <MoreButton
-                    toggleComments={toggleComments}
-                    showComments={showComments}
-                  />
-                  {showComments && (
-                    <OpinionComments
-                      closeModal={toggleComments}
+                  <div className="w-1/2" ref={opinionModalRef}>
+                    <OpinionModal
                       opinionData={selectedOpinion}
+                      toggleStateIt={toggleStateIt}
+                      toggleDebateIt={toggleDebateIt}
                     />
-                  )}{" "}
+                  </div>
+                  <div ref={moreButtonRef}>
+                    <MoreButton
+                      toggleComments={toggleComments}
+                      showComments={showComments}
+                    />
+                    {showComments && (
+                      <OpinionComments
+                        closeModal={toggleComments}
+                        opinionData={selectedOpinion}
+                      />
+                    )}
+                  </div>
                 </motion.div>
               )}
             </>
