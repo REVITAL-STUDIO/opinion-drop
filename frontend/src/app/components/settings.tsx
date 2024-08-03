@@ -22,39 +22,37 @@ interface User {
 }
 
 
-const Settings: React.FC<FileUploadProps> = ({
-  onFilesSelected,
-  initialFiles = [],
+const Settings = ({
 }) => {
-  const [selectedFiles, setSelectedFiles] =
-    useState<FileExtended[]>(initialFiles);
+  // const [selectedFiles, setSelectedFiles] =
+  //   useState<FileExtended[]>(initialFiles);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      setSelectedFiles([acceptedFiles[0] as FileExtended]);
-    }
-  }, []);
+  // const onDrop = useCallback((acceptedFiles: File[]) => {
+  //   if (acceptedFiles.length > 0) {
+  //     setSelectedFiles([acceptedFiles[0] as FileExtended]);
+  //   }
+  // }, []);
 
-  const removeFile = (event: React.MouseEvent) => {
-    event.stopPropagation();
-    setSelectedFiles([]);
-  };
+  // const removeFile = (event: React.MouseEvent) => {
+  //   event.stopPropagation();
+  //   setSelectedFiles([]);
+  // };
 
-  useEffect(() => {
-    if (typeof onFilesSelected === "function") {
-      onFilesSelected(selectedFiles);
-    }
-  }, [onFilesSelected, selectedFiles]);
+  // useEffect(() => {
+  //   if (typeof onFilesSelected === "function") {
+  //     onFilesSelected(selectedFiles);
+  //   }
+  // }, [onFilesSelected, selectedFiles]);
 
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: {
-      "image/jpeg": [],
-      "image/png": [],
-      "image/jpg": [],
-    },
-    maxFiles: 1,
-  });
+  // const { getRootProps, getInputProps } = useDropzone({
+  //   onDrop,
+  //   accept: {
+  //     "image/jpeg": [],
+  //     "image/png": [],
+  //     "image/jpg": [],
+  //   },
+  //   maxFiles: 1,
+  // });
 
   const [close, setClose] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -116,7 +114,7 @@ const Settings: React.FC<FileUploadProps> = ({
               Account Settings
             </h1>
             <div className="flex gap-x-2">
-              <div
+              {/* <div
                 {...getRootProps()}
                 className="w-[3rem] h-[3rem] relative rounded-full cursor-pointer overflow-hidden bg-white text-black flex justify-center items-center group"
               >
@@ -138,7 +136,7 @@ const Settings: React.FC<FileUploadProps> = ({
                     </button>
                   </>
                 )}
-              </div>
+              </div> */}
               <h4 className=" rounded-full text-white w-fit flex justify-center  text-sm items-center">
                 Change Profile Picture
               </h4>

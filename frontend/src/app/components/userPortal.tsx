@@ -567,7 +567,6 @@ const UserPortal: React.FC<UserPortalProps> = ({
                     />
                     {showComments && (
                       <OpinionComments
-                        closeModal={toggleComments}
                         opinionData={selectedOpinion}
                       />
                     )}

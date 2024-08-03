@@ -944,7 +944,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           <div className="flex flex-col items-center gap-y-2 max-h-[500px] overflow-y-auto relative">
             <div className="w-[90%]">
               {rebuttals.map((rebuttalData) => (
-                <RebuttalShort rebuttal={rebuttalData} />
+                <RebuttalShort key={rebuttalData.id} rebuttal={rebuttalData} />
               ))}
             </div>
           </div>

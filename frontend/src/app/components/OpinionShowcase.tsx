@@ -7,6 +7,7 @@ import Engagement from "./engagement";
 import Nav from "./nav";
 import SignIn from "./signInButton";
 import SignInButton from "./signInButton";
+import Cesspit from "./theCesspit";
 
 interface OpinionShowcaseProps {
   topic: {
@@ -22,6 +23,7 @@ export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
       <Questions />
       <Drop topic={topic} />
       <CreateButton topic={topic} />
+      <Cesspit topic={topic} />
     </div>
   );
 }
