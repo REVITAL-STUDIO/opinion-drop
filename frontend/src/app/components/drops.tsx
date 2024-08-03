@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleLeft,
   faAngleRight,
-  faArrowLeft,
-  faArrowUpFromBracket,
   faEye,
   faMicrophoneLines,
   faMicrophoneLinesSlash,
@@ -68,10 +66,9 @@ const Drop = ({ topic }: dropsProps) => {
   const { currentUser } = useAuth();
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [survey, setSurvey] = useState<Survey | null>(null);
-
+  console.log("survey", survey);
 
   //logic for Society Percentage
-
 
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -114,7 +111,7 @@ const Drop = ({ topic }: dropsProps) => {
     fetchOpinions();
   }, []);
 
-  useEffect(() => { }, [opinions]);
+  useEffect(() => {}, [opinions]);
 
   const [currdeg, setCurrdeg] = useState(0);
   const rotate = (direction: "next" | "prev") => {
@@ -186,7 +183,7 @@ const Drop = ({ topic }: dropsProps) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
@@ -223,7 +220,6 @@ const Drop = ({ topic }: dropsProps) => {
     }
   };
 
-
   useEffect(() => {
     const loadSurvey = async () => {
       if (!survey) {
@@ -232,7 +228,7 @@ const Drop = ({ topic }: dropsProps) => {
         setSurvey(surveyData);
       }
     };
-  
+
     const checkSurvey = async () => {
       if (survey) {
         const submitted = await hasSubmittedSurvey();
@@ -241,10 +237,10 @@ const Drop = ({ topic }: dropsProps) => {
         console.log("state survey: ", survey);
       }
     };
-  
+
     loadSurvey();
     checkSurvey();
-  }, [survey]); 
+  }, [survey]);
 
   return (
     <section className=" flex  justify-center items-center my-6">
@@ -297,7 +293,6 @@ const Drop = ({ topic }: dropsProps) => {
                       }}
                       className="w-[2rem] h-[2rem] z-40 shadow-lg text-black hover:bg-[#ececec] bg-[#ececec]/90  ease-in-out duration-400 transition hover:text-black  rounded-full text-xs   bottom-2 left-2"
                     >
-                      
                       <FontAwesomeIcon icon={faEye} className="text-[10px] " />
                     </button>
                     {/* Likes and Dislikes */}
@@ -315,7 +310,9 @@ const Drop = ({ topic }: dropsProps) => {
                           className="text-xs t"
                         />
                       </button>
-                      <span className="mx-2 text-[10px] text-black">{likes}</span>
+                      <span className="mx-2 text-[10px] text-black">
+                        {likes}
+                      </span>
                       <button
                         className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
                           activeButton === "dislike"
@@ -367,8 +364,8 @@ const Drop = ({ topic }: dropsProps) => {
                     toggleStateIt={toggleStateIt}
                     toggleDebateIt={toggleDebateIt}
                     hasSubmittedSurvey={hasSubmitted}
-                survey={survey}
-              />
+                    survey={survey}
+                  />
                 </div>
                 <div ref={moreButtonRef}>
                   <MoreButton
@@ -376,9 +373,7 @@ const Drop = ({ topic }: dropsProps) => {
                     showComments={showComments}
                   />
                   {showComments && (
-                    <OpinionComments
-                      opinionData={selectedOpinion}
-                    />
+                    <OpinionComments opinionData={selectedOpinion} />
                   )}
                 </div>
               </motion.div>

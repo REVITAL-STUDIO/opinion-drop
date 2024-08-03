@@ -71,7 +71,10 @@ const Settings: React.FC<FileUploadProps> = ({
           exit={{ opacity: 0 }}
           className="absolute h-screen w-full bg-white/90  flex justify-center items-center"
         >
-          <div className="p-4 bg-[#000]/50 xl:w-[30%] md:w-[50%] w-[75%] rounded relative shadow-sm">
+          <div
+            ref={modalRef}
+            className="p-4 bg-[#000]/50 xl:w-[30%] md:w-[50%] w-[75%] rounded relative shadow-sm"
+          >
             <h1 className=" text-3xl font-medium text-white  my-4">
               Account Settings
             </h1>

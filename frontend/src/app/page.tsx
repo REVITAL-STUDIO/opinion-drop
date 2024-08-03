@@ -4,8 +4,6 @@ import Drop from "./components/drops";
 import Cesspit from "./components/theCesspit";
 import { useEffect, useState } from "react";
 
-
-
 interface dropsProps {
   topic: {
     name: string;
@@ -24,11 +22,9 @@ interface Opinion {
 export default function Home() {
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
 
-
   return (
     <main>
       <Hero />
-      <Cesspit opinionData={selectedOpinion} />
     </main>
   );
 }

@@ -57,12 +57,6 @@ const Hero = () => {
 
   return (
     <section className="w-full bg-black min-h-screen bg-cover bg-center relative">
-      <Image
-        src="/Images/AdobeStock_756592648.jpeg"
-        alt="OD Background"
-        fill
-        className="absolute w-[100%] h-[100%] object-cover object-center blur-md brightness-50"
-      />
       {topics.length > 0 &&
         topics.map((topic) => <OpinionShowcase key={topic.id} topic={topic} />)}
     </section>

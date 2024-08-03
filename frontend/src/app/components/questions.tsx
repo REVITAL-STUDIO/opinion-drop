@@ -4,7 +4,7 @@ import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 
 const Questions = () => {
   return (
-    <section className="w-full  flex mx-auto">
+    <section className="w-full  flex mx-auto z-50">
       <div className="w-full text-white xl:mt-0  p-4  rounded-xl text-center shadow-white/30">
         <FontAwesomeIcon icon={faQuestionCircle} className="text-2xl my-4" />
         <p className="  xl:w-1/2 mx-auto md:text-[16px] text-[12px] font-bold">

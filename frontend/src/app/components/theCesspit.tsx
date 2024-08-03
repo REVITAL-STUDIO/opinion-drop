@@ -8,29 +8,31 @@ import CommentContainer from "./comment";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../hooks/AuthContext";
 
-interface OpinionCesspitCommentProps {
-  opinionData: {
-    id: number;
-    author: string;
-    title: string;
-    textcontent: string;
-    backgroundimage: string;
-    authorprofileimage?: string;
+interface CessPitProps {
+  cesspitData: {
+    commentId: number;
+    userId: string;
+    topicId: number;
+    parentCommentId: number | null;
+    content: string;
+    likes: number;
+    createdAt: Date;
+    updatedAt: Date;
   };
 }
 
 interface CommentCesspit {
-  id: number;
-  author: string;
-  textcontent: string;
-  parentcommentid: number | null;
-  parentcommentauthor: string | null;
-  authorprofileimage?: string;
+  commentId: number;
+  userId: string;
+  topicId: number;
+  parentCommentId: number | null;
+  content: string;
   likes: number;
-  createdat: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ opinionData }) => {
+const Cesspit = ({ cesspitData }: CessPitProps) => {
   const [comments, setComments] = useState<CommentCesspit[]>([]);
   const [newCommentText, setNewCommentText] = useState("");
   const { currentUser } = useAuth();
@@ -42,7 +44,7 @@ const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ opinionData }) => {
   const fetchComments = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${opinionData.id}`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${cesspitData.topicId}`,
         {
           method: "GET",
           headers: {
@@ -62,11 +64,11 @@ const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ opinionData }) => {
 
   const postComment = async () => {
     console.log("in post comments");
-    console.log("comments opinionid ", opinionData);
+    console.log("comments opinionid ", cesspitData);
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${opinionData.id}`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${cesspitData}`,
         {
           method: "POST",
           headers: {
@@ -74,7 +76,7 @@ const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ opinionData }) => {
           },
           body: JSON.stringify({
             userId: currentUser?.uid,
-            opinionId: opinionData.id,
+            topicId: cesspitData.topicId,
             content: newCommentText,
             parentCommentId: null,
           }),
@@ -110,8 +112,8 @@ const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ opinionData }) => {
               <div className="relative flex flex-col gap-8  overflow-visible w-full  border-[#676767] ">
                 {comments.map((comment) => (
                   <CommentContainer
-                    key={comment.id}
-                    comment={comment}
+                    key={comment.topicId}
+                    comment={comment.topicId}
                     opinionId={opinionData.id}
                   />
                 ))}
