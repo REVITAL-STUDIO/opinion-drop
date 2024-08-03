@@ -37,8 +37,8 @@ interface OpinionModalProps {
   };
   toggleStateIt: () => void;
   toggleDebateIt: () => void;
-  hasSubmittedSurvey: boolean;
-  survey: Survey;
+  hasSubmittedSurvey?: boolean;
+  survey?: Survey;
 }
 
 interface Rebuttal {
@@ -643,7 +643,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           },
           body: JSON.stringify({
             userId: currentUser?.uid,
-            surveyId: survey.surveyId,
+            surveyId: survey?.surveyId,
             answers: answers
           })
         }
@@ -728,7 +728,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         </a>
       </div>
       {/* Survey Container */}
-      {!hasSubmittedSurvey && currentUser &&
+      {!hasSubmittedSurvey && currentUser && survey &&
         <div
           className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${hideOpinion ? "" : "invisible"
             }`}

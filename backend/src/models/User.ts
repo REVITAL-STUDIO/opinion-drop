@@ -35,7 +35,8 @@ export class User {
             updatedAt: this.updatedAt,
             bio: this.bio,
             profilePicture: this.profilePicture,
-            politicalAlignment: this.politicalAlignment
+            politicalAlignment: this.politicalAlignment,
+            favoriteOpinionIds: this.favoriteOpinionIds
         };
     }
 }

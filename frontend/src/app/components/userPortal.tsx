@@ -56,6 +56,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
     null
   );
 
+
   const toggleComments = () => {
     setShowComments(!showComments);
   };

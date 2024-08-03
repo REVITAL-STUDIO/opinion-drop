@@ -110,15 +110,21 @@ export class UserController {
     async getUser(req: Request, res: Response): Promise<void> {
         try {
 
-            const userId: number = parseInt(req.params.userId, 10);
-            if (isNaN(userId)) {
+            const userId: string = req.params.userId;
+            if (!userId) {
                 res.status(400).send('Invalid user ID');
                 return;
             }
 
             const user = await this.userService.getUser(userId);
             if (user) {
-                res.status(200).json(user);
+                res.status(200).json({
+                    status: 'success',
+                    message: 'user info retrieved successfully',
+                    data: {
+                        userData: user,
+                    }
+                });
             } else {
                 res.status(404).send('User not found');
             }

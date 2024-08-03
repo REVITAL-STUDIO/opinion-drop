@@ -83,7 +83,7 @@ export class UserDAO {
         }
     }
 
-    async getUser(userId: number): Promise<User | null> {
+    async getUser(userId: string): Promise<User | null> {
         const query = "SELECT * FROM users WHERE user_id = $1"
 
 
@@ -104,6 +104,7 @@ export class UserDAO {
                 userData.bio,
                 userData.profile_picture,
                 userData.political_alignment,
+                userData.favoriteOpinionIds,
                 userData.created_at,
                 userData.updated_at,
 

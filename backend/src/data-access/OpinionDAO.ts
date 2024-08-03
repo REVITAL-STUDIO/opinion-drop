@@ -552,4 +552,28 @@ export class OpinionDAO {
         }
     }
 
+    async getAvgRating(opinionId: number): Promise<number | null> {
+        const query = `
+        SELECT AVG(value) AS average_rating
+        FROM ratings
+        WHERE opinion_id = $1;
+      `;
+
+        let client: PoolClient | undefined;
+
+        try {
+            client = await this.pool.connect();
+            const result = await client.query(query, [opinionId]);
+
+            const avgRating = result.rows[0].average_rating;
+            return avgRating !== null ? Math.round(avgRating) : null;
+        } catch (error) {
+            console.error('Error executing get avg rating query:', error);
+            throw new Error(`Error geting avg rating: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
 }

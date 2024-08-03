@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useAuth } from "../hooks/AuthContext";
 
 interface FileUploadProps {
   onFilesSelected: (files: FileExtended[]) => void;
@@ -11,6 +12,15 @@ interface FileUploadProps {
 interface FileExtended extends File {
   url?: string;
 }
+
+interface User {
+  userId: string;
+  username: string;
+  email: string;
+  profilePicture: string;
+  politicalAlignment: string;
+}
+
 
 const Settings: React.FC<FileUploadProps> = ({
   onFilesSelected,
@@ -48,7 +58,11 @@ const Settings: React.FC<FileUploadProps> = ({
 
   const [close, setClose] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-
+  const [userData, setUserData] = useState<User | null>(
+    null
+  );
+  const { currentUser, loading, logout } = useAuth();
+  
   const handleClickOutside = (event: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       setClose(true);
@@ -60,6 +74,32 @@ const Settings: React.FC<FileUploadProps> = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  const fetchUserInfo = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users/${currentUser?.uid}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving user info");
+      }
+      const response = await res.json();
+      console.log("resp user data: ", response.data.userData);
+      setUserData(response.data.userData);
+    } catch (error) {
+      console.log("Error Fetching user info: ", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchUserInfo();
   }, []);
 
   return (
