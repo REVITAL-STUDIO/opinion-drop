@@ -244,6 +244,15 @@ export class OpinionService {
         }
     }
 
+    async getAvgRating(opinionId: number): Promise<number | null> {
+        try {
+           return await this.opinionDAO.getAvgRating(opinionId);
+        } catch (error) {
+            console.error('Error in OpinionService getAvgRating:', error);
+            throw new Error('Error retrieving avg rating ');
+        }
+    }
+
     async updateOpinion(opinionData: {
         opinionId?: number
         userId: string,

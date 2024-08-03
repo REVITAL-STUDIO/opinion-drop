@@ -56,6 +56,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
     null
   );
 
+
   const toggleComments = () => {
     setShowComments(!showComments);
   };
@@ -566,7 +567,6 @@ const UserPortal: React.FC<UserPortalProps> = ({
                     />
                     {showComments && (
                       <OpinionComments
-                        closeModal={toggleComments}
                         opinionData={selectedOpinion}
                       />
                     )}

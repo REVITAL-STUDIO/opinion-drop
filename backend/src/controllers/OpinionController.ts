@@ -467,6 +467,28 @@ export class OpinionController {
         }
     }
 
+    async getAvgRating(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const avgRating = await this.opinionService.getAvgRating(opinionId);
+            res.status(200).send({
+                status: 'success',
+                message: 'society rating received',
+                data: {
+                    avgRating: avgRating
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController getAvgRating', error);
+            res.status(500).send('Failed to get avg rating');
+        }
+    }
+
     async updateOpinion(req: Request, res: Response): Promise<void> {
         try {
             const opinionId: number = parseInt(req.params.opinionId, 10);

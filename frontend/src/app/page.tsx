@@ -11,17 +11,7 @@ interface dropsProps {
   };
 }
 
-interface Opinion {
-  id: number;
-  author: string;
-  title: string;
-  textcontent: string;
-  backgroundimage: string;
-  authorprofileimage?: string;
-}
 export default function Home() {
-  const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
-
   return (
     <main>
       <Hero />

@@ -19,7 +19,7 @@ export class UserService {
     }
 
 
-    async getUser(userId: number): Promise<User | null> {
+    async getUser(userId: string): Promise<User | null> {
         try {
             return await this.userDAO.getUser(userId);
         } catch (error) {

@@ -49,6 +49,7 @@ router.put('/opinions/dislike/:opinionId', opinionController.dislikeOpinion.bind
 router.put('/opinions/undislike/:opinionId', opinionController.undislikeOpinion.bind(opinionController));
 router.post('/opinions/userDisliked/:opinionId', opinionController.userHasDisliked.bind(opinionController));
 router.get('/opinions/numDislikes/:opinionId', opinionController.getNumDislikes.bind(opinionController));
+router.get('/opinions/avgRating/:opinionId', opinionController.getAvgRating.bind(opinionController));
 router.put('/opinions/favorite/:opinionId', opinionController.favoriteOpinion.bind(opinionController));
 router.put('/opinions/unfavorite/:opinionId', opinionController.unfavoriteOpinion.bind(opinionController));
 router.delete('/opinions/:opinionId', opinionController.deleteOpinion.bind(opinionController));
