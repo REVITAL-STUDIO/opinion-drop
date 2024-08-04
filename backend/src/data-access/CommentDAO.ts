@@ -305,7 +305,7 @@ export class CommentDAO {
                     RETURNING 
                         comment_id AS id, 
                         user_id AS userId, 
-                        opinion_id AS opinionId, 
+                        topic_id AS topicId, 
                         content As textContent, 
                         likes,
                         parent_comment_id AS parentCommentId, 

@@ -28,7 +28,7 @@ export class CesspitComment {
         return {
             commentId: this.commentId,
             userId: this.userId,
-            opinionId: this.topicId,
+            topicId: this.topicId,
             parentCommentId: this.parentCommentId,
             content: this.content,
             likes: this.likes,
