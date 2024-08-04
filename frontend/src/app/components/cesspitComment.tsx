@@ -25,10 +25,10 @@ interface Comment {
 }
 interface CommentProps {
   comment: Comment;
-  opinionId: number;
+  topicId: number;
 }
 
-const CesspitComment: React.FC<CommentProps> = ({ comment, opinionId }) => {
+const CesspitComment: React.FC<CommentProps> = ({ comment, topicId }) => {
   const [openReplyTextBox, setOpenReplyTextBox] = useState(false);
   const [showChildComments, setShowChildComments] = useState(false);
   const [childComments, setChildComments] = useState<Comment[]>([]);
@@ -56,7 +56,7 @@ const CesspitComment: React.FC<CommentProps> = ({ comment, opinionId }) => {
   const fetchChildComments = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/children/${comment.id}`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/cesspit/children/${comment.id}`,
         {
           method: "GET",
           headers: {
@@ -77,7 +77,7 @@ const CesspitComment: React.FC<CommentProps> = ({ comment, opinionId }) => {
   const fetchChildCommentsReplies = async (childCommentId: number) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/children/${childCommentId}`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/cesspit/children/${childCommentId}`,
         {
           method: "GET",
           headers: {
@@ -134,7 +134,7 @@ const CesspitComment: React.FC<CommentProps> = ({ comment, opinionId }) => {
   ) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${opinionId}`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/cesspit/${topicId}`,
         {
           method: "POST",
           headers: {
@@ -142,7 +142,7 @@ const CesspitComment: React.FC<CommentProps> = ({ comment, opinionId }) => {
           },
           body: JSON.stringify({
             userId: currentUser?.uid,
-            opinionId: opinionId,
+            topicId: topicId,
             content: textcontent,
             parentCommentId: parentCommentId,
           }),

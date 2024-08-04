@@ -215,6 +215,7 @@ export class CommentController {
             }
 
             const commentData: CesspitCommentSchemaType = req.body as CesspitCommentSchemaType;
+            console.log("comment data in controller: ", commentData);
             const comment = await this.commentService.createCesspitComment(commentData);
             res.status(200).json({
                 status: 'success',
@@ -232,7 +233,7 @@ export class CommentController {
     async getCesspitComments(req: Request, res: Response): Promise<void> {
         try {
 
-            const topicId: number = parseInt(req.params.opinionId, 10);
+            const topicId: number = parseInt(req.params.topicId, 10);
             if (isNaN(topicId)) {
                 res.status(400).send('Invalid topic ID');
                 return;

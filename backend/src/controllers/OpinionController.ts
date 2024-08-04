@@ -22,8 +22,6 @@ export class OpinionController {
                 return;
             }
 
-            const { file } = req;
-
             const opinionData = {
                 title,
                 textContent,

@@ -137,12 +137,28 @@ export class UserController {
     async updateUser(req: Request, res: Response): Promise<void> {
         try {
 
-            if (!validate(req.body)) {
-                res.status(400).send('Invalid user data');
-                return;
-            }
+        const { userId, username, email, profilePicture, politicalAlignment, bio} = req.body;
+        if (!userId || !username || !email || !profilePicture || politicalAlignment) {
+            res.status(400).send('Invalid user data');
+            return;
+        }
 
-            const userData: UserSchemaType = req.body as UserSchemaType;
+        const { file } = req;
+
+        const userData = {
+            userId,
+            username,
+            email,
+            profilePicture,
+            profilePictureFile: null as null | Express.Multer.File,
+            politicalAlignment,
+            bio
+        };
+
+        if (req.file) {
+            userData.profilePictureFile = req.file; 
+        }
+
             await this.userService.updateUser(userData);
             res.status(201).send('User updated successfully');
         } catch (error) {

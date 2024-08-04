@@ -88,7 +88,7 @@ const ChildComment = ({
       </div>
       <div className="ml-[6%] py-[1rem] flex flex-col items-start gap-2 ">
         <p className="w-[100%] text-[0.9rem] ">
-          <span className="bold text-blue-500">
+          <span className="bold text-blue-500 mr-1">
             {rootCommentId != comment.parentcommentid &&
               `@${comment.parentcommentauthor}`}
           </span>

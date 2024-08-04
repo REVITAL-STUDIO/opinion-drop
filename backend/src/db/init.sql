@@ -10,6 +10,7 @@ CREATE TABLE users (
     email TEXT NOT NULL,
     bio TEXT,
     profile_picture TEXT,
+    favorite_opinion_ids INTEGER[] DEFAULT ARRAY[]::INTEGER[],
     political_alignment TEXT DEFAULT 'Moderate',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  NOT NULL
@@ -90,9 +91,59 @@ CREATE TABLE opinion_dislikes (
     FOREIGN KEY (opinion_id) REFERENCES opinions(opinion_id) 
 );
 
+CREATE TABLE cesspit_comments (
+    comment_id SERIAL PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    topic_id INTEGER NOT NULL,
+    parent_comment_id INTEGER,
+    content TEXT NOT NULL,
+    likes INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
 
+CREATE TABLE cesspit_comment_likes (
+    user_id TEXT NOT NULL,
+    comment_id INT NOT NULL,
+    liked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, comment_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id), 
+    FOREIGN KEY (comment_id) REFERENCES cesspit_comments(comment_id) 
+);
 
+CREATE TABLE surveys (
+    survey_id SERIAL PRIMARY KEY,
+    topic_id INT NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (topic_id) REFERENCES topics(topic_id) 
+);
 
+CREATE TABLE survey_questions (
+    question_id SERIAL PRIMARY KEY,
+    survey_id INT NOT NULL,
+    question_text TEXT NOT NULL,
+    FOREIGN KEY (survey_id) REFERENCES surveys(survey_id)
+);
+
+CREATE TABLE survey_responses (
+    response_id SERIAL PRIMARY KEY,
+    survey_id INT NOT NULL,
+    user_id TEXT NOT NULL,
+    response_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (survey_id) REFERENCES surveys(survey_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE survey_answers (
+    answer_id SERIAL PRIMARY KEY,
+    response_id INT NOT NULL,
+    question_id INT NOT NULL,
+    answer_value INT, 
+    FOREIGN KEY (response_id) REFERENCES survey_responses(response_id),
+    FOREIGN KEY (question_id) REFERENCES survey_questions(question_id),
+);
 
 -- Table Constraints
 

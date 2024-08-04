@@ -2,10 +2,13 @@
 import Drop from "./drops";
 import CreateButton from "./createButton";
 import Questions from "./questions";
-import Nav from "./nav";
-import Cesspit from "./theCesspit";
 import Image from "next/image";
 import Archive from "./ArchiveButton";
+import Engagement from "./engagement";
+import Nav from "./nav";
+import SignIn from "./signInButton";
+import SignInButton from "./signInButton";
+import Cesspit from "./theCesspit";
 
 interface OpinionShowcaseProps {
   topic: {

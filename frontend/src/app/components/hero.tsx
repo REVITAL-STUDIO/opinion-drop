@@ -49,9 +49,14 @@ const Hero = () => {
   };
 
   useEffect(() => {
-    // fetchTopics();
-    setTopics([{ name: "example topic", id: 1 } as Topic]);
+    console.log("topics: ", topics);
+    fetchTopics();
+    // setTopics([{ name: "example topic", id: 1 } as Topic]);
   }, []);
+  
+  useEffect(() => {
+    console.log("topics: ", topics);
+  }, [topics]);
 
   useEffect(() => {}, [topics]);
 

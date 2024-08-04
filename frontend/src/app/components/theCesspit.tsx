@@ -4,18 +4,18 @@ import React, {
   useEffect,
   MouseEvent as ReactMouseEvent,
 } from "react";
-import CommentContainer from "./comment";
+import CommentContainer from "./cesspitComment";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../hooks/AuthContext";
 
-interface OpinionCesspitCommentProps {
+interface CessPitProps {
   topic: {
     name: string;
     id: number;
   };
 }
 
-interface CommentCesspit {
+interface Comment {
   id: number;
   author: string;
   textcontent: string;
@@ -26,8 +26,8 @@ interface CommentCesspit {
   createdat: string;
 }
 
-const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ topic }) => {
-  const [comments, setComments] = useState<CommentCesspit[]>([]);
+const Cesspit = ({ topic }: CessPitProps) => {
+  const [comments, setComments] = useState<Comment[]>([]);
   const [newCommentText, setNewCommentText] = useState("");
   const { currentUser } = useAuth();
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -36,7 +36,7 @@ const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ topic }) => {
   const fetchComments = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${topic.id}`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/cesspit/topic/${topic.id}`,
         {
           method: "GET",
           headers: {
@@ -55,12 +55,12 @@ const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ topic }) => {
   };
 
   const postComment = async () => {
-    console.log("in post comments");
-    console.log("comments opinionid ", topic);
+    console.log("in post cesscomments");
+    console.log("cesscomments topicid ", topic);
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${topic.id}`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/cesspit/${topic.id}`,
         {
           method: "POST",
           headers: {
@@ -68,7 +68,7 @@ const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ topic }) => {
           },
           body: JSON.stringify({
             userId: currentUser?.uid,
-            opinionId: topic.id,
+            topicId: topic.id,
             content: newCommentText,
             parentCommentId: null,
           }),
@@ -104,7 +104,7 @@ const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ topic }) => {
                   <CommentContainer
                     key={comment.id}
                     comment={comment}
-                    opinionId={topic.id}
+                    topicId={topic.id}
                   />
                 ))}
               </div>
