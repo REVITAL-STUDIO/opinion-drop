@@ -1,6 +1,7 @@
 import { User } from '../models/User';
 import { UserDAO } from '../data-access/UserDAO';
 import pool from '../data-access/dbconnection';
+import { uploadImage } from '../utils/aws/uploadToS3';
 
 export class UserService {
     private userDAO: UserDAO;
@@ -34,9 +35,15 @@ export class UserService {
         email: string,
         bio: string | null,
         profilePicture: string | null,
+        profilePictureFile: Express.Multer.File | null,
         politicalAlignment: string | null,
     }): Promise<void> {
         try {        
+
+            if (userData.profilePictureFile) {
+                userData.profilePicture = await uploadImage(userData.profilePictureFile, 'images/profile-pictures');
+            }
+
             const updatedUser = new User(
                 userData.userId,
                 userData.username,

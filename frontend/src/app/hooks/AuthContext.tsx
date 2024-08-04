@@ -1,7 +1,7 @@
 'use client'
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth, initializeFirebase } from '../firebase/firebase-config';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, User, updateEmail, updatePassword } from 'firebase/auth';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
 import Cookies from 'js-cookie';
 
@@ -17,6 +17,8 @@ interface AuthContextType {
     signInWithGoogle: () => Promise<void>;
     signInWithFacebook: () => Promise<void>;
     logout: () => Promise<void>;
+    updateUserEmail: (newEmail: string) => Promise<void>;
+    updateUserPassword: (newPassword: string) => Promise<void>;
     accessToken: string | null;
 
 }
@@ -187,6 +189,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             throw error;
         }
     };
+
+    const updateUserEmail = async (newEmail: string) => {
+        if (!auth) return;
+
+        if (!auth.currentUser) return;
+        try {
+            await updateEmail(auth.currentUser, newEmail);
+        } catch (error) {
+            console.error('Error updating email:', error);
+            throw error;
+        }
+    };
+
+    const updateUserPassword = async (newPassword: string) => {
+        if (!auth) return;
+
+        if (!auth.currentUser) return;
+        try {
+            await updatePassword(auth.currentUser, newPassword);
+        } catch (error) {
+            console.error('Error updating password:', error);
+            throw error;
+        }
+    };
+
+
     useEffect(() => {
         initializeFirebase();
         if (!auth) return;
@@ -210,7 +238,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
     
     return (
-        <AuthContext.Provider value={{ currentUser, loading, login, signup, logout, signInWithGoogle, signInWithFacebook, accessToken }}>
+        <AuthContext.Provider value={{ currentUser, loading, login, signup, logout, signInWithGoogle, signInWithFacebook, updateUserEmail, updateUserPassword, accessToken }}>
             {!loading && children}
         </AuthContext.Provider>
     );

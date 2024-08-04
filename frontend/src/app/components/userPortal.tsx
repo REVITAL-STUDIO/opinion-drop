@@ -198,6 +198,10 @@ const UserPortal: React.FC<UserPortalProps> = ({
     setClose(false); // Reset the close state
   };
 
+  const closeSettingsModal = () => {
+    setOpenSettings(false);
+  };
+  
   return (
     <>
       {isMenuOpen && (
@@ -537,7 +541,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
                 {selectedTab == "Notifications" && <div></div>}
               </div>
             </div>
-            {openSettings && <Settings />}
+            {openSettings && <Settings closeSettings={closeSettingsModal}/>}
           </motion.section>
           {selectedOpinion && (
             <>

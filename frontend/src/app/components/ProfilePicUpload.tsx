@@ -3,15 +3,15 @@ import { useDropzone } from "react-dropzone";
 
 interface FileUploadProps {
     onFileSelected: (files: FileExtended | null) => void;
-    initialFile?: File;
+    initialPicUrl: string;
 }
 
 interface FileExtended extends File {
     url?: string;
 }
 
-const ProfilePicUpload: React.FC<FileUploadProps> = ({ onFileSelected, initialFile }) => {
-    const [selectedFile, setSelectedFile] = useState<FileExtended | null>(initialFile || null);
+const ProfilePicUpload: React.FC<FileUploadProps> = ({ onFileSelected, initialPicUrl }) => {
+    const [selectedFile, setSelectedFile] = useState<FileExtended | null>(null);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         // Only allow one file
@@ -53,7 +53,7 @@ const ProfilePicUpload: React.FC<FileUploadProps> = ({ onFileSelected, initialFi
                 
                 (
                     <img
-                        src={"https://opiniondrop-storage.s3.us-east-2.amazonaws.com/images/opinion-backgrounds/1722524537729_trumpvsharris.jpg"}
+                        src={initialPicUrl}
                         alt={"profilepic"}
                         className="w-full h-full object-cover"
                     />
