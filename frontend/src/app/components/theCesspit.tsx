@@ -8,43 +8,35 @@ import CommentContainer from "./comment";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../hooks/AuthContext";
 
-interface CessPitProps {
-  cesspitData: {
-    commentId: number;
-    userId: string;
-    topicId: number;
-    parentCommentId: number | null;
-    content: string;
-    likes: number;
-    createdAt: Date;
-    updatedAt: Date;
+interface OpinionCesspitCommentProps {
+  topic: {
+    name: string;
+    id: number;
   };
 }
 
 interface CommentCesspit {
-  commentId: number;
-  userId: string;
-  topicId: number;
-  parentCommentId: number | null;
-  content: string;
+  id: number;
+  author: string;
+  textcontent: string;
+  parentcommentid: number | null;
+  parentcommentauthor: string | null;
+  authorprofileimage?: string;
   likes: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdat: string;
 }
 
-const Cesspit = ({ cesspitData }: CessPitProps) => {
+const Cesspit: React.FC<OpinionCesspitCommentProps> = ({ topic }) => {
   const [comments, setComments] = useState<CommentCesspit[]>([]);
   const [newCommentText, setNewCommentText] = useState("");
   const { currentUser } = useAuth();
-
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewCommentText(e.target.value);
   };
-
   const fetchComments = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${cesspitData.topicId}`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${topic.id}`,
         {
           method: "GET",
           headers: {
@@ -64,11 +56,11 @@ const Cesspit = ({ cesspitData }: CessPitProps) => {
 
   const postComment = async () => {
     console.log("in post comments");
-    console.log("comments opinionid ", cesspitData);
+    console.log("comments opinionid ", topic);
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${cesspitData}`,
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/comments/opinion/${topic.id}`,
         {
           method: "POST",
           headers: {
@@ -76,7 +68,7 @@ const Cesspit = ({ cesspitData }: CessPitProps) => {
           },
           body: JSON.stringify({
             userId: currentUser?.uid,
-            topicId: cesspitData.topicId,
+            opinionId: topic.id,
             content: newCommentText,
             parentCommentId: null,
           }),
@@ -94,11 +86,9 @@ const Cesspit = ({ cesspitData }: CessPitProps) => {
       console.log("Error posting comment: ", error);
     }
   };
-
   useEffect(() => {
     fetchComments();
   }, []);
-
   return (
     <AnimatePresence>
       <motion.div className="z-40  right-0 bg-black/95 text-white  shadow-lg transition-transform">
@@ -112,9 +102,9 @@ const Cesspit = ({ cesspitData }: CessPitProps) => {
               <div className="relative flex flex-col gap-8  overflow-visible w-full  border-[#676767] ">
                 {comments.map((comment) => (
                   <CommentContainer
-                    key={comment.topicId}
-                    comment={comment.topicId}
-                    opinionId={opinionData.id}
+                    key={comment.id}
+                    comment={comment}
+                    opinionId={topic.id}
                   />
                 ))}
               </div>
@@ -152,5 +142,4 @@ const Cesspit = ({ cesspitData }: CessPitProps) => {
     </AnimatePresence>
   );
 };
-
 export default Cesspit;

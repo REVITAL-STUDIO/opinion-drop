@@ -105,15 +105,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const [numLikes, setNumLikes] = useState<number>(0);
   const [numDislikes, setNumDislikes] = useState<number>(0);
 
-
   const handleAnswerChange = (questionId: number, value: number) => {
-    setAnswers(prevAnswers => ({
+    setAnswers((prevAnswers) => ({
       ...prevAnswers,
-      [questionId]: value
+      [questionId]: value,
     }));
     console.log("answers object: ", answers);
   };
-
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     setSliderValue(newValue as number);
@@ -126,8 +124,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const closeDiscussion = () => {
     setOpenDiscussion(false);
   };
-
-
 
   const openReplies = () => {
     setReplyMenu((e) => !e);
@@ -279,7 +275,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         document.removeEventListener("mouseup", handleTextSelect);
       };
     }
-
   }, [highlightEnabled]);
 
   const fetchRebuttals = async () => {
@@ -629,8 +624,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       console.log(error);
     }
     setOpenRating(false);
-  }
-
+  };
 
   const submitSurvey = async () => {
     try {
@@ -644,8 +638,8 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           body: JSON.stringify({
             userId: currentUser?.uid,
             surveyId: survey?.surveyId,
-            answers: answers
-          })
+            answers: answers,
+          }),
         }
       );
       if (!res.ok) {
@@ -656,52 +650,10 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       setTimeout(() => {
         setShowConfirmation(false);
       }, 3000);
-
     } catch (error) {
       console.log("Error: ", error);
     }
   };
-
-  const demoRebuttals = [
-    {
-      id: 1,
-      title: "Pro-Choice Perspectives on Abortion",
-      author: "Alice Johnson",
-      textcontent: "rebutall text...........",
-      parentOpinionId: 1,
-    },
-    {
-      id: 1,
-      title: "Pro-Life Arguments Against Abortion",
-      author: "Bob Smith",
-      textcontent: "rebutall text...........",
-      parentOpinionId: 1,
-    },
-    {
-      id: 1,
-      title: "Legal Aspects of Abortion Rights",
-      author: "Catherine Lee",
-      textcontent: "rebutall text...........",
-      parentOpinionId: 1,
-    },
-    {
-      id: 1,
-      title: "Ethical Considerations in Abortion Debates",
-      author: "David Brown",
-      textcontent: "rebutall text...........",
-      parentOpinionId: 1,
-    },
-    {
-      id: 1,
-      title: "Medical Implications of Abortion Procedures",
-      author: "Eva Green",
-      textcontent: "rebutall text...........",
-      parentOpinionId: 1,
-    },
-  ];
-
-
-
 
   return (
     <div className="z-30  w-[75%] h-[750px] bg-white text-black p-6 shadow-lg relative rounded-md">
@@ -728,18 +680,26 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         </a>
       </div>
       {/* Survey Container */}
-      {!hasSubmittedSurvey && currentUser && survey &&
+      {!hasSubmittedSurvey && currentUser && survey && (
         <div
-          className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${hideOpinion ? "" : "invisible"
-            }`}
+          className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${
+            hideOpinion ? "" : "invisible"
+          }`}
         >
           <div className="absolute -top-[5rem] left-0 w-full   bg-[#2b2b2b] rounded-md text-white p-4  z-40">
             <h3 className="text-5xl  font-bold  p-4 mt-4">Tell Us..</h3>
-            <p className="p-4 text-gray-300">This Survey is to help us personalize your User Experience. </p>
+            <p className="p-4 text-gray-300">
+              This Survey is to help us personalize your User Experience.{" "}
+            </p>
           </div>
           <div className=" flex flex-col justify-center text-white relative">
             {survey.questions.map((question, index) => (
-              <SurveyPrompt key={index} onChange={handleAnswerChange} questionId={question.questionId} prompt={question.questionText} />
+              <SurveyPrompt
+                key={index}
+                onChange={handleAnswerChange}
+                questionId={question.questionId}
+                prompt={question.questionText}
+              />
             ))}
           </div>
           <button
@@ -749,7 +709,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             <FontAwesomeIcon icon={faPaperPlane} className="text-2xl" /> Send
           </button>
         </div>
-      }
+      )}
       {showConfirmation && (
         <motion.div
           initial={{ opacity: 0 }}

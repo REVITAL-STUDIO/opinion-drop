@@ -56,7 +56,6 @@ const UserPortal: React.FC<UserPortalProps> = ({
     null
   );
 
-
   const toggleComments = () => {
     setShowComments(!showComments);
   };
@@ -69,7 +68,6 @@ const UserPortal: React.FC<UserPortalProps> = ({
     setDebateIt(!debateIt);
   };
 
-  
   const closeRebuttal = () => {
     setSelectedRebuttal(null);
   };
@@ -353,7 +351,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
                   <div className="border-t mt-4">
                     {/* User Summary */}
                     <div className="  w-full rounded-3xl  p-4">
-                      <div className=" max-h-[800px] overflow-y-auto overflow-scroll flex flex-col gap-[3rem] p-4 ">
+                      <div className=" max-h-[700px] overflow-y-auto overflow-scroll flex flex-col gap-[3rem] p-4 ">
                         <div className="bg-white p-4 rounded-2xl shadow-md">
                           <h1 className="text-4xl font-light p-4 rounded-full text-black  w-fit">
                             Opinions
@@ -390,9 +388,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
                                     <div className="flex items-center justify-center h-full w-full px-4 py-2">
                                       <button
                                         className="text-white w-[2rem] h-[2rem] rounded-full shadow-md border transition-colors duration-300"
-                                        onClick={() =>
-                                          handleOpenModal(slide)
-                                        }
+                                        onClick={() => handleOpenModal(slide)}
                                       >
                                         <FontAwesomeIcon
                                           icon={faEye}
@@ -566,9 +562,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
                       showComments={showComments}
                     />
                     {showComments && (
-                      <OpinionComments
-                        opinionData={selectedOpinion}
-                      />
+                      <OpinionComments opinionData={selectedOpinion} />
                     )}
                   </div>
                 </motion.div>

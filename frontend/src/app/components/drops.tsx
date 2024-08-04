@@ -122,21 +122,6 @@ const Drop = ({ topic }: dropsProps) => {
     }
   };
 
-  const toggleIncrease = () => {
-    // If the user has not liked, add the like
-    setLikes((prevLikes) => prevLikes + 1);
-    setHasLiked(true);
-    setActiveButton("like"); // Set 'like' button as active
-  };
-
-  const toggleDecrease = () => {
-    if (likes > 0 && !hasDisliked) {
-      setDislikes((prevLikes) => prevLikes + 1);
-      setHasDisliked(false);
-    }
-    setActiveButton("dislike"); // Set 'dislike' button as active
-  };
-
   const [close, setClose] = useState(false);
   const detailsModalRef = useRef<HTMLDivElement>(null);
   const opinionModalRef = useRef<HTMLDivElement>(null);
@@ -303,7 +288,6 @@ const Drop = ({ topic }: dropsProps) => {
                             ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
                             : "scale-100 text-black"
                         }`}
-                        onClick={toggleIncrease}
                       >
                         <FontAwesomeIcon
                           icon={faMicrophoneLines}
@@ -319,7 +303,6 @@ const Drop = ({ topic }: dropsProps) => {
                             ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
                             : "scale-100 text-black"
                         }`}
-                        onClick={toggleDecrease}
                       >
                         <FontAwesomeIcon
                           icon={faMicrophoneLinesSlash}

@@ -43,7 +43,7 @@ const ProviderSignIn: React.FC = () => {
       >
         {loading ? "Loading..." : "Sign in with Google "}
       </button>
-      
+
       <button
         onClick={handleSignInWithFacebook}
         disabled={loading}

@@ -88,7 +88,7 @@ const OpinionComments: React.FC<OpinionCommentsProps> = ({ opinionData }) => {
         throw new Error("Error retrieving comments");
       }
       const response = await res.json();
-      console.log("response", response)
+      console.log("response", response);
       setComments(response.data.comments);
     } catch (error) {
       console.log("Error Fetching Comments: ", error);
@@ -167,7 +167,7 @@ const OpinionComments: React.FC<OpinionCommentsProps> = ({ opinionData }) => {
               Discussion
             </h2>
             {/* Comments */}
-            <div className="w-[100%] h-[650px] overflow-y-auto ">
+            <div className="w-[100%] h-[550px] overflow-y-auto ">
               <div className="relative flex flex-col gap-8  overflow-visible w-full  border-[#676767] ">
                 {comments.map((comment) => (
                   <CommentContainer
