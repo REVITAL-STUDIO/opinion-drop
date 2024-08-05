@@ -71,9 +71,9 @@ const CesspitChildComment = ({
   return (
     <div
       key={comment.id}
-      className=" p-4  my-4 rounded-xl bg-white  relative text-black left-16 border-[#fff]/50 overflow-visible w-[90%]"
+      className=" p-4  my-4 rounded-xl   relative text-white border-l border-b left-16 border-[#fff]/50 overflow-visible w-[90%]"
     >
-      <div className="   flex items-center gap-4">
+      <div className="  flex  gap-4">
         <div className="w-[3rem] h-[3rem] rounded-full bg-gray-300 flex items-center justify-center">
           <img
             src={comment.authorprofileimage}
@@ -81,48 +81,45 @@ const CesspitChildComment = ({
             className="w-full h-full rounded-full object-cover"
           />
         </div>
-        <div>
-          <h2 className="text-base  font-normal">{comment.author}</h2>
-          <p className="text-sm  font-bold">{timeAgo(comment.createdat)}</p>
-        </div>
-      </div>
-      <div className="ml-[6%] py-[1rem] flex flex-col items-start gap-2 ">
-        <p className="w-[100%] text-[0.9rem] ">
-          <span className="bold text-blue-500">
-            {rootCommentId != comment.parentcommentid &&
-              `@${comment.parentcommentauthor}`}
-          </span>
-          {textIsExpanded
-            ? comment.textcontent
-            : truncateText(comment.textcontent, textMaxChar)}
-        </p>
-        {comment.textcontent.length > textMaxChar && (
-          <button
-            onClick={toggleExpandedText}
-            className="font-semibold text-sm text-gray-400"
-          >
-            {textIsExpanded ? "Show less" : "Read more"}
-          </button>
-        )}
-      </div>
-      <div className="flex justify-between items-center  p-4  ">
-        <div className="w-1/2  ml-4 flex gap-x-8">
-          <button
-            onClick={() => handleLikeComment(comment, userHasLiked)}
-            className={` flex gap-x-2 rounded-[10px] w-[3rem] text-sm h-[2.3rem] justify-center items-center`}
-          >
-            <FontAwesomeIcon
-              icon={faHeart}
-              className={`w-5 h-5 ${userHasLiked ? "text-red-500" : ""} `}
-            />
-            <p>{comment.likes}</p>
-          </button>
-          <button
-            onClick={() => setOpenReplyTextBox(true)}
-            className="   flex rounded-[10px] w-[3rem] h-[2.3rem] justify-center text-sm items-center gap-x-2"
-          >
-            <FontAwesomeIcon icon={faCommentDots} className="w-5 h-5" /> Reply
-          </button>
+        <div className="">
+          <h2 className="text-sm  font-normal">{comment.author}</h2>
+          <p className="text-xs  font-light">{timeAgo(comment.createdat)}</p>
+          <div className=" my-2 flex flex-col items-start gap-2 ">
+            <p className={` w-[100%] text-[0.9rem] `}>
+              {textIsExpanded
+                ? comment.textcontent
+                : truncateText(comment.textcontent, textMaxChar)}
+            </p>
+            {comment.textcontent.length > textMaxChar && (
+              <button
+                onClick={toggleExpandedText}
+                className="font-semibold text-sm text-gray-400"
+              >
+                {textIsExpanded ? "Show less" : "Read more"}
+              </button>
+            )}
+          </div>
+          <div className="flex justify-between items-center  ">
+            <div className="w-1/2   flex gap-x-8">
+              <button
+                onClick={() => handleLikeComment(comment, userHasLiked)}
+                className={` flex gap-x-2 rounded-[10px] w-[3rem] text-sm h-[2.3rem] justify-center items-center`}
+              >
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  className={`w-5 h-5 ${userHasLiked ? "text-red-500" : ""} `}
+                />
+                <p>{comment.likes}</p>
+              </button>
+              <button
+                onClick={() => setOpenReplyTextBox(true)}
+                className="   flex rounded-[10px] w-[3rem] h-[2.3rem] justify-center text-sm items-center gap-x-2"
+              >
+                <FontAwesomeIcon icon={faCommentDots} className="w-5 h-5" />{" "}
+                Reply
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       {openReplyTextBox && (
@@ -141,14 +138,14 @@ const CesspitChildComment = ({
             <button
               onClick={() => setOpenReplyTextBox(false)}
               type="button"
-              className="py-2.5 px-4 text-sm font-medium text-center border border-black hover:border-none ease-in-out duration-300 transition shadow-lg text-black bg-transparent rounded-full hover:bg-gray-800/25"
+              className="py-2.5 px-4 text-sm font-medium text-center border border-black hover:border-none ease-in-out duration-300 transition shadow-lg text-white  rounded-lg bg-gray-800/50"
             >
               Cancel
             </button>
             <button
               onClick={() => postChildComment(newChildCommentText, comment.id)}
               type="button"
-              className="py-2.5 px-4 text-sm font-medium text-center text-white bg-purple-700 rounded-full shadow-lg ease-in-out duration-300 transition hover:bg-gray-800 active:bg-gray-700"
+              className="py-2.5 px-4 text-sm font-medium text-center text-white bg-purple-700 rounded-lg shadow-lg ease-in-out duration-300 transition hover:bg-gray-800 active:bg-gray-700"
             >
               Reply
             </button>

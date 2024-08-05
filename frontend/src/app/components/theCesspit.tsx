@@ -91,24 +91,11 @@ const Cesspit = ({ topic }: CessPitProps) => {
   }, []);
   return (
     <AnimatePresence>
-      <motion.div className="z-40  right-0 bg-black/95 text-white  shadow-lg transition-transform">
-        <div className=" px-[4rem] w-full flex gap-[8%] min-h-screen">
+      <motion.div className="z-40  right-0 bg-black/95 text-white min-h-screen  shadow-lg transition-transform">
+        <div className="  w-full flex gap-[8%] min-h-screen xl:p-[4rem] p-[1rem]">
           <div className="w-[100%]  overflow-x-visible">
-            <h2 className="text-2xl font-normal mt-[5%] relative p-4">
-              Cesspit
-            </h2>
+            <h2 className="text-4xl font-normal mt-[5%] relative ">Cesspit</h2>
             {/* Comments */}
-            <div className="w-[100%] h-[650px] overflow-y-auto ">
-              <div className="relative flex flex-col gap-8  overflow-visible w-full  border-[#676767] ">
-                {comments.map((comment) => (
-                  <CommentContainer
-                    key={comment.id}
-                    comment={comment}
-                    topicId={topic.id}
-                  />
-                ))}
-              </div>
-            </div>
             <div className="relative mt-2">
               <textarea
                 value={newCommentText}
@@ -135,6 +122,15 @@ const Cesspit = ({ topic }: CessPitProps) => {
                   />
                 </svg>
               </button>
+            </div>
+            <div className="relative flex flex-col gap-8  overflow-visible w-[100%]  border-[#676767] ">
+              {comments.map((comment) => (
+                <CommentContainer
+                  key={comment.id}
+                  comment={comment}
+                  topicId={topic.id}
+                />
+              ))}
             </div>
           </div>
         </div>

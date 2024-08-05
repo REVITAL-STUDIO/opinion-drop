@@ -86,12 +86,6 @@ const SignInButton: React.FC = () => {
                 <div className="xl:w-[3rem] xl:h-[3rem] w-[1.5rem] h-[1.5rem] rounded-full bg-gradient-to-tl from-red-400 via-white to-blue-500"></div>
               </button>
             </div>
-            {openUserPortal && (
-              <UserPortal
-                handleLogout={handleLogout}
-                toggleOpenUserPortal={toggleOpenUserPortal}
-              />
-            )}
           </>
         ) : (
           <>
@@ -99,13 +93,21 @@ const SignInButton: React.FC = () => {
               onClick={toggleOpenSignUpForm}
               className="p-4 w-full flex justify-center items-center gap-x-2 hover:scale-95 text-white ease-in-out transition duration-300 rounded-full"
             >
-              <div className="xl:w-[3rem] xl:h-[3rem] w-[1.5rem] h-[1.5rem] rounded-full bg-gradient-to-tl from-gray-500 via-white to-purple-500"></div>
+              <div className="xl:w-[3rem] xl:h-[3rem] w-[1.5rem] h-[1.5rem] rounded-full bg-gradient-to-tl from-gray-500 via-white to-gray-300"></div>
               Sign In
             </button>
             {openSignUp && <SignIn />}
           </>
         )}
       </motion.div>
+      <>
+        {openUserPortal && (
+          <UserPortal
+            handleLogout={handleLogout}
+            toggleOpenUserPortal={toggleOpenUserPortal}
+          />
+        )}
+      </>
     </AnimatePresence>
   );
 };

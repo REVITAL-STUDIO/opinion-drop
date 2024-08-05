@@ -251,9 +251,9 @@ const CesspitComment: React.FC<CommentProps> = ({ comment, topicId }) => {
   };
 
   return (
-    <div key={comment.id} className="w-[75%] mx-auto relative text-black">
-      <div className="p-4 relative   rounded-xl bg-white  border-[#fff]/50 overflow-visible w-[100%]">
-        <div className="  flex items-center gap-4">
+    <div key={comment.id} className="w-[100%] mx-auto relative text-white">
+      <div className="p-4 relative   rounded-xl border-b  border-[#fff]/50 overflow-visible w-[100%]">
+        <div className="  flex  gap-4">
           <div className="w-[3rem] h-[3rem] rounded-full bg-gray-300 flex items-center justify-center">
             <img
               src={comment.authorprofileimage}
@@ -261,49 +261,71 @@ const CesspitComment: React.FC<CommentProps> = ({ comment, topicId }) => {
               className="w-full h-full rounded-full object-cover"
             />
           </div>
-          <div className="">
-            <h2 className="text-lg  font-normal">{comment.author}</h2>
-            <p className="text-sm  font-semibold">
-              {timeAgo(comment.createdat)}
-            </p>
+          <div className="w-full">
+            <h2 className="text-sm  font-normal">{comment.author}</h2>
+            <p className="text-xs  font-light">{timeAgo(comment.createdat)}</p>
+            <div className=" my-2 flex flex-col items-start gap-2 ">
+              <p className={` w-[100%] text-[0.9rem] `}>
+                {textIsExpanded
+                  ? comment.textcontent
+                  : truncateText(comment.textcontent, textMaxChar)}
+              </p>
+              {comment.textcontent.length > textMaxChar && (
+                <button
+                  onClick={toggleExpandedText}
+                  className="font-semibold text-sm text-gray-400"
+                >
+                  {textIsExpanded ? "Show less" : "Read more"}
+                </button>
+              )}
+            </div>
+            <div className="flex justify-between items-center  ">
+              <div className="w-3/4   flex gap-x-4">
+                <button
+                  onClick={() => handleLikeComment(comment, userHasLiked)}
+                  className={` flex gap-x-2 rounded-[10px] w-[3rem] text-sm h-[2.3rem] justify-center items-center`}
+                >
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    className={`w-5 h-5 ${userHasLiked ? "text-red-500" : ""} `}
+                  />
+                  <p>{comment.likes}</p>
+                </button>
+                <button
+                  onClick={() => setOpenReplyTextBox(true)}
+                  className="   flex rounded-[10px] w-[3rem] h-[2.3rem] justify-center text-sm items-center gap-x-2"
+                >
+                  <FontAwesomeIcon icon={faCommentDots} className="w-5 h-5" />{" "}
+                  Reply
+                </button>
+                <button
+                  onClick={() => toggleChildComments()}
+                  className={`${
+                    numChildComments === 0 ? "hidden" : "flex"
+                  } relative  text-white shadow-lg   gap-2 transition ease-in-out duration-150 items-center text-sm   rounded-lg active:bg-blue-900/40`}
+                >
+                  {numChildComments === 1 && (
+                    <>
+                      <FontAwesomeIcon
+                        icon={showChildComments ? faChevronUp : faChevronDown}
+                      />
+                      {" 1 reply"}
+                    </>
+                  )}
+                  {numChildComments > 1 && (
+                    <>
+                      <FontAwesomeIcon
+                        icon={showChildComments ? faChevronUp : faChevronDown}
+                      />
+                      {` ${numChildComments} replies`}
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="ml-[6%] py-[1rem] flex flex-col items-start gap-2 ">
-          <p className={` w-[100%] text-[0.9rem] `}>
-            {textIsExpanded
-              ? comment.textcontent
-              : truncateText(comment.textcontent, textMaxChar)}
-          </p>
-          {comment.textcontent.length > textMaxChar && (
-            <button
-              onClick={toggleExpandedText}
-              className="font-semibold text-sm text-gray-400"
-            >
-              {textIsExpanded ? "Show less" : "Read more"}
-            </button>
-          )}
         </div>
 
-        <div className="flex justify-between items-center  p-4  ">
-          <div className="w-1/2  ml-4 flex gap-x-8">
-            <button
-              onClick={() => handleLikeComment(comment, userHasLiked)}
-              className={` flex gap-x-2 rounded-[10px] w-[3rem] text-sm h-[2.3rem] justify-center items-center`}
-            >
-              <FontAwesomeIcon
-                icon={faHeart}
-                className={`w-5 h-5 ${userHasLiked ? "text-red-500" : ""} `}
-              />
-              <p>{comment.likes}</p>
-            </button>
-            <button
-              onClick={() => setOpenReplyTextBox(true)}
-              className="   flex rounded-[10px] w-[3rem] h-[2.3rem] justify-center text-sm items-center gap-x-2"
-            >
-              <FontAwesomeIcon icon={faCommentDots} className="w-5 h-5" /> Reply
-            </button>
-          </div>
-        </div>
         {openReplyTextBox && (
           <div className="relative px-6  border-t ">
             <textarea
@@ -320,7 +342,7 @@ const CesspitComment: React.FC<CommentProps> = ({ comment, topicId }) => {
               <button
                 onClick={() => setOpenReplyTextBox(false)}
                 type="button"
-                className="py-2.5 px-4 text-sm font-medium text-center border border-black hover:border-none ease-in-out duration-300 transition shadow-lg text-black bg-transparent rounded-full hover:bg-gray-800/25"
+                className="py-2.5 px-4 text-sm font-medium text-center border border-black hover:border-none ease-in-out duration-300 transition shadow-lg text-white  rounded-lg bg-gray-800/50"
               >
                 Cancel
               </button>
@@ -329,31 +351,9 @@ const CesspitComment: React.FC<CommentProps> = ({ comment, topicId }) => {
                   postChildComment(newChildCommentText, comment.id)
                 }
                 type="button"
-                className="py-2.5 px-4 text-sm font-medium text-center text-white bg-purple-700 rounded-full shadow-lg ease-in-out duration-300 transition hover:bg-gray-800 active:bg-gray-700"
+                className="py-2.5 px-4 text-sm font-medium text-center text-white bg-purple-700 rounded-lg shadow-lg ease-in-out duration-300 transition hover:bg-gray-800 active:bg-gray-700"
               >
                 Reply
-              </button>
-              <button
-                onClick={() => toggleChildComments()}
-                className={`${numChildComments === 0 ? "hidden": "flex"} relative  text-white shadow-lg   justify-center items-center gap-2 transition ease-in-out duration-150 px-4 py-2 text-sm bg-blue-500 rounded-full active:bg-blue-900/40`}
-              >
-                
-                {numChildComments === 1 && (
-                  <>
-                    <FontAwesomeIcon
-                      icon={showChildComments ? faChevronUp : faChevronDown}
-                    />
-                    {" 1 reply"}
-                  </>
-                )}
-                {numChildComments > 1 && (
-                  <>
-                    <FontAwesomeIcon
-                      icon={showChildComments ? faChevronUp : faChevronDown}
-                    />
-                    {` ${numChildComments} replies`}
-                  </>
-                )}
               </button>
             </div>
           </div>

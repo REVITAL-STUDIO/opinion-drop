@@ -25,6 +25,7 @@ const SignIn: React.FC = () => {
       }
       console.log("Authentication successful");
       setShowSuccessModal(true); // Show success modal
+      console.log("Show Success Opened", showSuccessModal);
 
       // Hide the modal and reset the form after 3 seconds
       setTimeout(() => {
@@ -34,10 +35,15 @@ const SignIn: React.FC = () => {
     } catch (error) {
       console.error("Authentication failed", error);
       setError("Authentication failed. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (showSuccessModal) {
+      // This runs when showSuccessModal changes to true
+      console.log("Success modal is now visible");
+    }
+  }, [showSuccessModal]);
 
   const modalRef = useRef<HTMLDivElement>(null);
 

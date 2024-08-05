@@ -252,7 +252,6 @@ span:hover .overlay-container {
   justify-content: center;
   align-items: center;
   position: absolute;
-  background: #2b2b2b;
   width: 250px;
   height: 300px;
   line-height: 200px;
@@ -329,7 +328,6 @@ span:hover .overlay-container {
     justify-content: center;
     align-items: center;
     position: absolute;
-    background: #2b2b2b;
     width: 200px;
     height: 300px;
     line-height: 200px;

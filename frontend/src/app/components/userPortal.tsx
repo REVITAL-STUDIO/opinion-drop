@@ -199,7 +199,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
   const closeSettingsModal = () => {
     setOpenSettings(false);
   };
-  
+
   return (
     <>
       {isMenuOpen && (
@@ -224,11 +224,6 @@ const UserPortal: React.FC<UserPortalProps> = ({
               <div className="flex xl:flex-col font-light flex-row text-black gap-y-4 p-4">
                 <div className="p-4 mt-[4%] rounded-full w-fit flex items-center gap-x-4">
                   <div className="w-[4rem] h-[4rem] rounded-full shadow-md bg-white"></div>
-                  {/* <h1 className="lg:text-xl text-lg text-black ">
-                  Welcome,{" "}
-                  <span className="font-semibold">{currentUser?.username}</span>
-                  !
-                </h1> */}
                 </div>
                 <button
                   onClick={closeMenuFunction}
@@ -260,14 +255,14 @@ const UserPortal: React.FC<UserPortalProps> = ({
            space-x-reverse `}
               >
                 <span
-                  className={`block w-3/4 my-0.5 border-4  rounded-full ${
+                  className={`block w-3/4 my-0.5 border  rounded-full ${
                     menuOpen
                       ? "rotate-45 transition-transform duration-300 ease-in-out border-[#000]"
                       : "transition-transform duration-300 ease-in-out border-[#000]"
                   }`}
                 ></span>
                 <span
-                  className={`block w-3/4 my-0.5 border-4  rounded-full ${
+                  className={`block w-3/4 my-0.5 border  rounded-full ${
                     menuOpen
                       ? "-rotate-45 w-3/4 absolute top-2/5 transition-transform duration-300 ease-in-out border-[#000]"
                       : "transition-transform duration-300 ease-in-out border-[#000]"
@@ -281,37 +276,40 @@ const UserPortal: React.FC<UserPortalProps> = ({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ ease: "easeInOut", duration: 0.5 }}
-                    className="md:hidden absolute top-0 left-0 bottom-0 flex justify-center items-center bg-black/90 w-full h-screen bg-mist "
+                    className="md:hidden absolute top-0 left-0 bottom-0 flex justify-center items-center bg-black/90 w-full h-screen bg-mist z-50"
                   >
                     <motion.div
                       initial={{ x: -100, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ opacity: 0, x: -100 }}
                       transition={{ ease: "easeInOut", duration: 0.5 }}
-                      className="lg:hidden absolute top-0 left-0 bottom-0 w-full min-h-screen bg-gradient-to-b to-red-500 via-purple-300 from-blue-300 p-4 gap-y-8"
+                      className="lg:hidden absolute top-0 left-0 bottom-0 w-[75%] min-h-screen bg-gradient-to-b to-red-500 via-purple-300 from-blue-300 p-4 gap-y-8"
                     >
                       {/* Explore */}
                       <section className="p-4  rounded-md  justify-center items-center mt-[25%] ">
                         <div className="flex flex-col justify-center w-full">
                           <ul className="flex flex-col gap-y-4 p-4 text-2xl font-medium text-black font-cheapSignage ">
                             <h2 className="font-dmSans my-4">Explore</h2>
+                            <div className="p-4 mt-[4%] rounded-full w-fit flex items-center gap-x-4">
+                              <div className="w-[4rem] h-[4rem] rounded-full shadow-md bg-white"></div>
+                            </div>
                             <button
                               onClick={closeMenuFunction}
-                              className="p-4 w-fit  text-left font-semibold  hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition  flex items-center gap-x-4"
+                              className="p-4 w-fit text-base text-left   hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition  flex items-center gap-x-4"
                             >
                               <FontAwesomeIcon icon={faSquareH} /> Home
                             </button>
 
                             <button
                               onClick={toggleSettings}
-                              className="p-4 w-fit  text-left font-semibold hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition flex items-center gap-x-4"
+                              className="p-4 w-fit text-base text-left  hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition flex items-center gap-x-4"
                             >
                               <FontAwesomeIcon icon={faGears} className="" />
                               Settings
                             </button>
                             <button
                               onClick={handleLogout}
-                              className="p-4 w-fit  text-left font-semibold text-black duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4"
+                              className="p-4 w-fit text-base text-left  text-black hover:text-red-600 duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4"
                             >
                               <FontAwesomeIcon icon={faArrowRightFromBracket} />{" "}
                               Log Out
@@ -537,7 +535,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
                 {selectedTab == "Notifications" && <div></div>}
               </div>
             </div>
-            {openSettings && <Settings closeSettings={closeSettingsModal}/>}
+            {openSettings && <Settings closeSettings={closeSettingsModal} />}
           </motion.section>
           {selectedOpinion && (
             <>

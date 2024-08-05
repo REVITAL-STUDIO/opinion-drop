@@ -9,10 +9,10 @@ import {
   faEye,
   faMicrophoneLines,
   faMicrophoneLinesSlash,
+  faPenFancy,
   faPlus,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import Questions from "./questions";
 import DetailsModal from "./DetailsModal";
 import OpinionModal from "./OpinionModal";
 import StateIt from "./stateIt";
@@ -227,6 +227,61 @@ const Drop = ({ topic }: dropsProps) => {
     checkSurvey();
   }, [survey]);
 
+  const [numLikes, setNumLikes] = useState<number>(0);
+  const [numDislikes, setNumDislikes] = useState<number>(0);
+  console.log("likes:", numLikes);
+  console.log("dislikes:", numDislikes);
+
+  const getNumOpinionLikes = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/numlikes/${topic.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving opinion like count");
+      }
+      const response = await res.json();
+      console.log("likes", response);
+
+      setNumLikes(response.data.numLikes);
+    } catch (error) {
+      console.log("Error Fetching Opinion like count: ", error);
+    }
+  };
+
+  const getNumDislikes = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/numDislikes/${topic.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving opinion dislike count");
+      }
+      const response = await res.json();
+      console.log("Dislikes", response);
+      setNumDislikes(response.data.numDislikes);
+    } catch (error) {
+      console.log("Error Fetching Opinion dislike count: ", error);
+    }
+  };
+
+  useEffect(() => {
+    getNumDislikes();
+    getNumOpinionLikes();
+  }, []);
+
   return (
     <section className=" flex  justify-center items-center my-6">
       <div className="container ">
@@ -236,87 +291,99 @@ const Drop = ({ topic }: dropsProps) => {
             transform: `rotateY(${currdeg}deg)`,
           }}
         >
-          {opinions.length === 0 ? (
-            <div className="item relative shadow-lg shadow-white/50">
-              <button className="border w-[6rem] h-[6rem] rounded-full shadow-md flex justify-center items-center text-black">
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  className="w-[2rem] h-[2rem] text-white"
-                />
-              </button>
-              <p className="text-sm mt-2 w-2/3 p-4">
-                Be the first to share your opinion!
-              </p>
-            </div>
-          ) : (
-            opinions.map((slide, index) =>
-              slide ? (
-                <div
-                  key={index}
-                  className={`item ${slide.id} relative shadow-lg shadow-white/50`}
-                  style={{
-                    transform: `rotateY(${index * 60}deg) translateZ(250px)`,
-                    overflow: "hidden",
-                  }}
-                >
-                  <Image
-                    src={slide.backgroundimage}
-                    alt={slide.author}
-                    fill
-                    className="absolute w-[100%] h-[100%] object-cover rounded-md"
+          {currentUser ? (
+            opinions.length === 0 ? (
+              <div className="item relative shadow-lg bg-gradient-to-br from-white to-blue-300 shadow-white/100">
+                <button className="border w-[6rem] h-[6rem] shadow-md rounded-full flex justify-center items-center text-black">
+                  <FontAwesomeIcon
+                    icon={faPenFancy}
+                    className="text-3xl text-[#2b2b2b]/75"
                   />
-                  <div className="absolute inset-0 bg-black opacity-40"></div>
-                  <div className="text-white font-medium absolute top-1/2 left-4 text-left line-clamp-3 leading-tight flex flex-col gap-2">
-                    <p className="text-[12px]">{slide.author}</p>
+                </button>
+                <p className="text-sm mt-2 p-4 text-[#2b2b2b]/75">
+                  Be the First to Drop your Essay!
+                  <br></br>
+                </p>
+              </div>
+            ) : (
+              opinions.map((slide, index) =>
+                slide ? (
+                  <div
+                    key={index}
+                    className={`item ${slide.id} relative shadow-lg shadow-white/50`}
+                    style={{
+                      transform: `rotateY(${index * 60}deg) translateZ(250px)`,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Image
+                      src={slide.backgroundimage}
+                      alt={slide.author}
+                      fill
+                      className="absolute w-[100%] h-[100%] object-cover rounded-md"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white bg-black opacity-40"></div>
+                    <div className="text-white font-medium absolute top-1/2 left-4 text-left line-clamp-3 leading-tight flex flex-col gap-2">
+                      <p className="text-[12px]">{slide.author}</p>
+                      <p className="text-[18px] font-bold">{slide.title}</p>
+                    </div>
+                    <div className="flex justify-between px-2 w-full gap-y-1 absolute bottom-2">
+                      <button
+                        onClick={() => handleOpenModal(slide)}
+                        className="w-[2rem] h-[2rem] z-40 shadow-lg text-black hover:bg-[#ececec] bg-[#ececec]/90 ease-in-out duration-400 transition hover:text-black rounded-full text-xs bottom-2 left-2"
+                      >
+                        <FontAwesomeIcon icon={faEye} className="text-[10px]" />
+                      </button>
+                      <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-gradient-to-tl from-purple-200 to-white bottom-2 right-2 flex justify-between items-center">
+                        <button
+                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
+                            activeButton === "like"
+                              ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
+                              : "scale-100 text-black"
+                          }`}
+                        >
+                          <FontAwesomeIcon
+                            icon={faMicrophoneLines}
+                            className="text-xs"
+                          />
+                        </button>
 
-                    <p className="text-[18px] font-bold">{slide.title}</p>
-                  </div>
-                  <div className="flex  justify-between px-2 w-full  gap-y-1 absolute bottom-2 ">
-                    <button
-                      onClick={() => {
-                        handleOpenModal(slide);
-                      }}
-                      className="w-[2rem] h-[2rem] z-40 shadow-lg text-black hover:bg-[#ececec] bg-[#ececec]/90  ease-in-out duration-400 transition hover:text-black  rounded-full text-xs   bottom-2 left-2"
-                    >
-                      <FontAwesomeIcon icon={faEye} className="text-[10px] " />
-                    </button>
-                    {/* Likes and Dislikes */}
-                    <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-gradient-to-tl from-purple-200 to-white  bottom-2 right-2 flex justify-between items-center">
-                      <button
-                        className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
-                          activeButton === "like"
-                            ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
-                            : "scale-100 text-black"
-                        }`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faMicrophoneLines}
-                          className="text-xs t"
-                        />
-                      </button>
-                      <span className="mx-2 text-[10px] text-black">
-                        {likes}
-                      </span>
-                      <button
-                        className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
-                          activeButton === "dislike"
-                            ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
-                            : "scale-100 text-black"
-                        }`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faMicrophoneLinesSlash}
-                          className="text-xs "
-                        />
-                      </button>
-                      <span className="mx-2 text-[10px] text-black">
-                        {dislikes}
-                      </span>
+                        <span className="mx-2 text-[10px] text-black">
+                          {numLikes}
+                        </span>
+                        <button
+                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
+                            activeButton === "dislike"
+                              ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
+                              : "scale-100 text-black"
+                          }`}
+                        >
+                          <FontAwesomeIcon
+                            icon={faMicrophoneLinesSlash}
+                            className="text-xs"
+                          />
+                        </button>
+                        <span className="mx-2 text-[10px] text-black">
+                          {numDislikes}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : null
+                ) : null
+              )
             )
+          ) : (
+            <div className="item relative shadow-lg bg-gradient-to-br from-white to-red-300 shadow-white/100">
+              <button className="border w-[6rem] h-[6rem] shadow-md rounded-full flex justify-center items-center text-black">
+                <FontAwesomeIcon
+                  icon={faPenFancy}
+                  className="text-3xl text-[#2b2b2b]/75"
+                />
+              </button>
+              <p className="text-sm mt-2 p-4 text-[#2b2b2b]/75">
+                <br></br> Sign Up to get started
+              </p>
+            </div>
           )}
         </div>
       </div>

@@ -1,14 +1,12 @@
 "use client";
 import Drop from "./drops";
 import CreateButton from "./createButton";
-import Questions from "./questions";
 import Image from "next/image";
 import Archive from "./ArchiveButton";
-import Engagement from "./engagement";
 import Nav from "./nav";
-import SignIn from "./signInButton";
-import SignInButton from "./signInButton";
+
 import Cesspit from "./theCesspit";
+import Topic from "./Topic";
 
 interface OpinionShowcaseProps {
   topic: {
@@ -19,19 +17,16 @@ interface OpinionShowcaseProps {
 
 export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
   return (
-    <div className=" w-full  ">
-      <div className="min-h-screen relative gap-y-2 flex flex-col">
-        <Image
-          src="/Images/AdobeStock_756592648.jpeg"
-          alt="OD Background"
-          fill
-          className="absolute w-[100%] h-[100%] object-cover object-center blur-md brightness-50 "
-        />
-        <Nav />
-        <Questions />
-        <Drop topic={topic} />
-        <Archive topic={topic} />
-        <CreateButton topic={topic} />
+    <div className="w-full">
+      <div className="min-h-screen relative bg-[url('/Images/AdobeStock_756592648.jpeg')] bg-cover bg-center gap-y-2">
+        <div className="absolute inset-0 bg-black opacity-50 z-0"></div>
+        <div className="absolute w-full z-10">
+          <Nav />
+          <Topic />
+          <Archive topic={topic} />
+          <Drop topic={topic} />
+          <CreateButton topic={topic} />
+        </div>
       </div>
       <Cesspit topic={topic} />
     </div>
