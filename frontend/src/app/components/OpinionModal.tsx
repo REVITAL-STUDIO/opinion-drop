@@ -21,6 +21,9 @@ import OpenRebuttal from "./RebuttalModal";
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import StateIt from "./stateIt";
 import { useAuth } from "../hooks/AuthContext";
+import { v4 as uuidv4 } from 'uuid';
+import { Content } from "next/font/google";
+
 
 function valuetext(value: number) {
   return `${value}`;
@@ -51,9 +54,12 @@ interface Rebuttal {
 }
 
 interface Highlight {
-  id: string;
+  highlightId: string;
   container: HTMLElement;
-  text: string;
+  highlightedText: string;
+  reactionText: string;
+  reactionType: string;
+
 }
 
 interface SurveyQuestion {
@@ -132,29 +138,46 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   //Progress bar
   const containerRef = useRef(null);
 
-  const generateHighlightId = () =>
-    `highlight-${Math.random().toString(36).substr(2, 9)}`;
+  const generateHighlightId = () => uuidv4();
+
 
   const closeInteractionModal = () => {
     setShowInteractionModal(false);
   };
   const addEmojiToHighlight = (emoji: string) => {
+    console.log("in addemoji currenthighlightId: ", currentHighlightId);
+    console.log("in addemoji current Highlights state: ", highlights);
+
     if (currentHighlightId) {
       setHighlights((prevHighlights) =>
         prevHighlights.map((highlight) =>
-          highlight.id === currentHighlightId
+          highlight.highlightId === currentHighlightId
             ? {
-                ...highlight,
-                container: updateHighlightContainer(
-                  highlight.container,
-                  emoji,
-                  "emoji"
-                ),
-              }
+              ...highlight,
+              container: updateHighlightContainer(
+                highlight.container,
+                emoji,
+                "emoji"
+              ),
+              reactionType: "emoji",
+              reactionText: emoji
+
+            }
             : highlight
         )
       );
       setShowInteractionModal(false);
+      const updatedHighlight = highlights.find((highlight) => highlight.highlightId == currentHighlightId);
+      console.log("updated highlight: ", updatedHighlight);
+
+      if (updatedHighlight) {
+        updateHighlight({
+          ...updatedHighlight,
+          reactionText: emoji,
+          reactionType: "emoji",
+        });
+      }
+
     }
   };
 
@@ -162,19 +185,31 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     if (currentHighlightId) {
       setHighlights((prevHighlights) =>
         prevHighlights.map((highlight) =>
-          highlight.id === currentHighlightId
+          highlight.highlightId === currentHighlightId
             ? {
-                ...highlight,
-                container: updateHighlightContainer(
-                  highlight.container,
-                  comment,
-                  "comment"
-                ),
-              }
+              ...highlight,
+              container: updateHighlightContainer(
+                highlight.container,
+                comment,
+                "comment"
+              ),
+              reactionType: "comment",
+              reactionText: comment
+            }
             : highlight
         )
       );
       setShowInteractionModal(false);
+      const updatedHighlight = highlights.find((highlight) => highlight.highlightId == currentHighlightId);
+      console.log("updated highlight: ", updatedHighlight);
+
+      if (updatedHighlight) {
+        updateHighlight({
+          ...updatedHighlight,
+          reactionText: comment,
+          reactionType: "comment",
+        });
+      }
     }
   };
 
@@ -183,24 +218,39 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     content: string,
     type: "emoji" | "comment"
   ) => {
-    const existingEmoji = container.querySelector(".emoji");
-    const existingComment = container.querySelector(".comment");
-    if (existingComment) existingComment.remove();
-    if (existingEmoji) existingEmoji.remove();
+    console.log("in update highlight, container: ", container);
+
+    container.querySelectorAll(".emoji, .comment").forEach((element) => element.remove());
 
     const newElement = document.createElement("span");
     newElement.className = type;
     newElement.textContent = content;
     container.appendChild(newElement);
 
+    console.log("in updatehighlightcontainer currenthighlightId: ", currentHighlightId);
+    if (currentHighlightId) {
+      const oldContainer = document.getElementById(currentHighlightId);
+      container.id = currentHighlightId
+
+      if (oldContainer) {
+        oldContainer.replaceWith(container);
+      }
+
+    }
+
+
     return container;
   };
+
+
 
   const handleTextSelect = () => {
     if (!highlightEnabled) return;
     const opinionText = document.querySelector(".opinion-text");
     const selection = window.getSelection();
     const selectedText = selection?.toString();
+    const highlightId = generateHighlightId();
+
     if (selection && !opinionText?.contains(selection.anchorNode)) return;
     if (selectedText) {
       setShowInteractionModal(true);
@@ -228,6 +278,14 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         if (parent) {
           parent.replaceChild(document.createTextNode(selectedText), container);
         }
+        const highlight = highlights.find((highlight) => highlight.highlightId == highlightId);
+        if (highlight) {
+          deleteHighlight(highlight);
+        }
+        setHighlights((prev) =>
+          prev.filter((highlight) => highlight.highlightId !== highlightId)
+        );
+
       });
 
       const editButton = document.createElement("button");
@@ -246,6 +304,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       container.appendChild(highlightedText);
       container.appendChild(closeButton);
       container.appendChild(editButton);
+      container.id = highlightId;
       setHighlightContainer(container);
 
       // Remove the selected text and insert the container in its place
@@ -259,12 +318,252 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         selection?.addRange(range);
       }
 
-      const highlightId = generateHighlightId();
       setCurrentHighlightId(highlightId);
+      const newHighlight = {
+        highlightId: highlightId,
+        container,
+        highlightedText: selectedText,
+        reactionType: "",
+        reactionText: ""
+      };
+
       setHighlights((prev) => [
         ...prev,
-        { id: highlightId, container, text: selectedText },
+        newHighlight,
       ]);
+      createHighlight(newHighlight);
+
+
+
+    }
+
+  };
+
+
+  const applyHighlights = (fetchedHighlights: Highlight[]) => {
+    const opinionText = document.querySelector(".opinion-text") as HTMLElement;
+
+    // Extract existing highlight IDs
+    const existingHighlights = new Set<string>(
+      Array.from(opinionText.querySelectorAll('span[id]')).map(span => span.id)
+    );
+
+    const highlightsWithContainers: Highlight[] = []
+
+    fetchedHighlights.forEach((highlight) => {
+      // Skip already highlighted text
+      if (existingHighlights.has(highlight.highlightId)) return;
+
+      // Replace the highlighted text in the opinionElement with HTML containing the highlight span and buttons
+      const highlightHTML = `
+        <span id="${highlight.highlightId}" style="position: relative; display: inline-block; text-indent: 0px;">
+          <span class="highlightedText" style="font-size: 1.2em;">${highlight.highlightedText}</span>
+          <button class="highlight-close-button">✕</button>
+          <button class="highlight-edit-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+              <path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/>
+            </svg>
+          </button>
+          <span class="${highlight.reactionType}">${highlight.reactionText}</span>
+        </span>`;
+
+      // Replace highlighted text in the HTML
+      opinionText.innerHTML = opinionText.innerHTML.replace(
+        highlight.highlightedText,
+        highlightHTML
+      );
+
+      // Update highlight container reference
+      const highlightContainer = document.getElementById(highlight.highlightId);
+      if (highlightContainer) {
+        highlight.container = highlightContainer;
+        highlightsWithContainers.push(highlight);
+      }
+    });
+
+    
+
+    return highlightsWithContainers;
+
+  };
+
+
+
+  const fetchHighlights = async () => {
+    try {
+      console.log("fetching highlights: ")
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/highlights/userHighlights/${opinionData.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving opinion dislike count");
+      }
+      const response = await res.json();
+      const fetchedHighlights = await response.data.highlights;
+      return fetchedHighlights;
+
+    } catch (error) {
+      console.log("Error Fetching Opinion dislike count: ", error);
+    }
+  }
+
+
+  const loadHighlightOnclicks = () => {
+
+    const closeButtons = document.querySelectorAll(".highlight-close-button");
+    closeButtons.forEach((button) => {
+
+      
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const parentSpan = button.closest("span[id]");
+        if (parentSpan) {
+          const highlightId = parentSpan.id;
+          // Remove highlight from state and DOM
+          const highlight = highlights.find((highlight) => highlight.highlightId === highlightId);
+          if (highlight) {
+            const originalTextNode = document.createTextNode(highlight.highlightedText);
+            parentSpan.parentNode?.replaceChild(originalTextNode, parentSpan);
+            deleteHighlight(highlight);
+          }
+          setHighlights((prev) => prev.filter((highlight) => highlight.highlightId !== highlightId));
+        }
+      });
+    });
+
+    const editButtons = document.querySelectorAll(".highlight-edit-button");
+
+    editButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const parentSpan = button.closest("span[id]");
+        if (parentSpan) {
+          const highlightId = parentSpan.id;
+          // Open the interaction modal for editing
+          setCurrentHighlightId(highlightId);
+          const highlight = highlights.find((highlight) => highlight.highlightId == highlightId);
+          console.log("in edit button, slectedHIghlight find: ", highlight, " highlight text: ", highlight?.highlightedText);
+          if (highlight && highlight.highlightedText) {
+            console.log("highlighted text: ", highlight.highlightedText)
+            setHighlightedText(highlight.highlightedText);
+          }
+          console.log("highlightId: ", highlightId);
+          console.log("currenthighlightId state: ", currentHighlightId);
+          console.log("highlightedtext state: ", highlightedText);
+          setShowInteractionModal(true);
+        }
+      });
+    });
+
+  }
+
+  useEffect(() => {
+    const loadHighlights = async () => {
+      try {
+        const fetchedHighlights = await fetchHighlights();
+        console.log("fetched highlights: ", fetchedHighlights);
+        const updatedHighlights: Highlight[] = applyHighlights(fetchedHighlights);
+        console.log("updated highlights after calling applyhighlights: ", updatedHighlights);
+        if (updatedHighlights?.length > 0) {
+          setHighlights(updatedHighlights);
+        }
+      } catch (error) {
+        console.error("Error fetching highlights:", error);
+      }
+    };
+
+    loadHighlights();
+    loadHighlightOnclicks();
+
+
+  }, []);
+
+  useEffect(() => {
+    console.log("state variable highlights: ", highlights);
+    loadHighlightOnclicks();
+  }, [highlights]);
+
+
+  const createHighlight = async (highlight: Highlight) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/highlights`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            highlightId: highlight.highlightId,
+            userId: currentUser?.uid,
+            opinionId: opinionData.id,
+            highlightedText: highlight.highlightedText,
+            reactionText: highlight.reactionText,
+            reactionType: highlight.reactionType
+          })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error creating highlight");
+      }
+
+    } catch (error) {
+      console.log("Error creating highlight: ", error);
+    }
+  };
+
+  const updateHighlight = async (highlight: Highlight) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/highlights`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            highlightId: highlight.highlightId,
+            userId: currentUser?.uid,
+            opinionId: opinionData.id,
+            highlightedText: highlight.highlightedText,
+            reactionText: highlight.reactionText,
+            reactionType: highlight.reactionType
+          })
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error updating highlight");
+      }
+
+    } catch (error) {
+      console.log("Error updating highlight: ", error);
+    }
+  };
+
+  const deleteHighlight = async (highlight: Highlight) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/highlights/${highlight.highlightId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error deleting highlight");
+      }
+
+    } catch (error) {
+      console.log("Error deleting highlight: ", error);
     }
   };
 
@@ -276,6 +575,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       };
     }
   }, [highlightEnabled]);
+
 
   const fetchRebuttals = async () => {
     try {
@@ -347,7 +647,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   }, []);
 
   const handleLikeOpinion = async () => {
-    console.log("in handle like");
     try {
       if (!userHasLiked) {
         if (userHasDisliked) {
@@ -366,7 +665,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   };
 
   const handleDislikeOpinion = async () => {
-    console.log("in handle like");
     try {
       if (!userHasDisliked) {
         if (userHasLiked) {
@@ -441,7 +739,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         throw new Error("Error retrieving has liked");
       }
       const response = await res.json();
-      console.log("response hasuserliked: ", response);
       return response.data.userHasLiked;
     } catch (error) {
       console.log("Error retrieving hasliked: ", error);
@@ -504,7 +801,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         throw new Error("Error retrieving has liked");
       }
       const response = await res.json();
-      console.log("response hasuserDisliked: ", response);
       return response.data.userHasDisliked;
     } catch (error) {
       console.log("Error retrieving hasdisliked: ", error);
@@ -540,7 +836,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         throw new Error("Error retrieving rating");
       }
       const response = await res.json();
-      console.log("response hasuserliked: ", response.data.userHasRated);
       if (response.data.userHasRated) {
         setuserRating(response.data.rating.value);
         setuserRatingId(response.data.rating.ratingId);
@@ -571,7 +866,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         throw new Error("Error rating opinion");
       }
       const response = await res.json();
-      console.log("response hasuserliked: ", response.data.userHasRated);
       setuserRating(response.data.rating.value);
       setuserRatingId(response.data.rating.ratingId);
       setUserHasRated(response.data.userHasRated);
@@ -582,7 +876,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
 
   const updateRating = async () => {
     try {
-      console.log("in update rating ratingId: ", userRatingId);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/ratings`,
         {
@@ -659,21 +952,19 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     <div className="z-30  w-[75%] h-[750px] bg-white text-black p-6 shadow-lg relative rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <a
-          className={`cursor-pointer ${
-            selectedTab === "Opinion"
-              ? "border-b-[4px] border-[#606060] "
-              : "border-b-0"
-          }`}
+          className={`cursor-pointer ${selectedTab === "Opinion"
+            ? "border-b-[4px] border-[#606060] "
+            : "border-b-0"
+            }`}
           onClick={() => setSelectedTab("Opinion")}
         >
           Opinion
         </a>
         <a
-          className={`cursor-pointer ${
-            selectedTab === "Rebuttal"
-              ? "border-b-[4px] border-[#606060] "
-              : "border-b-0"
-          }`}
+          className={`cursor-pointer ${selectedTab === "Rebuttal"
+            ? "border-b-[4px] border-[#606060] "
+            : "border-b-0"
+            }`}
           onClick={() => setSelectedTab("Rebuttal")}
         >
           Rebuttal
@@ -744,16 +1035,14 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             >
               Reply
               <IoIosArrowDropdown
-                className={`${
-                  replyMenu ? "rotate-0" : "-rotate-180"
-                } transition ease-in-out duration-150`}
+                className={`${replyMenu ? "rotate-0" : "-rotate-180"
+                  } transition ease-in-out duration-150`}
               />
             </button>
             {replyMenu && (
               <section
-                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${
-                  replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg shadow-lg text-white `}
+                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                  }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg shadow-lg text-white `}
               >
                 <button
                   onClick={toggleStateIt}
@@ -794,17 +1083,15 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                   <div className="p-4 mx-auto mt-[2%] rounded-full w-[50%] flex justify-evenly items-center">
                     <button
                       onClick={() => handleLikeOpinion()}
-                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${
-                        userHasLiked ? "bg-green-500 scale-105" : "bg-white"
-                      }`}
+                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasLiked ? "bg-green-500 scale-105" : "bg-white"
+                        }`}
                     >
                       👍
                     </button>
                     <button
                       onClick={() => handleDislikeOpinion()}
-                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${
-                        userHasDisliked ? "bg-red-500 scale-105" : "bg-white"
-                      }`}
+                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasDisliked ? "bg-red-500 scale-105" : "bg-white"
+                        }`}
                     >
                       👎
                     </button>

@@ -145,6 +145,20 @@ CREATE TABLE survey_answers (
     FOREIGN KEY (question_id) REFERENCES survey_questions(question_id),
 );
 
+CREATE TABLE highlights (
+  highlight_id TEXT PRIMARY KEY,
+  user_id VARCHAR(255) NOT NULL,
+  opinion_id INT NOT NULL,
+  highlighted_text TEXT,
+  reaction_text TEXT,
+  reaction_type TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(user_id),
+  FOREIGN KEY (opinion_id) REFERENCES opinions(opinion_id)
+
+);
+
 -- Table Constraints
 
 -- Opinions table constraints
@@ -220,5 +234,10 @@ EXECUTE FUNCTION update_timestamp();
 
 CREATE TRIGGER update_comments_timestamp
 BEFORE UPDATE ON comments
+FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+CREATE TRIGGER update_highlights_timestamp
+BEFORE UPDATE ON highlights
 FOR EACH ROW
 EXECUTE FUNCTION update_timestamp();

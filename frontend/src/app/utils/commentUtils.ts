@@ -7,15 +7,9 @@ export function timeAgo(dateString: string): string {
     const now = new Date();
     const date = new Date(dateString);  
     const adjustedDate = new Date(date.getTime() - 4 * 60 * 60 * 1000); // 4 hours in milliseconds
-
-    console.log("now date: ", now);
-    console.log("comment date ", adjustedDate);
     const seconds = Math.floor((now.getTime() - adjustedDate.getTime()) / 1000);  // Time difference in seconds
 
     // Log values for debugging
-    console.log("Current date (ms):", now.getTime());
-    console.log("Comment date (ms):", adjustedDate.getTime());
-    console.log("Time difference in seconds:", seconds);
 
     if (seconds < 0) {
         return 'Just now'; // Handle future dates if necessary

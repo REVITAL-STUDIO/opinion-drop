@@ -6,6 +6,7 @@ import { TopicController } from './controllers/TopicController';
 import { RatingController } from './controllers/RatingController';
 import multer from 'multer';
 import { SurveyController } from './controllers/SurveyController';
+import { HighlightController } from './controllers/HighlightController';
 
 const upload = multer();
 const router = Router();
@@ -17,6 +18,7 @@ const commentController = new CommentController();
 const topicController = new TopicController();
 const ratingController = new RatingController();
 const surveyController = new SurveyController();
+const highlightController = new HighlightController();
 
 
 
@@ -94,6 +96,13 @@ router.post('/ratings/userRated/:opinionId', ratingController.getUserRating.bind
 router.get('/surveys/topic/:topicId', surveyController.getSurveyByTopic.bind(surveyController));
 router.post('/surveys/submit', surveyController.submitResponse.bind(surveyController));
 router.post('/surveys/userSubmitted/:surveyId', surveyController.hasUserSubmittedSurvey.bind(surveyController));
+
+// Highlights Routes
+router.post('/highlights', highlightController.createHighlight.bind(highlightController));
+router.post('/highlights/userHighlights/:opinionId', highlightController.getUserHighlights.bind(highlightController));
+router.put('/highlights', highlightController.updateHighlight.bind(highlightController));
+router.delete('/highlights/:highlightId', highlightController.deleteHighlight.bind(highlightController));
+
 
 
 
