@@ -22,9 +22,6 @@ const Nav = () => {
           height={65}
           className="mt-6 ml-4"
         />
-        <div className="px-4 py-2 h-fit  rounded-full border-2 font-semibold text-sm ml-4">
-          Beta
-        </div>
       </Link>
       <SignInButton />
     </section>

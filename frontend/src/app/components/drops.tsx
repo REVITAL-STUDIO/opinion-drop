@@ -10,8 +10,6 @@ import {
   faMicrophoneLines,
   faMicrophoneLinesSlash,
   faPenFancy,
-  faPlus,
-  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import DetailsModal from "./DetailsModal";
 import OpinionModal from "./OpinionModal";
@@ -283,7 +281,7 @@ const Drop = ({ topic }: dropsProps) => {
   }, []);
 
   return (
-    <section className=" flex  justify-center items-center my-6">
+    <section className=" flex  justify-center items-center">
       <div className="container ">
         <div
           className="carousel"

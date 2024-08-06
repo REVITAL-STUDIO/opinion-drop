@@ -280,7 +280,7 @@ const CesspitComment: React.FC<CommentProps> = ({ comment, topicId }) => {
               )}
             </div>
             <div className="flex justify-between items-center  ">
-              <div className="w-3/4   flex gap-x-4">
+              <div className="w-full   flex gap-x-4">
                 <button
                   onClick={() => handleLikeComment(comment, userHasLiked)}
                   className={` flex gap-x-2 rounded-[10px] w-[3rem] text-sm h-[2.3rem] justify-center items-center`}

@@ -78,7 +78,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
     setOpenSettings(!openSettings);
   };
 
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
   const toggleMenu = () => {
@@ -160,29 +160,22 @@ const UserPortal: React.FC<UserPortalProps> = ({
   };
 
   const [close, setClose] = useState(false);
+
   const detailsModalRef = useRef<HTMLDivElement>(null);
   const opinionModalRef = useRef<HTMLDivElement>(null);
   const moreButtonRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (
-      detailsModalRef.current &&
-      !detailsModalRef.current.contains(event.target as Node) &&
-      opinionModalRef.current &&
-      !opinionModalRef.current.contains(event.target as Node) &&
-      moreButtonRef.current &&
-      !moreButtonRef.current.contains(event.target as Node)
-    ) {
+    console.log("Mouse event:", event);
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      console.log("Clicked outside, closing modal");
+      setMenuOpen(false);
       setClose(true);
+    } else {
+      console.log("Clicked inside, not closing modal");
     }
   };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -269,58 +262,63 @@ const UserPortal: React.FC<UserPortalProps> = ({
                   }`}
                 ></span>
               </button>
-              <AnimatePresence>
+              <>
                 {menuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ ease: "easeInOut", duration: 0.5 }}
-                    className="md:hidden absolute top-0 left-0 bottom-0 flex justify-center items-center bg-black/90 w-full h-screen bg-mist z-50"
-                  >
+                  <AnimatePresence>
                     <motion.div
-                      initial={{ x: -100, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      exit={{ opacity: 0, x: -100 }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
                       transition={{ ease: "easeInOut", duration: 0.5 }}
-                      className="lg:hidden absolute top-0 left-0 bottom-0 w-[75%] min-h-screen bg-gradient-to-b to-red-500 via-purple-300 from-blue-300 p-4 gap-y-8"
+                      className="md:hidden absolute top-0 left-0 bottom-0 flex justify-center items-center bg-black/90 w-full h-screen bg-mist z-50"
                     >
-                      {/* Explore */}
-                      <section className="p-4  rounded-md  justify-center items-center mt-[25%] ">
-                        <div className="flex flex-col justify-center w-full">
-                          <ul className="flex flex-col gap-y-4 p-4 text-2xl font-medium text-black font-cheapSignage ">
-                            <h2 className="font-dmSans my-4">Explore</h2>
-                            <div className="p-4 mt-[4%] rounded-full w-fit flex items-center gap-x-4">
-                              <div className="w-[4rem] h-[4rem] rounded-full shadow-md bg-white"></div>
-                            </div>
-                            <button
-                              onClick={closeMenuFunction}
-                              className="p-4 w-fit text-base text-left   hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition  flex items-center gap-x-4"
-                            >
-                              <FontAwesomeIcon icon={faSquareH} /> Home
-                            </button>
+                      <motion.div
+                        ref={modalRef}
+                        initial={{ x: -100, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ opacity: 0, x: -100 }}
+                        transition={{ ease: "easeInOut", duration: 0.5 }}
+                        className="lg:hidden absolute top-0 left-0 bottom-0 w-[75%] min-h-screen bg-gradient-to-b to-red-500 via-purple-300 from-blue-300 p-4 gap-y-8"
+                      >
+                        {/* Explore */}
+                        <section className="p-4  rounded-md  justify-center items-center mt-[25%] ">
+                          <div className="flex flex-col justify-center w-full">
+                            <ul className="flex flex-col gap-y-4 p-4 text-2xl font-medium text-black font-cheapSignage ">
+                              <h2 className="font-dmSans my-4">Explore</h2>
+                              <div className="p-4 mt-[4%] rounded-full w-fit flex items-center gap-x-4">
+                                <div className="w-[4rem] h-[4rem] rounded-full shadow-md bg-white"></div>
+                              </div>
+                              <button
+                                onClick={closeMenuFunction}
+                                className="p-4 w-fit text-base text-left   hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition  flex items-center gap-x-4"
+                              >
+                                <FontAwesomeIcon icon={faSquareH} /> Home
+                              </button>
 
-                            <button
-                              onClick={toggleSettings}
-                              className="p-4 w-fit text-base text-left  hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition flex items-center gap-x-4"
-                            >
-                              <FontAwesomeIcon icon={faGears} className="" />
-                              Settings
-                            </button>
-                            <button
-                              onClick={handleLogout}
-                              className="p-4 w-fit text-base text-left  text-black hover:text-red-600 duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4"
-                            >
-                              <FontAwesomeIcon icon={faArrowRightFromBracket} />{" "}
-                              Log Out
-                            </button>
-                          </ul>
-                        </div>
-                      </section>
+                              <button
+                                onClick={toggleSettings}
+                                className="p-4 w-fit text-base text-left  hover:border-l-4 hover:border-purple-600 hover:text-white  duration-300 ease-in-out transition flex items-center gap-x-4"
+                              >
+                                <FontAwesomeIcon icon={faGears} className="" />
+                                Settings
+                              </button>
+                              <button
+                                onClick={handleLogout}
+                                className="p-4 w-fit text-base text-left  text-black hover:text-red-600 duration-150 ease-in-out transition rounded-3xl flex items-center gap-x-4"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faArrowRightFromBracket}
+                                />{" "}
+                                Log Out
+                              </button>
+                            </ul>
+                          </div>
+                        </section>
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
+                  </AnimatePresence>
                 )}
-              </AnimatePresence>
+              </>
             </div>
             <div className="lg::w-5/6 w-full h-full text-white px-2 mt-[2%]">
               {/* UserName */}
@@ -537,6 +535,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
             </div>
             {openSettings && <Settings closeSettings={closeSettingsModal} />}
           </motion.section>
+
           {selectedOpinion && (
             <>
               {!close && (

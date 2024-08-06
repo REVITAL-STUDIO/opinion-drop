@@ -71,7 +71,7 @@ const CesspitChildComment = ({
   return (
     <div
       key={comment.id}
-      className=" p-4  my-4 rounded-xl   relative text-white border-l border-b left-16 border-[#fff]/50 overflow-visible w-[90%]"
+      className=" p-4  my-4 rounded-xl   relative text-white border-l border-b xl:left-16 left-8 border-[#fff]/50 overflow-visible w-[90%]"
     >
       <div className="  flex  gap-4">
         <div className="w-[3rem] h-[3rem] rounded-full bg-gray-300 flex items-center justify-center">

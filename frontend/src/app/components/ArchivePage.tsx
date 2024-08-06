@@ -57,7 +57,7 @@ const ArchivePage = ({ topic }: dropsProps) => {
   const [activeButton, setActiveButton] = useState<"like" | "dislike" | null>(
     null
   );
-  const [close, setClose] = useState(false);
+  const [close, setClose] = useState(true);
   const [loading, setLoading] = useState(true); // Step 1: Define loading state
 
   const fetchOpinions = async () => {
@@ -134,17 +134,8 @@ const ArchivePage = ({ topic }: dropsProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (
-      modalRef.current &&
-      !modalRef.current.contains(event.target as Node) &&
-      detailsModalRef.current &&
-      !detailsModalRef.current.contains(event.target as Node) &&
-      opinionModalRef.current &&
-      !opinionModalRef.current.contains(event.target as Node) &&
-      moreButtonRef.current &&
-      !moreButtonRef.current.contains(event.target as Node)
-    ) {
-      setClose(true);
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      setClose(false);
     }
   };
 
@@ -162,14 +153,14 @@ const ArchivePage = ({ topic }: dropsProps) => {
 
   return (
     <>
-      {!close && (
+      {close && (
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed bg-black/95 top-0 left-0 w-full h-screen flex items-center z-50"
+          className="fixed bg-black/95 top-0 left-0 w-full min-h-screen flex items-center z-50"
         >
-          <div className="carousel-container">
+          <div className="carousel-container ">
             <div className="my-4 text-5xl text-white">Catalogue</div>
             {loading ? ( // Step 4: Show loading state
               <div
@@ -228,15 +219,15 @@ const ArchivePage = ({ topic }: dropsProps) => {
                 {opinions.map((info, index) => (
                   <SwiperSlide
                     key={index}
-                    className="swiper-slide cursor-pointer "
+                    className="swiper-slide cursor-pointer"
                   >
                     {/* Ensure SwiperSlide has a defined size */}
-                    <div className="w-full h-full relative overflow-hidden">
+                    <div
+                      ref={modalRef}
+                      className="w-full  h-full relative overflow-hidden"
+                    >
                       {/* This div acts as a container for absolutely positioned elements */}
-                      <div
-                        ref={modalRef}
-                        className="absolute  inset-0 w-full h-full"
-                      >
+                      <div className="absolute  inset-0 w-full h-full">
                         {/* The actual image, styled to cover its parent container */}
                         <Image
                           src={info.backgroundimage} // Make sure info.images is correctly set

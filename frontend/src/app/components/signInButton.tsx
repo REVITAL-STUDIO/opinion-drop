@@ -14,13 +14,18 @@ const SignInButton: React.FC = () => {
   const [openNotification, setOpenNotifications] = useState(false);
   const [firstTimeOpen, setFirstTimeOpen] = useState(true);
   const menuRef = useRef<HTMLButtonElement>(null);
+  const [close, setClose] = useState(true);
+
+  const handleOpenModal = () => {
+    setClose(false); // Reset the close state
+  };
 
   const toggleOpenSignUpForm = () => {
-    setSignUp((prev) => !prev);
+    setSignUp(!openSignUp);
   };
 
   const toggleOpenUserPortal = () => {
-    setOpenUserPortal((prev) => !prev);
+    setOpenUserPortal(!openUserPortal);
   };
 
   useEffect(() => {

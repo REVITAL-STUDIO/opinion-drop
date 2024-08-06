@@ -18,9 +18,9 @@ interface OpinionShowcaseProps {
 export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
   return (
     <div className="w-full">
-      <div className="min-h-screen relative bg-[url('/Images/AdobeStock_756592648.jpeg')] bg-cover bg-center gap-y-2">
-        <div className="absolute inset-0 bg-black opacity-50 z-0"></div>
-        <div className="absolute w-full z-10">
+      <div className="relative min-h-screen bg-[url('/Images/AdobeStock_756592648.jpeg')] bg-cover bg-center">
+        <div className="absolute inset-0 bg-black opacity-75 blur-md z-10"></div>
+        <div className="relative w-full z-20">
           <Nav />
           <Topic />
           <Archive topic={topic} />

@@ -11,9 +11,9 @@ const Topic = () => {
       <div className="w-full  rounded-xl text-center ">
         <FontAwesomeIcon
           icon={faQuestion}
-          className="text-sm text-white w-[1rem] h-[1rem] p-4 rounded-full border"
+          className="text-sm text-white w-[1rem] h-[1rem] p-4 rounded-full shadow-md bg-gradient-to-tr from-gray-300 via-slate-500 to-gray-200"
         />
-        <p className="  xl:w-1/2 mx-auto md:text-[16px] text-[12px] text-white font-bold">
+        <p className="  xl:w-1/2 mx-auto lg:text-xl text-base text-white font-bold">
           How can we conduct an efficient and fair open primary at the
           Democratic Convention in Chicago on August 19th?
         </p>
