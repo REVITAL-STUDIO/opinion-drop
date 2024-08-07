@@ -10,10 +10,10 @@ export class UserDAO {
 
 
 
-    async createUser(firebaseUUID: string, email: string): Promise<User | null> {
+    async createUser(firebaseUUID: string, email: string, identiconUrl: string): Promise<User | null> {
         const query = `
-            INSERT INTO users (user_id, username, email)
-            VALUES ($1, $2, $3)
+            INSERT INTO users (user_id, username, email, profile_picture)
+            VALUES ($1, $2, $3, $4)
             RETURNING *
         `;
         const userName = await this.generateUniqueUsername();
@@ -21,7 +21,7 @@ export class UserDAO {
 
         try {
             client = await this.pool.connect();
-            const result: QueryResult = await client.query(query, [firebaseUUID, userName, email]);
+            const result: QueryResult = await client.query(query, [firebaseUUID, userName, email, identiconUrl]);
 
 
             if (result.rows.length > 0) {
