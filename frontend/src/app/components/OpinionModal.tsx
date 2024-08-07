@@ -21,9 +21,8 @@ import OpenRebuttal from "./RebuttalModal";
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import StateIt from "./stateIt";
 import { useAuth } from "../hooks/AuthContext";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { Content } from "next/font/google";
-
 
 function valuetext(value: number) {
   return `${value}`;
@@ -59,7 +58,6 @@ interface Highlight {
   highlightedText: string;
   reactionText: string;
   reactionType: string;
-
 }
 
 interface SurveyQuestion {
@@ -140,7 +138,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
 
   const generateHighlightId = () => uuidv4();
 
-
   const closeInteractionModal = () => {
     setShowInteractionModal(false);
   };
@@ -153,21 +150,22 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.highlightId === currentHighlightId
             ? {
-              ...highlight,
-              container: updateHighlightContainer(
-                highlight.container,
-                emoji,
-                "emoji"
-              ),
-              reactionType: "emoji",
-              reactionText: emoji
-
-            }
+                ...highlight,
+                container: updateHighlightContainer(
+                  highlight.container,
+                  emoji,
+                  "emoji"
+                ),
+                reactionType: "emoji",
+                reactionText: emoji,
+              }
             : highlight
         )
       );
       setShowInteractionModal(false);
-      const updatedHighlight = highlights.find((highlight) => highlight.highlightId == currentHighlightId);
+      const updatedHighlight = highlights.find(
+        (highlight) => highlight.highlightId == currentHighlightId
+      );
       console.log("updated highlight: ", updatedHighlight);
 
       if (updatedHighlight) {
@@ -177,7 +175,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           reactionType: "emoji",
         });
       }
-
     }
   };
 
@@ -187,20 +184,22 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.highlightId === currentHighlightId
             ? {
-              ...highlight,
-              container: updateHighlightContainer(
-                highlight.container,
-                comment,
-                "comment"
-              ),
-              reactionType: "comment",
-              reactionText: comment
-            }
+                ...highlight,
+                container: updateHighlightContainer(
+                  highlight.container,
+                  comment,
+                  "comment"
+                ),
+                reactionType: "comment",
+                reactionText: comment,
+              }
             : highlight
         )
       );
       setShowInteractionModal(false);
-      const updatedHighlight = highlights.find((highlight) => highlight.highlightId == currentHighlightId);
+      const updatedHighlight = highlights.find(
+        (highlight) => highlight.highlightId == currentHighlightId
+      );
       console.log("updated highlight: ", updatedHighlight);
 
       if (updatedHighlight) {
@@ -220,29 +219,30 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   ) => {
     console.log("in update highlight, container: ", container);
 
-    container.querySelectorAll(".emoji, .comment").forEach((element) => element.remove());
+    container
+      .querySelectorAll(".emoji, .comment")
+      .forEach((element) => element.remove());
 
     const newElement = document.createElement("span");
     newElement.className = type;
     newElement.textContent = content;
     container.appendChild(newElement);
 
-    console.log("in updatehighlightcontainer currenthighlightId: ", currentHighlightId);
+    console.log(
+      "in updatehighlightcontainer currenthighlightId: ",
+      currentHighlightId
+    );
     if (currentHighlightId) {
       const oldContainer = document.getElementById(currentHighlightId);
-      container.id = currentHighlightId
+      container.id = currentHighlightId;
 
       if (oldContainer) {
         oldContainer.replaceWith(container);
       }
-
     }
-
 
     return container;
   };
-
-
 
   const handleTextSelect = () => {
     if (!highlightEnabled) return;
@@ -278,14 +278,15 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         if (parent) {
           parent.replaceChild(document.createTextNode(selectedText), container);
         }
-        const highlight = highlights.find((highlight) => highlight.highlightId == highlightId);
+        const highlight = highlights.find(
+          (highlight) => highlight.highlightId == highlightId
+        );
         if (highlight) {
           deleteHighlight(highlight);
         }
         setHighlights((prev) =>
           prev.filter((highlight) => highlight.highlightId !== highlightId)
         );
-
       });
 
       const editButton = document.createElement("button");
@@ -324,31 +325,25 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         container,
         highlightedText: selectedText,
         reactionType: "",
-        reactionText: ""
+        reactionText: "",
       };
 
-      setHighlights((prev) => [
-        ...prev,
-        newHighlight,
-      ]);
+      setHighlights((prev) => [...prev, newHighlight]);
       createHighlight(newHighlight);
-
-
-
     }
-
   };
-
 
   const applyHighlights = (fetchedHighlights: Highlight[]) => {
     const opinionText = document.querySelector(".opinion-text") as HTMLElement;
 
     // Extract existing highlight IDs
     const existingHighlights = new Set<string>(
-      Array.from(opinionText.querySelectorAll('span[id]')).map(span => span.id)
+      Array.from(opinionText.querySelectorAll("span[id]")).map(
+        (span) => span.id
+      )
     );
 
-    const highlightsWithContainers: Highlight[] = []
+    const highlightsWithContainers: Highlight[] = [];
 
     fetchedHighlights.forEach((highlight) => {
       // Skip already highlighted text
@@ -381,17 +376,12 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       }
     });
 
-    
-
     return highlightsWithContainers;
-
   };
-
-
 
   const fetchHighlights = async () => {
     try {
-      console.log("fetching highlights: ")
+      console.log("fetching highlights: ");
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/highlights/userHighlights/${opinionData.id}`,
         {
@@ -399,7 +389,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId: currentUser?.uid })
+          body: JSON.stringify({ userId: currentUser?.uid }),
         }
       );
       if (!res.ok) {
@@ -408,32 +398,33 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       const response = await res.json();
       const fetchedHighlights = await response.data.highlights;
       return fetchedHighlights;
-
     } catch (error) {
       console.log("Error Fetching Opinion dislike count: ", error);
     }
-  }
-
+  };
 
   const loadHighlightOnclicks = () => {
-
     const closeButtons = document.querySelectorAll(".highlight-close-button");
     closeButtons.forEach((button) => {
-
-      
       button.addEventListener("click", (event) => {
         event.stopPropagation();
         const parentSpan = button.closest("span[id]");
         if (parentSpan) {
           const highlightId = parentSpan.id;
           // Remove highlight from state and DOM
-          const highlight = highlights.find((highlight) => highlight.highlightId === highlightId);
+          const highlight = highlights.find(
+            (highlight) => highlight.highlightId === highlightId
+          );
           if (highlight) {
-            const originalTextNode = document.createTextNode(highlight.highlightedText);
+            const originalTextNode = document.createTextNode(
+              highlight.highlightedText
+            );
             parentSpan.parentNode?.replaceChild(originalTextNode, parentSpan);
             deleteHighlight(highlight);
           }
-          setHighlights((prev) => prev.filter((highlight) => highlight.highlightId !== highlightId));
+          setHighlights((prev) =>
+            prev.filter((highlight) => highlight.highlightId !== highlightId)
+          );
         }
       });
     });
@@ -448,10 +439,17 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           const highlightId = parentSpan.id;
           // Open the interaction modal for editing
           setCurrentHighlightId(highlightId);
-          const highlight = highlights.find((highlight) => highlight.highlightId == highlightId);
-          console.log("in edit button, slectedHIghlight find: ", highlight, " highlight text: ", highlight?.highlightedText);
+          const highlight = highlights.find(
+            (highlight) => highlight.highlightId == highlightId
+          );
+          console.log(
+            "in edit button, slectedHIghlight find: ",
+            highlight,
+            " highlight text: ",
+            highlight?.highlightedText
+          );
           if (highlight && highlight.highlightedText) {
-            console.log("highlighted text: ", highlight.highlightedText)
+            console.log("highlighted text: ", highlight.highlightedText);
             setHighlightedText(highlight.highlightedText);
           }
           console.log("highlightId: ", highlightId);
@@ -461,16 +459,19 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         }
       });
     });
-
-  }
+  };
 
   useEffect(() => {
     const loadHighlights = async () => {
       try {
         const fetchedHighlights = await fetchHighlights();
         console.log("fetched highlights: ", fetchedHighlights);
-        const updatedHighlights: Highlight[] = applyHighlights(fetchedHighlights);
-        console.log("updated highlights after calling applyhighlights: ", updatedHighlights);
+        const updatedHighlights: Highlight[] =
+          applyHighlights(fetchedHighlights);
+        console.log(
+          "updated highlights after calling applyhighlights: ",
+          updatedHighlights
+        );
         if (updatedHighlights?.length > 0) {
           setHighlights(updatedHighlights);
         }
@@ -481,15 +482,12 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
 
     loadHighlights();
     loadHighlightOnclicks();
-
-
   }, []);
 
   useEffect(() => {
     console.log("state variable highlights: ", highlights);
     loadHighlightOnclicks();
   }, [highlights]);
-
 
   const createHighlight = async (highlight: Highlight) => {
     try {
@@ -506,14 +504,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             opinionId: opinionData.id,
             highlightedText: highlight.highlightedText,
             reactionText: highlight.reactionText,
-            reactionType: highlight.reactionType
-          })
+            reactionType: highlight.reactionType,
+          }),
         }
       );
       if (!res.ok) {
         throw new Error("Error creating highlight");
       }
-
     } catch (error) {
       console.log("Error creating highlight: ", error);
     }
@@ -534,14 +531,13 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             opinionId: opinionData.id,
             highlightedText: highlight.highlightedText,
             reactionText: highlight.reactionText,
-            reactionType: highlight.reactionType
-          })
+            reactionType: highlight.reactionType,
+          }),
         }
       );
       if (!res.ok) {
         throw new Error("Error updating highlight");
       }
-
     } catch (error) {
       console.log("Error updating highlight: ", error);
     }
@@ -555,13 +551,12 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-          }
+          },
         }
       );
       if (!res.ok) {
         throw new Error("Error deleting highlight");
       }
-
     } catch (error) {
       console.log("Error deleting highlight: ", error);
     }
@@ -575,7 +570,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       };
     }
   }, [highlightEnabled]);
-
 
   const fetchRebuttals = async () => {
     try {
@@ -952,19 +946,21 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     <div className="z-30  w-[75%] h-[750px] bg-white text-black p-6 shadow-lg relative rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <a
-          className={`cursor-pointer ${selectedTab === "Opinion"
-            ? "border-b-[4px] border-[#606060] "
-            : "border-b-0"
-            }`}
+          className={`cursor-pointer ${
+            selectedTab === "Opinion"
+              ? "border-b-[4px] border-[#606060] "
+              : "border-b-0"
+          }`}
           onClick={() => setSelectedTab("Opinion")}
         >
           Opinion
         </a>
         <a
-          className={`cursor-pointer ${selectedTab === "Rebuttal"
-            ? "border-b-[4px] border-[#606060] "
-            : "border-b-0"
-            }`}
+          className={`cursor-pointer ${
+            selectedTab === "Rebuttal"
+              ? "border-b-[4px] border-[#606060] "
+              : "border-b-0"
+          }`}
           onClick={() => setSelectedTab("Rebuttal")}
         >
           Rebuttal
@@ -1035,30 +1031,34 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             >
               Reply
               <IoIosArrowDropdown
-                className={`${replyMenu ? "rotate-0" : "-rotate-180"
-                  } transition ease-in-out duration-150`}
+                className={`${
+                  replyMenu ? "rotate-0" : "-rotate-180"
+                } transition ease-in-out duration-150`}
               />
             </button>
             {replyMenu && (
               <section
-                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                  }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg shadow-lg text-white `}
+                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${
+                  replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg p-4 shadow-lg text-white `}
               >
                 <button
                   onClick={toggleStateIt}
-                  className="w-full p-4 text-left hover:bg-white text-black ease-in-out   duration-200 transition rounded-tl-lg hover:scale-110 rounded-tr-lg border-b  "
+                  className="w-full  text-left hover:bg-white text-black ease-in-out   duration-200 transition rounded-tl-lg hover:scale-110 rounded-tr-lg border-b  "
                 >
-                  <span className="font-semibold">State It</span>
-                  <p className="  text-xs">
+                  <span className="font-semibold text-[12px]">State It</span>
+                  <p className="  text-[11px]">
                     Support this Claim.. Better yet, add on
                   </p>
                 </button>
                 <button
                   onClick={toggleDebateIt}
-                  className="w-full p-4 text-left text-black ease-in-out rounded-bl-lg rounded-br-lg hover:scale-110 duration-200 transition "
+                  className="w-full  text-left text-black ease-in-out rounded-bl-lg rounded-br-lg hover:scale-110 duration-200 transition "
                 >
-                  <span className="font-semibold">Debate It</span>
-                  <p className=" text-xs">Give them a fierce second opinion</p>
+                  <span className="font-semibold text-[12px]">Debate It</span>
+                  <p className="  text-[11px]">
+                    Give them a fierce second opinion
+                  </p>
                 </button>
               </section>
             )}
@@ -1083,15 +1083,17 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                   <div className="p-4 mx-auto mt-[2%] rounded-full w-[50%] flex justify-evenly items-center">
                     <button
                       onClick={() => handleLikeOpinion()}
-                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasLiked ? "bg-green-500 scale-105" : "bg-white"
-                        }`}
+                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${
+                        userHasLiked ? "bg-green-500 scale-105" : "bg-white"
+                      }`}
                     >
                       👍
                     </button>
                     <button
                       onClick={() => handleDislikeOpinion()}
-                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasDisliked ? "bg-red-500 scale-105" : "bg-white"
-                        }`}
+                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${
+                        userHasDisliked ? "bg-red-500 scale-105" : "bg-white"
+                      }`}
                     >
                       👎
                     </button>

@@ -291,7 +291,7 @@ const Drop = ({ topic }: dropsProps) => {
         >
           {currentUser ? (
             opinions.length === 0 ? (
-              <div className="item relative shadow-lg bg-gradient-to-br from-white to-blue-300 shadow-white/100">
+              <div className="item relative shadow-lg bg-gradient-to-br to-white from-gray-600 shadow-white/100">
                 <button className="border w-[6rem] h-[6rem] shadow-md rounded-full flex justify-center items-center text-black">
                   <FontAwesomeIcon
                     icon={faPenFancy}
@@ -371,7 +371,7 @@ const Drop = ({ topic }: dropsProps) => {
               )
             )
           ) : (
-            <div className="item relative shadow-lg bg-gradient-to-br from-white to-red-300 shadow-white/100">
+            <div className="item relative shadow-lg bg-gradient-to-br from-white to-gray-600 shadow-white/100">
               <button className="border w-[6rem] h-[6rem] shadow-md rounded-full flex justify-center items-center text-black">
                 <FontAwesomeIcon
                   icon={faPenFancy}

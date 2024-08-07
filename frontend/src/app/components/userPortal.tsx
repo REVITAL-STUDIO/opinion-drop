@@ -351,7 +351,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
                   <div className="border-t mt-4">
                     {/* User Summary */}
                     <div className="  w-full rounded-3xl  p-4">
-                      <div className=" max-h-[700px] overflow-y-auto overflow-scroll flex flex-col gap-[3rem] p-4 ">
+                      <div className=" max-h-[650px] overflow-y-auto overflow-scroll flex flex-col gap-[3rem] p-4 ">
                         <div className="bg-white p-4 rounded-2xl shadow-md">
                           <h1 className="text-4xl font-light p-4 rounded-full text-black  w-fit">
                             Opinions
@@ -573,7 +573,6 @@ const UserPortal: React.FC<UserPortalProps> = ({
           {selectedRebuttal && (
             <div className="fixed inset-0 flex items-center justify-center  bg-black bg-opacity-50 ">
               <RebuttalModal rebuttal={selectedRebuttal} />
-
               <button
                 onClick={closeRebuttal}
                 className="w-10 h-10 bg-white shadow-lg flex justify-center items-center rounded-full absolute top-4 left-4 p-4"

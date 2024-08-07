@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { useAuth } from "../hooks/AuthContext";
 import ProfilePicUpload from "./ProfilePicUpload";
 
-
 interface FileExtended extends File {
   url?: string;
 }
@@ -18,7 +17,6 @@ interface User {
   politicalAlignment: string;
   bio: string;
   [key: string]: any;
-
 }
 
 interface SettingsProps {
@@ -26,11 +24,24 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
-
   const [close, setClose] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-  const [userData, setUserData] = useState<User>({ userId: "", username: "", email: "", profilePicture: "", politicalAlignment: "", bio: "" });
-  const [userDataEdit, setUserDataEdit] = useState<User>({ userId: "", username: "", email: "", profilePicture: "", politicalAlignment: "", bio: "" });
+  const [userData, setUserData] = useState<User>({
+    userId: "",
+    username: "",
+    email: "",
+    profilePicture: "",
+    politicalAlignment: "",
+    bio: "",
+  });
+  const [userDataEdit, setUserDataEdit] = useState<User>({
+    userId: "",
+    username: "",
+    email: "",
+    profilePicture: "",
+    politicalAlignment: "",
+    bio: "",
+  });
 
   const { currentUser, updateUserEmail, updateUserPassword } = useAuth();
   const [newPassword, setNewPassword] = useState("");
@@ -54,10 +65,10 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
 
   const handleFilesSelected = (file: FileExtended | null) => {
     if (file) {
-      setSelectedFile(file)
+      setSelectedFile(file);
       console.log("uploaded file: ", file);
-    };
-  }
+    }
+  };
 
   const handleCloseSettings = () => {
     closeSettings();
@@ -95,8 +106,6 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
       console.log("resp user data: ", response.data.userData);
       setUserData(response.data.userData);
       setUserDataEdit(response.data.userData);
-
-
     } catch (error) {
       console.log("Error Fetching user info: ", error);
     }
@@ -106,14 +115,13 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
     fetchUserInfo();
   }, []);
 
-
   const saveUserData: React.MouseEventHandler<HTMLButtonElement> = async (
     e
   ) => {
     e.preventDefault();
     setNoChangeError(false);
     setPasswordError(false);
-    if (newPassword == "" && userDataEdit == userData || !selectedFile) {
+    if ((newPassword == "" && userDataEdit == userData) || !selectedFile) {
       setNoChangeError(true);
       throw new Error("No values changed");
     }
@@ -123,16 +131,15 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
     }
 
     const formData = new FormData();
-    Object.keys(userDataEdit).forEach(key => {
+    Object.keys(userDataEdit).forEach((key) => {
       formData.append(key, userDataEdit[key]);
     });
 
     if (selectedFile) {
-      formData.append('profilePicture', selectedFile);
+      formData.append("profilePicture", selectedFile);
     }
 
     try {
-
       if (userDataEdit.email !== userData.email) {
         await updateUserEmail(userDataEdit.email);
       }
@@ -141,7 +148,8 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
         await updateUserPassword(newPassword);
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users/${currentUser?.uid}`,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users/${currentUser?.uid}`,
         {
           method: "PUT",
           headers: {
@@ -171,10 +179,10 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="absolute h-screen w-full bg-white/90  flex justify-center items-center"
+          className="absolute min-h-screen w-full bg-gray-400/90  flex justify-center items-center"
         >
-          <div className="p-4 bg-[#000]/50 xl:w-[30%] md:w-[50%] w-[75%] rounded relative shadow-sm">
-            <h1 className=" text-3xl font-medium text-white  my-4">
+          <div className="p-4 bg-[#fff]  w-[35%] rounded-xl relative shadow-md">
+            <h1 className=" text-xl font-normal text-black  my-4">
               Account Settings
             </h1>
             {noChangeError && (
@@ -185,17 +193,18 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
             )}
             {/* Profile picture */}
             <div className="flex justify-center py-6">
-              <div
-                className="w-[8rem] h-[8rem] relative rounded-full cursor-pointer overflow-hidden text-black flex justify-center items-center group"
-              >
-                <ProfilePicUpload onFileSelected={handleFilesSelected} initialPicUrl={userData.profilePicture} />
+              <div className="w-[8rem] h-[8rem] relative rounded-full cursor-pointer overflow-hidden text-black flex justify-center items-center group">
+                <ProfilePicUpload
+                  onFileSelected={handleFilesSelected}
+                  initialPicUrl={userData.profilePicture}
+                />
               </div>
             </div>
             <form className="space-y-2 w-[100%] my-4 mx-auto">
               <div>
                 <label
                   htmlFor="username"
-                  className="block mb-2 text-sm font-medium text-white dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Username
                 </label>
@@ -209,14 +218,14 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
                       username: e.target.value,
                     })
                   }
-                  className="bg-transparent border border-white/30 rounded-md text-white placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none"
+                  className="bg-transparent border border-black/20 rounded-md text-black placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none"
                   placeholder="name@company.com"
                 />
               </div>
               <div>
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-white dark:text-white"
+                  className="block mb-2 text-sm text-black dark:text-white"
                 >
                   Email
                 </label>
@@ -230,14 +239,14 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
                       email: e.target.value,
                     })
                   }
-                  className="bg-transparent border border-white/30 rounded-md text-white placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none"
+                  className="bg-transparent border border-black/20 rounded-md text-black placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none"
                   placeholder="name@company.com"
                 />
               </div>
               <div>
                 <label
                   htmlFor="politicalalignment"
-                  className="block mb-2 text-sm font-medium text-white dark:text-white"
+                  className="block mb-2 text-sm  text-black dark:text-white"
                 >
                   Political Alignment
                 </label>
@@ -251,15 +260,18 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
                       politicalAlignment: e.target.value,
                     })
                   }
-                  className="bg-transparent border border-white/30 rounded-md text-white placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none"
+                  className="bg-transparent border border-black/20 rounded-md text-black placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none"
                   placeholder="name@company.com"
                 />
               </div>
               <div>
-                <label className="block mb-2 text-sm font-medium text-white dark:text-white">Password Change</label>
+                <label className="block mb-2 text-sm text-black dark:text-white">
+                  Password Change
+                </label>
                 <input
-                  className={`bg-transparent border border-white/30 rounded-md text-white placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none ${passwordError ? "border-2 border-red-400" : ""
-                    }`}
+                  className={`bg-transparent border border-black/20 rounded-md text-white placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none ${
+                    passwordError ? "border-2 border-red-400" : ""
+                  }`}
                   type="password"
                   id="Password"
                   name="Password"
@@ -270,8 +282,9 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
               </div>
               <div>
                 <input
-                  className={`bg-transparent border border-white/30 rounded-md text-white placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none${passwordError ? "border-2 border-red-400" : ""
-                    }`}
+                  className={`bg-transparent border border-black/30 rounded-md text-black placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none${
+                    passwordError ? "border-2 border-red-400" : ""
+                  }`}
                   type="password"
                   id="Confirm-Password"
                   name="Confirm Password"
@@ -293,7 +306,7 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
             <button
               type="submit"
               onClick={handleCloseSettings}
-              className="  hover:scale-110 left-14 hover:bg-red-400/50  mx-auto text-white bg-primary-600 border border-red-500 rounded-full hover:bg-primary-700  focus:outline-none focus:ring-primary-300 font-medium  hover:text-black ease-in-out transition duration-150 text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              className="  left-14 hover:bg-red-400  mx-auto text-red-400 bg-primary-600 border border-red-500 rounded-full hover:bg-primary-700  focus:outline-none focus:ring-primary-300 font-medium  hover:text-black ease-in-out transition duration-150 text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
               Cancel
             </button>{" "}
