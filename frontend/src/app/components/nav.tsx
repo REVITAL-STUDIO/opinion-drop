@@ -9,21 +9,23 @@ const Nav = () => {
   return (
     <section
       className="
-     relative w-full flex justify-between items-center text-white z-10"
+     relative w-full flex justify-center items-center text-white  rounded-full z-10"
     >
-      <Link
-        href="/"
-        className="flex ml-4 w-fit h-fit justify-center items-center "
-      >
-        <Image
-          src="/images/opinion-drop-logo.png"
-          alt="Logo"
-          width={65}
-          height={65}
-          className="mt-6 ml-4"
-        />
-      </Link>
-      <SignInButton />
+      <div className="w-[90%] h-fit my-2  rounded-full flex justify-between items-center ">
+        <Link
+          href="/"
+          className="flex ml-4 w-fit h-fit justify-center items-center "
+        >
+          <Image
+            src="/images/opinion-drop-logo.png"
+            alt="Logo"
+            width={65}
+            height={65}
+            className="mt-4"
+          />
+        </Link>
+        <SignInButton />
+      </div>
     </section>
   );
 };

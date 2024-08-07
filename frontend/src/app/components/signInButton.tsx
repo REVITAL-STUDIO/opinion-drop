@@ -83,7 +83,7 @@ const SignInButton: React.FC = () => {
       >
         {currentUser ? (
           <>
-            <div className="flex items-center mr-4">
+            <div className="flex items-center ">
               <button
                 onClick={toggleOpenUserPortal}
                 className="w-full flex justify-center mr-2 items-center gap-x-2 hover:scale-95 text-white ease-in-out transition duration-300 rounded-full relative"

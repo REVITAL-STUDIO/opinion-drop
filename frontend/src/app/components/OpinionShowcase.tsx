@@ -23,9 +23,11 @@ export default function OpinionShowcase({ topic }: OpinionShowcaseProps) {
         <div className="relative w-full z-20">
           <Nav />
           <Topic />
-          <Archive topic={topic} />
           <Drop topic={topic} />
-          <CreateButton topic={topic} />
+          <div className="flex  justify-center items-center">
+            <CreateButton topic={topic} />
+            <Archive topic={topic} />
+          </div>
         </div>
       </div>
       <Cesspit topic={topic} />

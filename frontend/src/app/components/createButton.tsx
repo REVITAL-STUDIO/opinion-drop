@@ -22,10 +22,10 @@ const CreateButton = ({ topic }: createButtonProps) => {
   };
 
   return (
-    <div className="w-full flex justify-center items-center my-2 p-4">
+    <div className="w-fit flex justify-center items-center my-2 p-4">
       <button
         onClick={toggleCreate}
-        className="p-4 text-white mt-0 xl:w-[25%] w-[50%] font-normal hover:scale-95 ease-in-out duration-200 transition bg-gradient-to-tl from-red-400 to-blue-500 shadow-lg  relative rounded-full md:text-sm text-xs"
+        className="p-4 text-white mt-0 w-[%] font-normal hover:scale-95 ease-in-out duration-200 transition bg-[#2b2b2b] shadow-lg  relative rounded-full md:text-sm text-xs"
       >
         Drop Opinion +
       </button>

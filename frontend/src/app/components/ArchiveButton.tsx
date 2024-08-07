@@ -22,10 +22,10 @@ const Archive = ({ topic }: createButtonProps) => {
       {!currentUser ? (
         ""
       ) : (
-        <div className="w-full flex justify-center items-center my-2">
+        <div className="w-fit flex justify-center items-center my-2">
           <button
             onClick={toggleArchivePage}
-            className=" w-fit flex  items-center justify-center mx-auto rounded-full gap-x-2 hover:scale-95 ease-in-out duration-200 transition p-4 relative text-white md:text-base text-xs"
+            className=" w-fit flex border items-center justify-center mx-auto rounded-full gap-x-2 hover:scale-95 ease-in-out duration-200 transition p-4 relative text-white md:text-base text-xs"
           >
             <div className="w-[1rem] h-[1rem] rounded-full bg-white "></div>
             Catalogue
