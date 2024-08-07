@@ -138,7 +138,8 @@ export class UserController {
         try {
 
         const { userId, username, email, profilePicture, politicalAlignment, bio} = req.body;
-        if (!userId || !username || !email || !profilePicture || politicalAlignment) {
+        console.log("REQUEST BODY: ", req.body);
+        if (!userId) {
             res.status(400).send('Invalid user data');
             return;
         }
@@ -158,6 +159,8 @@ export class UserController {
         if (req.file) {
             userData.profilePictureFile = req.file; 
         }
+
+        console.log("in usercontroller updateuser, userData: ", userData);
 
             await this.userService.updateUser(userData);
             res.status(201).send('User updated successfully');

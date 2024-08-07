@@ -113,7 +113,7 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
     e.preventDefault();
     setNoChangeError(false);
     setPasswordError(false);
-    if (newPassword == "" && userDataEdit == userData || !selectedFile) {
+    if (newPassword == "" && userDataEdit == userData && !selectedFile) {
       setNoChangeError(true);
       throw new Error("No values changed");
     }
@@ -141,12 +141,15 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
         await updateUserPassword(newPassword);
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users/${currentUser?.uid}`,
+
+      console.log("FormData contents:");
+      formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: formData,
         }
       );
@@ -284,14 +287,13 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
                 <div className="flex items-start"></div>
               </div>
               <button
-                type="submit"
+                onClick={saveUserData}
                 className="w-full text-white bg-gradient-to-bl hover:scale-95 to-red-300 from-blue-500 border rounded-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium   ease-in-out transition duration-150 text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 Save Changes
               </button>
             </form>
             <button
-              type="submit"
               onClick={handleCloseSettings}
               className="  hover:scale-110 left-14 hover:bg-red-400/50  mx-auto text-white bg-primary-600 border border-red-500 rounded-full hover:bg-primary-700  focus:outline-none focus:ring-primary-300 font-medium  hover:text-black ease-in-out transition duration-150 text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >

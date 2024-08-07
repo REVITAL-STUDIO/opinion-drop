@@ -28,7 +28,7 @@ router.post('/users/register/credentials', userController.registerUserCredential
 router.post('/users/register/provider', userController.registerUserProvider.bind(userController));
 router.post('/users/login', userController.loginUser.bind(userController));
 router.get('/users/:userId', userController.getUser.bind(userController));
-router.put('/users/:userId', userController.updateUser.bind(userController));
+router.put('/users',upload.single('profilePicture'), userController.updateUser.bind(userController));
 router.delete('/users/:userId', userController.deleteUser.bind(userController));
 
 

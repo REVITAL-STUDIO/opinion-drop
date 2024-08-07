@@ -2,6 +2,7 @@ import { User } from '../models/User';
 import { UserDAO } from '../data-access/UserDAO';
 import pool from '../data-access/dbconnection';
 import { uploadImage } from '../utils/aws/uploadToS3';
+const jdenticon = require('jdenticon');
 
 export class UserService {
     private userDAO: UserDAO;
@@ -12,7 +13,11 @@ export class UserService {
     
 
     async createUser(firebaseUUID: string, email: string) {
-        return this.userDAO.createUser(firebaseUUID, email);
+        const size = 80; // Example size
+        const svg = jdenticon.toSvg(email, size);
+        const identiconUrl = await uploadImage(svg, 'images/profile-pictures');
+
+        return this.userDAO.createUser(firebaseUUID, email, identiconUrl);
     }
 
     async findUserByEmail(email: string) {
