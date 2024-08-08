@@ -127,6 +127,7 @@ const Comment: React.FC<CommentProps> = ({ comment, opinionId }) => {
     }
   }, [comment]);
 
+  
   const postChildComment = async (
     textcontent: string,
     parentCommentId: number

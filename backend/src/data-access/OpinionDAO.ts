@@ -105,11 +105,28 @@ export class OpinionDAO {
 
     async getOpinionsByTopic(topicId: number): Promise<UserOpinion[]> {
         const query = `
-        SELECT opinions.opinion_id as id, opinions.title, opinions.text_content as textContent, opinions.background_image as backgroundImage, 
-               users.username as author, users.profile_picture as authorProfileImage
-        FROM opinions
-        JOIN users ON opinions.user_id = users.user_id
-        WHERE parent_opinion_id IS NULL AND topic_id = $1
+        
+            SELECT 
+            opinions.opinion_id AS id, 
+            opinions.title, 
+            opinions.text_content AS textContent, 
+            opinions.background_image AS backgroundImage, 
+            users.username AS author, 
+            users.profile_picture AS authorProfileImage,
+            COALESCE(COUNT(DISTINCT opinion_likes.user_id), 0) AS totalLikes,
+            COALESCE(COUNT(DISTINCT opinion_dislikes.user_id), 0) AS totalDislikes
+            FROM opinions
+            JOIN users ON opinions.user_id = users.user_id
+            LEFT JOIN opinion_likes ON opinions.opinion_id = opinion_likes.opinion_id
+            LEFT JOIN opinion_dislikes ON opinions.opinion_id = opinion_dislikes.opinion_id
+            WHERE opinions.parent_opinion_id IS NULL AND opinions.topic_id = $1
+            GROUP BY 
+            opinions.opinion_id, 
+            users.username, 
+            users.profile_picture, 
+            opinions.title, 
+            opinions.text_content, 
+            opinions.background_image
     `;
         let client: PoolClient | undefined;
 

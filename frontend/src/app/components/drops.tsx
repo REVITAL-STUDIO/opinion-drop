@@ -10,6 +10,7 @@ import {
   faMicrophoneLines,
   faMicrophoneLinesSlash,
   faPenFancy,
+  faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import DetailsModal from "./DetailsModal";
 import OpinionModal from "./OpinionModal";
@@ -20,6 +21,7 @@ import { motion } from "framer-motion";
 import OpinionComments from "./OpinionComments";
 import { IoClose } from "react-icons/io5";
 import { useAuth } from "../hooks/AuthContext";
+import { faThumbsDown } from "@fortawesome/free-regular-svg-icons";
 
 interface dropsProps {
   topic: {
@@ -35,6 +37,8 @@ interface Opinion {
   textcontent: string;
   backgroundimage: string;
   authorprofileimage: string;
+  totallikes?: number;
+  totaldislikes?: number;
 }
 
 interface SurveyQuestion {
@@ -225,60 +229,7 @@ const Drop = ({ topic }: dropsProps) => {
     checkSurvey();
   }, [survey]);
 
-  const [numLikes, setNumLikes] = useState<number>(0);
-  const [numDislikes, setNumDislikes] = useState<number>(0);
-  console.log("likes:", numLikes);
-  console.log("dislikes:", numDislikes);
 
-  const getNumOpinionLikes = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/numlikes/${topic.id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!res.ok) {
-        throw new Error("Error retrieving opinion like count");
-      }
-      const response = await res.json();
-      console.log("likes", response);
-
-      setNumLikes(response.data.numLikes);
-    } catch (error) {
-      console.log("Error Fetching Opinion like count: ", error);
-    }
-  };
-
-  const getNumDislikes = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/numDislikes/${topic.id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!res.ok) {
-        throw new Error("Error retrieving opinion dislike count");
-      }
-      const response = await res.json();
-      console.log("Dislikes", response);
-      setNumDislikes(response.data.numDislikes);
-    } catch (error) {
-      console.log("Error Fetching Opinion dislike count: ", error);
-    }
-  };
-
-  useEffect(() => {
-    getNumDislikes();
-    getNumOpinionLikes();
-  }, []);
 
   return (
     <section className=" flex  justify-center items-center">
@@ -341,28 +292,28 @@ const Drop = ({ topic }: dropsProps) => {
                           }`}
                         >
                           <FontAwesomeIcon
-                            icon={faMicrophoneLines}
+                            icon={faThumbsUp}
                             className="text-xs"
                           />
                         </button>
 
                         <span className="mx-2 text-[10px] text-black">
-                          {numLikes}
+                          {slide.totallikes}
                         </span>
                         <button
-                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
+                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 rotate-180 ${
                             activeButton === "dislike"
                               ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
                               : "scale-100 text-black"
                           }`}
                         >
                           <FontAwesomeIcon
-                            icon={faMicrophoneLinesSlash}
+                            icon={faThumbsUp}
                             className="text-xs"
                           />
                         </button>
                         <span className="mx-2 text-[10px] text-black">
-                          {numDislikes}
+                          {slide.totaldislikes}
                         </span>
                       </div>
                     </div>

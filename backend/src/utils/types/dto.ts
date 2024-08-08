@@ -6,6 +6,8 @@ export interface UserOpinion {
   parentopinionid: number | null;
   author: string;
   authorProfileImage: string;
+  totallikes?: number;
+  totaldislikes?: number;
 }
 
 export interface RebuttalsAndOpinions {
