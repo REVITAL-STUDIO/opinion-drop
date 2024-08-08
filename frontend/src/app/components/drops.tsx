@@ -39,6 +39,7 @@ interface Opinion {
   authorprofileimage: string;
   totallikes?: number;
   totaldislikes?: number;
+  avgrating?: number;
 }
 
 interface SurveyQuestion {
@@ -104,6 +105,7 @@ const Drop = ({ topic }: dropsProps) => {
       }
       const response = await res.json();
       setOpinions(response.data.opinions);
+      console.log("Opinions: ", response.data.opinions)
     } catch (error) {
       console.log("Error Fetching Opinions: ", error);
     }
@@ -113,7 +115,7 @@ const Drop = ({ topic }: dropsProps) => {
     fetchOpinions();
   }, []);
 
-  useEffect(() => {}, [opinions]);
+  useEffect(() => { }, [opinions]);
 
   const [currdeg, setCurrdeg] = useState(0);
   const rotate = (direction: "next" | "prev") => {
@@ -285,11 +287,10 @@ const Drop = ({ topic }: dropsProps) => {
                       </button>
                       <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-gradient-to-tl from-purple-200 to-white bottom-2 right-2 flex justify-between items-center">
                         <button
-                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
-                            activeButton === "like"
-                              ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
-                              : "scale-100 text-black"
-                          }`}
+                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${activeButton === "like"
+                            ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
+                            : "scale-100 text-black"
+                            }`}
                         >
                           <FontAwesomeIcon
                             icon={faThumbsUp}
@@ -301,11 +302,10 @@ const Drop = ({ topic }: dropsProps) => {
                           {slide.totallikes}
                         </span>
                         <button
-                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 rotate-180 ${
-                            activeButton === "dislike"
-                              ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
-                              : "scale-100 text-black"
-                          }`}
+                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 rotate-180 ${activeButton === "dislike"
+                            ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
+                            : "scale-100 text-black"
+                            }`}
                         >
                           <FontAwesomeIcon
                             icon={faThumbsUp}
@@ -316,6 +316,10 @@ const Drop = ({ topic }: dropsProps) => {
                           {slide.totaldislikes}
                         </span>
                       </div>
+                    </div>
+                    <div className="absolute top-4 right-4 bg-blue-500/80 text-white text-xs font-semibold py-2 px-4 rounded-full shadow-md flex items-center">
+                      <span className="mr-1">Rating:</span>
+                      <span>{slide.avgrating}%</span>
                     </div>
                   </div>
                 ) : null

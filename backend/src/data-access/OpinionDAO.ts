@@ -105,7 +105,6 @@ export class OpinionDAO {
 
     async getOpinionsByTopic(topicId: number): Promise<UserOpinion[]> {
         const query = `
-        
             SELECT 
             opinions.opinion_id AS id, 
             opinions.title, 
@@ -113,20 +112,28 @@ export class OpinionDAO {
             opinions.background_image AS backgroundImage, 
             users.username AS author, 
             users.profile_picture AS authorProfileImage,
-            COALESCE(COUNT(DISTINCT opinion_likes.user_id), 0) AS totalLikes,
-            COALESCE(COUNT(DISTINCT opinion_dislikes.user_id), 0) AS totalDislikes
-            FROM opinions
-            JOIN users ON opinions.user_id = users.user_id
-            LEFT JOIN opinion_likes ON opinions.opinion_id = opinion_likes.opinion_id
-            LEFT JOIN opinion_dislikes ON opinions.opinion_id = opinion_dislikes.opinion_id
-            WHERE opinions.parent_opinion_id IS NULL AND opinions.topic_id = $1
-            GROUP BY 
-            opinions.opinion_id, 
-            users.username, 
-            users.profile_picture, 
-            opinions.title, 
-            opinions.text_content, 
-            opinions.background_image
+            COALESCE(like_counts.totalLikes, 0) AS totalLikes,
+            COALESCE(dislike_counts.totalDislikes, 0) AS totalDislikes,
+            COALESCE(rating_avg.avgRating, 0) AS avgRating
+        FROM opinions
+        JOIN users ON opinions.user_id = users.user_id
+        LEFT JOIN (
+            SELECT opinion_id, COUNT(*) AS totalLikes
+            FROM opinion_likes
+            GROUP BY opinion_id
+        ) AS like_counts ON opinions.opinion_id = like_counts.opinion_id
+        LEFT JOIN (
+            SELECT opinion_id, COUNT(*) AS totalDislikes
+            FROM opinion_dislikes
+            GROUP BY opinion_id
+        ) AS dislike_counts ON opinions.opinion_id = dislike_counts.opinion_id
+        LEFT JOIN (
+            SELECT opinion_id, AVG(value) AS avgRating
+            FROM ratings
+            GROUP BY opinion_id
+        ) AS rating_avg ON opinions.opinion_id = rating_avg.opinion_id
+        WHERE opinions.parent_opinion_id IS NULL AND opinions.topic_id = $1
+        
     `;
         let client: PoolClient | undefined;
 
@@ -136,7 +143,7 @@ export class OpinionDAO {
 
             const opinions: UserOpinion[] = [];
             for (const row of result.rows) {
-
+                row.avgrating = Math.round(row.avgrating);
                 opinions.push(row as UserOpinion);
             }
 

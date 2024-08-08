@@ -4,6 +4,7 @@ import {
   faEye,
   faMicrophoneLines,
   faMicrophoneLinesSlash,
+  faThumbsDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
@@ -19,6 +20,7 @@ import OpinionModal from "./OpinionModal";
 import MoreButton from "./moreButton";
 import OpinionComments from "./OpinionComments";
 import DetailsModal from "./DetailsModal";
+import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 
 interface dropsProps {
   topic: {
@@ -33,8 +35,11 @@ interface Opinion {
   title: string;
   textcontent: string;
   backgroundimage: string;
-  authorprofileimage?: string;
+  authorprofileimage: string;
   parentopinionid: number | null;
+  totallikes?: number;
+  totaldislikes?: number;
+  avgrating?: number;
 }
 
 const ArchivePage = ({ topic }: dropsProps) => {
@@ -261,36 +266,38 @@ const ArchivePage = ({ topic }: dropsProps) => {
                           {/* Likes and Dislikes */}
                           <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-gradient-to-tl from-purple-200 to-white  bottom-2 right-2 flex justify-between items-center">
                             <div
-                              className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
-                                activeButton === "like"
-                                  ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
-                                  : "scale-100 text-black"
-                              }`}
+                              className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${activeButton === "like"
+                                ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
+                                : "scale-100 text-black"
+                                }`}
                             >
                               <FontAwesomeIcon
-                                icon={faMicrophoneLines}
+                                icon={faThumbsUp}
                                 className="text-xs t"
                               />
                             </div>
                             <span className="mx-2 text-[10px] text-black">
-                              {likes}
+                              {info.totallikes}
                             </span>
                             <div
-                              className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
-                                activeButton === "dislike"
-                                  ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
-                                  : "scale-100 text-black"
-                              }`}
+                              className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${activeButton === "dislike"
+                                ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
+                                : "scale-100 text-black"
+                                }`}
                             >
                               <FontAwesomeIcon
-                                icon={faMicrophoneLinesSlash}
+                                icon={faThumbsDown}
                                 className="text-xs "
                               />
                             </div>
                             <span className="mx-2 text-[10px] text-black">
-                              {dislikes}
+                              {info.totaldislikes}
                             </span>
                           </div>
+                        </div>
+                        <div className="absolute top-4 right-4 bg-blue-500/80 text-white text-xs font-semibold py-2 px-4 rounded-full shadow-md flex items-center">
+                          <span className="mr-1">Rating:</span>
+                          <span>{info.avgrating}%</span>
                         </div>
                       </div>
                     </div>

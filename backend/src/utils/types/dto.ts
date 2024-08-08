@@ -8,6 +8,7 @@ export interface UserOpinion {
   authorProfileImage: string;
   totallikes?: number;
   totaldislikes?: number;
+  avgrating?: number;
 }
 
 export interface RebuttalsAndOpinions {
