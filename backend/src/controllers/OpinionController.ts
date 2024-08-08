@@ -438,7 +438,7 @@ export class OpinionController {
                 return;
             }
             const userId: string = req.body.userId
-            await this.opinionService.likeOpinion(opinionId, userId);
+            await this.opinionService.favoriteOpinion(opinionId, userId);
             res.status(200).send('Opinion favorited successfully');
 
         } catch (error) {
@@ -456,12 +456,35 @@ export class OpinionController {
                 return;
             }
             const userId: string = req.body.userId
-            await this.opinionService.likeOpinion(opinionId, userId);
-            res.status(200).send('Opinion favorited successfully');
+            await this.opinionService.unfavoriteOpinion(opinionId, userId);
+            res.status(200).send('Opinion unfavorited successfully');
 
         } catch (error) {
-            console.error('Error in OpinionController favoriteOpinion:', error);
-            res.status(500).send('Failed to favorite opinion');
+            console.error('Error in OpinionController unfavoriteOpinion:', error);
+            res.status(500).send('Failed to unfavorite opinion');
+        }
+    }
+
+    async userHasFavorited(req: Request, res: Response): Promise<void> {
+        try {
+
+            const opinionId: number = parseInt(req.params.opinionId, 10);
+            if (isNaN(opinionId)) {
+                res.status(400).send('Invalid opinion ID');
+                return;
+            }
+            const userId: string = req.body.userId
+            const hasFavorited: boolean = await this.opinionService.userHasFavorited(opinionId, userId);
+            res.status(200).send({
+                status: 'success',
+                message: 'has favorited received succussfully',
+                data: {
+                    userHasFavorited: hasFavorited
+                }
+            });
+        } catch (error) {
+            console.error('Error in OpinionController userHasFavorited:', error);
+            res.status(500).send('Failed to retrieve has favorited');
         }
     }
 

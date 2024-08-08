@@ -86,6 +86,11 @@ const ChildComment = ({
           <p className="text-xs  font-light">{timeAgo(comment.createdat)}</p>
           <div className=" my-2 flex flex-col items-start gap-2 ">
             <p className={` w-[100%] text-[0.9rem] `}>
+              {rootCommentId != comment.parentcommentid &&
+                <span className="bold text-blue-500 mr-2">
+                  @{comment.parentcommentauthor}
+                </span>
+              }
               {textIsExpanded
                 ? comment.textcontent
                 : truncateText(comment.textcontent, textMaxChar)}
@@ -143,7 +148,7 @@ const ChildComment = ({
               Cancel
             </button>
             <button
-              onClick={() => postChildComment(newChildCommentText, comment.id)}
+              onClick={handlePostReply}
               type="button"
               className="py-2.5 px-4 text-sm font-medium text-center text-white bg-purple-700 rounded-lg shadow-lg ease-in-out duration-300 transition hover:bg-gray-800 active:bg-gray-700"
             >

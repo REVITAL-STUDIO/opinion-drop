@@ -46,7 +46,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
   const [opinions, setOpinions] = useState<Opinion[]>([]);
   const [rebuttals, setRebuttals] = useState<Opinion[]>([]);
   const [rebuttalledOpinions, setRebuttaledOpinions] = useState<Opinion[]>([]);
-  const [favOpinions, setFavOpinions] = useState<Opinion[]>([]);
+  const [savedOpinions, setSavedOpinions] = useState<Opinion[]>([]);
   const [selectedTab, setSelectedTab] = useState("Summary");
   const [selectedOpinion, setSelectedOpinion] = useState<Opinion | null>(null);
   const [showComments, setShowComments] = useState(false);
@@ -144,9 +144,31 @@ const UserPortal: React.FC<UserPortalProps> = ({
     }
   };
 
+  const fetchSavedOpinions = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/favorites/${currentUser?.uid}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving saved opinions");
+      }
+      const response = await res.json();
+      setSavedOpinions(response.data.opinions);
+    } catch (error) {
+      console.log("Error Fetching Saved Opinions: ", error);
+    }
+  };
+
   useEffect(() => {
     fetchUserOpinions();
     fetchUserRebuttals();
+    fetchSavedOpinions();
     console.log("user opinions state variable", opinions);
   }, []);
 
@@ -469,13 +491,13 @@ const UserPortal: React.FC<UserPortalProps> = ({
                         </div>
                         <div className="bg-white p-4 rounded-2xl shadow-md">
                           <h1 className="text-4xl font-light p-4 rounded-full text-black  w-fit">
-                            Favorites
+                            Saved
                           </h1>
                           <div className="my-4 grid xl:grid-cols-3 grid-cols-2 gap-2 mx-auto">
-                            {favOpinions.length === 0 ? (
+                            {savedOpinions.length === 0 ? (
                               <div className="col-span-full text-center p-4">
                                 <p className="lg:text-3xl text-xl font-bold text-gray-700 mb-2">
-                                  No Favorites
+                                  None Saved
                                 </p>
                                 <p className="text-base text-gray-300 mb-4">
                                   Explore the views of the people!
@@ -488,7 +510,7 @@ const UserPortal: React.FC<UserPortalProps> = ({
                                 </button>
                               </div>
                             ) : (
-                              favOpinions.map((slide, index) => (
+                              savedOpinions.map((slide, index) => (
                                 <div
                                   key={index}
                                   className="relative group xl:p-[25%] p-[50%] border rounded-2xl overflow-hidden shadow-md"

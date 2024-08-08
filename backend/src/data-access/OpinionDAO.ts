@@ -317,14 +317,14 @@ export class OpinionDAO {
         }
     }
 
-    async userHasLiked(commentId: number, userId: string): Promise<boolean> {
+    async userHasLiked(opinionId: number, userId: string): Promise<boolean> {
         const query = `SELECT liked_at FROM opinion_likes WHERE opinion_id = $1 AND user_id = $2`
 
         let client: PoolClient | undefined;
         let hasLiked: boolean = false;
         try {
             client = await this.pool.connect();
-            const resp = await client.query(query, [commentId, userId]);
+            const resp = await client.query(query, [opinionId, userId]);
             if (resp.rows[0]) {
                 hasLiked = true;
             }
@@ -398,14 +398,14 @@ export class OpinionDAO {
         }
     }
 
-    async userHasDisliked(commentId: number, userId: string): Promise<boolean> {
+    async userHasDisliked(opinionId: number, userId: string): Promise<boolean> {
         const query = `SELECT disliked_at FROM opinion_dislikes WHERE opinion_id = $1 AND user_id = $2`
 
         let client: PoolClient | undefined;
         let hasLiked: boolean = false;
         try {
             client = await this.pool.connect();
-            const resp = await client.query(query, [commentId, userId]);
+            const resp = await client.query(query, [opinionId, userId]);
             if (resp.rows[0]) {
                 hasLiked = true;
             }
@@ -463,6 +463,8 @@ export class OpinionDAO {
         const query = `UPDATE users SET favorite_opinion_ids = array_append(favorite_opinion_ids, $1)
         WHERE user_id = $2`
 
+        console.log("in dao userid: ", userId);
+
         let client: PoolClient | undefined;
 
         try {
@@ -489,6 +491,34 @@ export class OpinionDAO {
         } catch (error) {
             console.error('Error executing unfavorite opinion query:', error);
             throw new Error(`Error unfavoriting opinion: ${error}`);
+        } finally {
+            client && client.release();
+
+        }
+    }
+
+
+    async userHasFavorited(opinionId: number, userId: string): Promise<boolean> {
+        const query = `
+        SELECT EXISTS (
+            SELECT 1 
+            FROM users 
+            WHERE user_id = $1 
+              AND $2 = ANY(favorite_opinion_ids)
+        ) AS has_favorited
+    `;
+        let client: PoolClient | undefined;
+        let hasFavorited: boolean = false;
+        try {
+            client = await this.pool.connect();
+            const resp = await client.query(query, [userId, opinionId]);
+            if (resp.rows.length > 0) {
+                hasFavorited = resp.rows[0].has_favorited;
+            }
+            return hasFavorited;
+        } catch (error) {
+            console.error('Error executing hasFavorited query:', error);
+            throw new Error(`Error retrieving hasfavorited ${error}`);
         } finally {
             client && client.release();
 

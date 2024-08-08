@@ -16,6 +16,7 @@ import {
   faFlag,
   faPaperPlane,
   faThumbsUp,
+  faBookmark
 } from "@fortawesome/free-regular-svg-icons";
 import OpenRebuttal from "./RebuttalModal";
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
@@ -101,6 +102,8 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const { currentUser } = useAuth();
   const [userHasLiked, setUserHasLiked] = useState(false);
   const [userHasDisliked, setUserHasDisliked] = useState(false);
+  const [userHasSaved, setUserHasSaved] = useState(false);
+
   const [openRating, setOpenRating] = useState(false);
   const [userHasRated, setUserHasRated] = useState(false);
   const [userRating, setuserRating] = useState<null | number>(null);
@@ -150,15 +153,15 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.highlightId === currentHighlightId
             ? {
-                ...highlight,
-                container: updateHighlightContainer(
-                  highlight.container,
-                  emoji,
-                  "emoji"
-                ),
-                reactionType: "emoji",
-                reactionText: emoji,
-              }
+              ...highlight,
+              container: updateHighlightContainer(
+                highlight.container,
+                emoji,
+                "emoji"
+              ),
+              reactionType: "emoji",
+              reactionText: emoji,
+            }
             : highlight
         )
       );
@@ -184,15 +187,15 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.highlightId === currentHighlightId
             ? {
-                ...highlight,
-                container: updateHighlightContainer(
-                  highlight.container,
-                  comment,
-                  "comment"
-                ),
-                reactionType: "comment",
-                reactionText: comment,
-              }
+              ...highlight,
+              container: updateHighlightContainer(
+                highlight.container,
+                comment,
+                "comment"
+              ),
+              reactionType: "comment",
+              reactionText: comment,
+            }
             : highlight
         )
       );
@@ -676,6 +679,20 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     }
   };
 
+  const handleSaveOpinion = async () => {
+    try {
+      if (!userHasSaved) {
+        await saveOpinion();
+        setUserHasSaved(true);
+      } else {
+        await unSaveOpinion();
+        setUserHasSaved(false);
+      }
+    } catch (error) {
+      console.log("Error in handlelike opinion: ", error);
+    }
+  };
+
   const likeOpinion = async () => {
     try {
       const res = await fetch(
@@ -808,11 +825,80 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       setUserHasLiked(hasLiked);
       setUserHasDisliked(hasDisliked);
     };
+    const loadSaved = async () => {
+      const hasSaved: boolean = await hasUserSaved();
+      setUserHasSaved(hasSaved);
+    };
+
     if (opinionData) {
       loadLiked();
+      loadSaved();
       getUserRating();
     }
   }, [opinionData]);
+
+  const saveOpinion = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/favorite/${opinionData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid }),
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error favoriting opinion");
+      }
+    } catch (error) {
+      console.log("Error favoriting Opinion: ", error);
+    }
+  };
+
+  const unSaveOpinion = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/unfavorite/${opinionData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid }),
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error unliking opinion");
+      }
+      const response = await res.json();
+    } catch (error) {
+      console.log("Error unliking opinion: ", error);
+    }
+  };
+
+  const hasUserSaved = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/opinions/userFavorited/${opinionData.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: currentUser?.uid }),
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error retrieving has saved");
+      }
+      const response = await res.json();
+      return response.data.userHasFavorited;
+    } catch (error) {
+      console.log("Error retrieving hassaved: ", error);
+    }
+  };
 
   const getUserRating = async () => {
     try {
@@ -946,21 +1032,19 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     <div className="z-30  w-[75%] h-[750px] bg-white text-black p-6 shadow-lg relative rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <a
-          className={`cursor-pointer ${
-            selectedTab === "Opinion"
-              ? "border-b-[4px] border-[#606060] "
-              : "border-b-0"
-          }`}
+          className={`cursor-pointer ${selectedTab === "Opinion"
+            ? "border-b-[4px] border-[#606060] "
+            : "border-b-0"
+            }`}
           onClick={() => setSelectedTab("Opinion")}
         >
           Opinion
         </a>
         <a
-          className={`cursor-pointer ${
-            selectedTab === "Rebuttal"
-              ? "border-b-[4px] border-[#606060] "
-              : "border-b-0"
-          }`}
+          className={`cursor-pointer ${selectedTab === "Rebuttal"
+            ? "border-b-[4px] border-[#606060] "
+            : "border-b-0"
+            }`}
           onClick={() => setSelectedTab("Rebuttal")}
         >
           Rebuttal
@@ -969,9 +1053,8 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       {/* Survey Container */}
       {!hasSubmittedSurvey && currentUser && survey && (
         <div
-          className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${
-            hideOpinion ? "" : "invisible"
-          }`}
+          className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${hideOpinion ? "" : "invisible"
+            }`}
         >
           <div className="absolute -top-[5rem] left-0 w-full   bg-[#2b2b2b] rounded-md text-white p-4  z-40">
             <h3 className="text-5xl  font-bold  p-4 mt-4">Tell Us..</h3>
@@ -1025,22 +1108,40 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
             <h2 className="text-5xl leading-tight mb-4 w-4/6 font-black px-4">
               {opinionData.title.toUpperCase()}
             </h2>
-            <button
-              onClick={openReplies}
-              className={`font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-[#000] `}
-            >
-              Reply
-              <IoIosArrowDropdown
-                className={`${
-                  replyMenu ? "rotate-0" : "-rotate-180"
-                } transition ease-in-out duration-150`}
-              />
-            </button>
+            {selectedTab == 'Opinion' &&
+              <button
+              onClick={handleSaveOpinion}
+                className="absolute right-6 text-sm"
+              >
+                {userHasSaved ?
+                  <div className="flex flex-col">
+                    <FontAwesomeIcon className="w-[2rem] h-[2rem] text-green-400" icon={faCheck} />
+                    saved
+                  </div>
+                  :
+                  <div className="flex flex-col">
+                    <FontAwesomeIcon className="w-[2rem] h-[2rem]" icon={faBookmark} />
+                    save
+                  </div>
+                }
+              </button>
+            }
+            {selectedTab == 'Rebuttal' &&
+              <button
+                onClick={openReplies}
+                className={`font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-[#000] `}
+              >
+                Rebuttal
+                <IoIosArrowDropdown
+                  className={`${replyMenu ? "rotate-0" : "-rotate-180"
+                    } transition ease-in-out duration-150`}
+                />
+              </button>
+            }
             {replyMenu && (
               <section
-                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${
-                  replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg p-4 shadow-lg text-white `}
+                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                  }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg p-4 shadow-lg text-white `}
               >
                 <button
                   onClick={toggleStateIt}
@@ -1083,17 +1184,15 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                   <div className="p-4 mx-auto mt-[2%] rounded-full w-[50%] flex justify-evenly items-center">
                     <button
                       onClick={() => handleLikeOpinion()}
-                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${
-                        userHasLiked ? "bg-green-500 scale-105" : "bg-white"
-                      }`}
+                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasLiked ? "bg-green-500 scale-105" : "bg-white"
+                        }`}
                     >
                       👍
                     </button>
                     <button
                       onClick={() => handleDislikeOpinion()}
-                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${
-                        userHasDisliked ? "bg-red-500 scale-105" : "bg-white"
-                      }`}
+                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasDisliked ? "bg-red-500 scale-105" : "bg-white"
+                        }`}
                     >
                       👎
                     </button>

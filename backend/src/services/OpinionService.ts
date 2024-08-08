@@ -163,9 +163,9 @@ export class OpinionService {
         }
     }
 
-    async userHasLiked(commentId: number, userId: string): Promise<boolean> {
+    async userHasLiked(opinionId: number, userId: string): Promise<boolean> {
         try {
-            return await this.opinionDAO.userHasLiked(commentId, userId);
+            return await this.opinionDAO.userHasLiked(opinionId, userId);
         } catch (error) {
             console.error('Error in OpinionService userHasLiked:', error);
             throw new Error('Error retrieving user has liked');
@@ -244,6 +244,15 @@ export class OpinionService {
         }
     }
 
+    async userHasFavorited(opinionId: number, userId: string): Promise<boolean> {
+        try {
+            return await this.opinionDAO.userHasFavorited(opinionId, userId);
+        } catch (error) {
+            console.error('Error in OpinionService userHasFavorited:', error);
+            throw new Error('Error retrieving user has favorited');
+        }
+    }
+    
     async getAvgRating(opinionId: number): Promise<number | null> {
         try {
            return await this.opinionDAO.getAvgRating(opinionId);

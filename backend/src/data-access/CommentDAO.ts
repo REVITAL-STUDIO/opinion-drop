@@ -164,6 +164,7 @@ export class CommentDAO {
             c.created_at as createdAt, 
             c.updated_at as updatedAt,
             u.username as author,  
+            u.profile_picture as authorProfileImage,
             p_author.username as parentCommentAuthor  
         FROM comments c
         JOIN users u ON c.user_id = u.user_id  
@@ -381,6 +382,7 @@ export class CommentDAO {
             c.created_at as createdAt, 
             c.updated_at as updatedAt,
             u.username as author,  
+            u.profile_picture as authorProfileImage,
             p_author.username as parentCommentAuthor  
         FROM cesspit_comments c
         JOIN users u ON c.user_id = u.user_id  
