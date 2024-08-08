@@ -25,9 +25,9 @@ const Archive = ({ topic }: createButtonProps) => {
         <div className="w-fit flex justify-center items-center my-2">
           <button
             onClick={toggleArchivePage}
-            className=" w-fit flex border items-center justify-center mx-auto rounded-full gap-x-2 hover:scale-95 ease-in-out duration-200 transition p-4 relative text-white md:text-base text-xs"
+            className=" w-fit flex border border-black items-center justify-center mx-auto rounded-full gap-x-2 hover:scale-95 ease-in-out duration-200 transition p-4 relative text-black md:text-base text-xs"
           >
-            <div className="w-[1rem] h-[1rem] rounded-full bg-white "></div>
+            <div className="w-[1rem] h-[1rem] rounded-full bg-black "></div>
             Catalogue
           </button>
           {showArchive && <ArchivePage topic={topic} />}

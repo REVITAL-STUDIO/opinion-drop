@@ -4,8 +4,7 @@ import { useAuth } from "../hooks/AuthContext";
 import SignIn from "./CredentialsSignIn";
 import UserPortal from "./userPortal";
 import { AnimatePresence, motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { disableScroll, enableScroll } from "../utils/scrollLock";
 
 const SignInButton: React.FC = () => {
   const [openSignUp, setSignUp] = useState(false);
@@ -21,11 +20,23 @@ const SignInButton: React.FC = () => {
   };
 
   const toggleOpenSignUpForm = () => {
-    setSignUp(!openSignUp);
+    const newState = !openSignUp;
+    setSignUp(newState);
+    if (newState) {
+      disableScroll();
+    } else {
+      enableScroll();
+    }
   };
 
   const toggleOpenUserPortal = () => {
-    setOpenUserPortal(!openUserPortal);
+    const toggleStateLock = !openUserPortal;
+    setOpenUserPortal(toggleStateLock);
+    if (toggleStateLock) {
+      disableScroll();
+    } else {
+      enableScroll();
+    }
   };
 
   useEffect(() => {
@@ -86,10 +97,12 @@ const SignInButton: React.FC = () => {
             <div className="flex items-center ">
               <button
                 onClick={toggleOpenUserPortal}
-                className="w-full flex justify-center mr-2 items-center gap-x-2 hover:scale-95 text-white ease-in-out transition duration-300 rounded-full relative"
+                className="w-full flex justify-center mr-2 items-center gap-x-2 hover:scale-95 text-black ease-in-out transition duration-300 rounded-full relative"
               >
                 <div className="xl:w-[3rem] xl:h-[3rem] w-[1.5rem] h-[1.5rem] rounded-full bg-gradient-to-tl from-red-400 via-white to-blue-500"></div>
-                <span className="font-light">{currentUser.username}</span>
+                <span className="font-light text-sm">
+                  {currentUser.username}
+                </span>
               </button>
             </div>
           </>
@@ -97,7 +110,7 @@ const SignInButton: React.FC = () => {
           <>
             <button
               onClick={toggleOpenSignUpForm}
-              className="p-4 w-full flex justify-center items-center gap-x-2 hover:scale-95 text-white ease-in-out transition duration-300 rounded-full"
+              className="p-4 w-full flex justify-center items-center gap-x-2 hover:scale-95 text-black ease-in-out transition duration-300 rounded-full"
             >
               <div className="xl:w-[3rem] xl:h-[3rem] w-[1.5rem] h-[1.5rem] rounded-full bg-gradient-to-tl from-gray-500 via-white to-gray-300"></div>
               Sign In

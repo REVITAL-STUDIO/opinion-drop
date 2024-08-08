@@ -158,10 +158,10 @@ const ArchivePage = ({ topic }: dropsProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed bg-black/95 top-0 left-0 w-full min-h-screen flex items-center z-50"
+          className="fixed bg-white/60 top-0 left-0 w-full min-h-screen flex items-center z-50"
         >
           <div className="carousel-container ">
-            <div className="my-4 text-5xl text-white">Catalogue</div>
+            <div className="my-4 text-5xl text-black">Catalogue</div>
             {loading ? ( // Step 4: Show loading state
               <div
                 role="status"

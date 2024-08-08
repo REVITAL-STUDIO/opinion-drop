@@ -14,14 +14,14 @@ const Nav = () => {
       <div className="w-[90%] h-fit my-2  rounded-full flex justify-between items-center ">
         <Link
           href="/"
-          className="flex ml-4 w-fit h-fit justify-center items-center "
+          className="flex  w-fit h-fit justify-center items-center "
         >
           <Image
-            src="/images/opinion-drop-logo.png"
+            src="/Images/Final-Stacked.png"
             alt="Logo"
-            width={65}
-            height={65}
-            className="mt-4"
+            width={125}
+            height={125}
+            className=""
           />
         </Link>
         <SignInButton />

@@ -385,10 +385,10 @@ const Drop = ({ topic }: dropsProps) => {
           )}
         </div>
       </div>
-      <div className="prev" onClick={() => rotate("prev")}>
+      <div className="prev shadow-lg" onClick={() => rotate("prev")}>
         <FontAwesomeIcon icon={faAngleLeft} className="w-5 h-5" />{" "}
       </div>
-      <div className="next" onClick={() => rotate("next")}>
+      <div className="next shadow-lg" onClick={() => rotate("next")}>
         <FontAwesomeIcon icon={faAngleRight} className="w-5 h-5" />{" "}
       </div>
       <div>

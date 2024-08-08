@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@import './font.css';
+
+
 /* Moving Text */
 .word__movingTexts::-webkit-scrollbar {
   display: none;
@@ -264,14 +268,14 @@ span:hover .overlay-container {
 
 .next,
 .prev {
-  background-color: transparent;
-  color: #fff;
+  background-color: #fff;
+  color: #000;
   position: absolute;
-
   padding: 1em;
   cursor: pointer;
   border-radius: 100%;
-  border: 1px solid #fff;
+  border: 2px solid #fff;
+  font-size: 1rem;
 }
 
 /* .next:hover,
