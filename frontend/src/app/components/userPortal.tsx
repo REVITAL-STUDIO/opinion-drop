@@ -216,7 +216,13 @@ const UserPortal: React.FC<UserPortalProps> = ({
               </div>
               <div className="flex xl:flex-col font-light flex-row text-black gap-y-4 p-4">
                 <div className="p-4 mt-[4%] rounded-full w-fit flex items-center gap-x-4">
-                  <div className="w-[4rem] h-[4rem] rounded-full shadow-md bg-white"></div>
+                  <div className="w-[4rem] h-[4rem] rounded-full shadow-md bg-white"
+                    style={{
+                      backgroundImage: `url(${currentUser?.profilePic})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  ></div>
                 </div>
                 <button
                   onClick={closeMenuFunction}
@@ -248,18 +254,16 @@ const UserPortal: React.FC<UserPortalProps> = ({
            space-x-reverse `}
               >
                 <span
-                  className={`block w-3/4 my-0.5 border  rounded-full ${
-                    menuOpen
+                  className={`block w-3/4 my-0.5 border  rounded-full ${menuOpen
                       ? "rotate-45 transition-transform duration-300 ease-in-out border-[#000]"
                       : "transition-transform duration-300 ease-in-out border-[#000]"
-                  }`}
+                    }`}
                 ></span>
                 <span
-                  className={`block w-3/4 my-0.5 border  rounded-full ${
-                    menuOpen
+                  className={`block w-3/4 my-0.5 border  rounded-full ${menuOpen
                       ? "-rotate-45 w-3/4 absolute top-2/5 transition-transform duration-300 ease-in-out border-[#000]"
                       : "transition-transform duration-300 ease-in-out border-[#000]"
-                  }`}
+                    }`}
                 ></span>
               </button>
               <>
@@ -325,21 +329,19 @@ const UserPortal: React.FC<UserPortalProps> = ({
 
               <div className=" text-black text-lg flex  items-center gap-x-8 ml-4 p-4">
                 <a
-                  className={`cursor-pointer ${
-                    selectedTab === "Summary"
+                  className={`cursor-pointer ${selectedTab === "Summary"
                       ? "border-b-[1px] border-black "
                       : "border-b-0"
-                  }`}
+                    }`}
                   onClick={() => setSelectedTab("Summary")}
                 >
                   Summary
                 </a>
                 <a
-                  className={`cursor-pointer ${
-                    selectedTab === "Notifications"
+                  className={`cursor-pointer ${selectedTab === "Notifications"
                       ? "border-b-[2px] border-white "
                       : "border-b-0"
-                  }`}
+                    }`}
                   onClick={() => setSelectedTab("Notifications")}
                 >
                   Notifications
