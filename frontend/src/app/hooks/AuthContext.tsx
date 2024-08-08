@@ -7,6 +7,8 @@ import Cookies from 'js-cookie';
 
 interface ExtendedUser extends User {
     username?: string;
+    profilePic?: string;
+
 }
 
 interface AuthContextType {
@@ -19,6 +21,9 @@ interface AuthContextType {
     logout: () => Promise<void>;
     updateUserEmail: (newEmail: string) => Promise<void>;
     updateUserPassword: (newPassword: string) => Promise<void>;
+    updateUserUsername: (newUsername: string) => void;
+    updateUserProfilePic: (newProfilePic: string) => void;
+
     accessToken: string | null;
 
 }
@@ -62,10 +67,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             const res = await response.json();
             const username = res.data.user.username;
-            const extendedUser = { ...user, username } as ExtendedUser;
+            const profilePic = res.data.user.profilePicture;
+
+            const extendedUser = { ...user, username, profilePic } as ExtendedUser;
 
             setCurrentUser(extendedUser);
             localStorage.setItem('username', username);
+            localStorage.setItem('profilePic', profilePic);
 
         } catch (error) {
             console.error('Error signing in with email and password:', error);
@@ -97,10 +105,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             const res = await response.json();
             const username = res.data.user.username;
-            const extendedUser = { ...user, username } as ExtendedUser;
+            const profilePic = res.data.user.profilePicture;
+
+            const extendedUser = { ...user, username, profilePic } as ExtendedUser;
 
             setCurrentUser(extendedUser);
             localStorage.setItem('username', username);
+            localStorage.setItem('profilePic', profilePic);
         } catch (error) {
             console.error('Error signing up with email and password:', error);
             throw error;
@@ -132,10 +143,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             const res = await response.json();
             const username = res.data.user.username;
-            const extendedUser = { ...user, username } as ExtendedUser;
+            const profilePic = res.data.user.profilePicture;
+            const extendedUser = { ...user, username, profilePic } as ExtendedUser;
 
             setCurrentUser(extendedUser);
             localStorage.setItem('username', username);
+            localStorage.setItem('profilePic', profilePic);
         } catch (error) {
             console.error('Error signing in with Google:', error);
         }
@@ -166,10 +179,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             const res = await response.json();
             const username = res.data.user.username;
-            const extendedUser = { ...user, username } as ExtendedUser;
+            const profilePic = res.data.user.profilePicture;
+            const extendedUser = { ...user, username, profilePic } as ExtendedUser;
 
             setCurrentUser(extendedUser);
             localStorage.setItem('username', username);
+            localStorage.setItem('profilePic', profilePic);
         } catch (error) {
             console.error('Error signing in with Facebook:', error);
         }
@@ -184,6 +199,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setAccessToken(null);
             Cookies.remove('accessToken'); // Remove token on logout
             localStorage.removeItem('username');
+            localStorage.removeItem('profilePic');
         } catch (error) {
             console.error('Error logging out:', error);
             throw error;
@@ -214,6 +230,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    const updateUserUsername = (newUsername: string) => {
+        setCurrentUser(prevUser => {
+            if (prevUser) {
+                return { ...prevUser, username: newUsername } as ExtendedUser;
+            }
+            return null;
+        });
+    
+        localStorage.setItem('username', newUsername);
+    };
+
+    const updateUserProfilePic = (newProfilePic: string) => {
+        setCurrentUser(prevUser => {
+            if (prevUser) {
+                return { ...prevUser, profilePic: newProfilePic } as ExtendedUser;
+            }
+            return null;
+        });
+    
+        localStorage.setItem('profilePic', newProfilePic);
+    };
 
     useEffect(() => {
         initializeFirebase();
@@ -221,7 +258,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 const username = localStorage.getItem('username');
-                const extendedUser = { ...user, username } as ExtendedUser;
+                const profilePic = localStorage.getItem('profilePic');
+                const extendedUser = { ...user, username, profilePic } as ExtendedUser;
                 setCurrentUser(extendedUser);
             } else {
                 setCurrentUser(null);
@@ -238,7 +276,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
     
     return (
-        <AuthContext.Provider value={{ currentUser, loading, login, signup, logout, signInWithGoogle, signInWithFacebook, updateUserEmail, updateUserPassword, accessToken }}>
+        <AuthContext.Provider value={{ currentUser, loading, login, signup, logout, signInWithGoogle, signInWithFacebook, updateUserEmail, updateUserPassword, updateUserUsername, updateUserProfilePic, accessToken }}>
             {!loading && children}
         </AuthContext.Provider>
     );

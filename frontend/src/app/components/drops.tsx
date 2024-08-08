@@ -34,7 +34,7 @@ interface Opinion {
   title: string;
   textcontent: string;
   backgroundimage: string;
-  authorprofileimage?: string;
+  authorprofileimage: string;
 }
 
 interface SurveyQuestion {

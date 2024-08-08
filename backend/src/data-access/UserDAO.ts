@@ -120,11 +120,10 @@ export class UserDAO {
         }
     }
 
-    async updateUser(user: User): Promise<void> {
+    async updateUser(user: User): Promise<User | null> {
 
-        const query = "UPDATE users SET username = $1, email = $2, bio = $3, profile_picture = $4, political_alignment = $5 WHERE user_id = $6"
+        const query = "UPDATE users SET username = $1, email = $2, bio = $3, profile_picture = $4, political_alignment = $5 WHERE user_id = $6 RETURNING * "
         const userData = user.getUserData();
-        console.log("user data: ", userData);
         const values = [
             userData.username,
             userData.email,
@@ -139,10 +138,25 @@ export class UserDAO {
 
         try {
             client = await this.pool.connect();
-            const resp = await client.query(query, values);
-            if (resp.rowCount == 0) {
+            const result = await client.query(query, values);
+            if (result.rowCount == 0) {
                 throw new Error(`User with ID ${userData.userId} does not exist.`);
+                return null
             }
+
+                const row = result.rows[0];
+                return new User(
+                    row.user_id,
+                    row.username,
+                    row.email,
+                    row.bio,
+                    row.profile_picture,
+                    row.political_alignment,
+                    row.created_at,
+                    row.updated_at
+                );
+
+
         } catch (error) {
             console.error('Error executing update user query:', error);
             throw new Error(`Error updating user: ${error}`);

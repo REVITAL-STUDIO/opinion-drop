@@ -97,12 +97,22 @@ const SignInButton: React.FC = () => {
             <div className="flex items-center ">
               <button
                 onClick={toggleOpenUserPortal}
-                className="w-full flex justify-center mr-2 items-center gap-x-2 hover:scale-95 text-black ease-in-out transition duration-300 rounded-full relative"
+                className="w-full flex justify-center mr-2 items-center gap-x-2 hover:scale-95 text-white ease-in-out transition duration-300 rounded-full relative"
               >
-                <div className="xl:w-[3rem] xl:h-[3rem] w-[1.5rem] h-[1.5rem] rounded-full bg-gradient-to-tl from-red-400 via-white to-blue-500"></div>
-                <span className="font-light text-sm">
-                  {currentUser.username}
-                </span>
+                <div className="relative flex items-center justify-center">
+                  {/* Gradient ring */}
+                  <div className="absolute w-[4.2rem] h-[4.2rem] rounded-full bg-gradient-to-tl from-red-400 via-white to-blue-500"></div>
+
+                  {/* Profile picture */}
+                  <div className="relative w-[4rem] h-[4rem] rounded-full overflow-hidden">
+                    <img
+                      src={currentUser.profilePic}
+                      alt="Profile"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  </div>
+                </div>
+                <span className="font-light ml-1">{currentUser.username}</span>
               </button>
             </div>
           </>

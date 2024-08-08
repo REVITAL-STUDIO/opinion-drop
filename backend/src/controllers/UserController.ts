@@ -160,10 +160,14 @@ export class UserController {
             userData.profilePictureFile = req.file; 
         }
 
-        console.log("in usercontroller updateuser, userData: ", userData);
-
-            await this.userService.updateUser(userData);
-            res.status(201).send('User updated successfully');
+            const user = await this.userService.updateUser(userData);
+            res.status(201).json({
+                status: 'success',
+                message: 'user updated successfully',
+                data: {
+                    userData: user,
+                }
+            });
         } catch (error) {
             console.error('Error in UserController updateUser:', error);
             res.status(500).send('Failed to update user');

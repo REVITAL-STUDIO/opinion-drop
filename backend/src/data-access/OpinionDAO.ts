@@ -214,18 +214,15 @@ export class OpinionDAO {
 
                 rebuttals.push(row as UserOpinion);
             }
-            console.log("in server rebuttals by user: ", rebuttals);
 
             const rebuttaledOpinions: UserOpinion[] = [];
 
             for (const rebuttal of rebuttals) {
                 const rebuttaledOpinionId = rebuttal.parentopinionid;
-                console.log("id rebuttalledopinion: ", rebuttaledOpinionId);
                 const rebuttaledOpinion = await this.getOpinion(rebuttaledOpinionId!);
                 if (rebuttaledOpinion && !rebuttaledOpinions.find(opinion => opinion.id == rebuttaledOpinion.id)) {
                     rebuttaledOpinions.push(rebuttaledOpinion);
                 }
-                console.log("in server rebuttaledopinions by user: ", rebuttaledOpinions);
 
             }
 
@@ -257,12 +254,10 @@ export class OpinionDAO {
             const result: QueryResult = await client.query(query, [opinionId]);
 
             const opinions: UserOpinion[] = [];
-            console.log("query results: ", result.rows)
             for (const row of result.rows) {
 
                 opinions.push(row as UserOpinion);
             }
-            console.log("rebuttals: ", opinions)
             return opinions;
         } catch (error) {
             console.error('Error executing getOpinionRebuttals query:', error);

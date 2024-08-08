@@ -9,10 +9,12 @@ interface OpinionModalProps {
     title: string;
     textcontent: string;
     backgroundimage: string;
+    authorprofileimage: string;
   };
 }
 
 const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
+
   return (
     <div className="z-30 py-[15%] w-[50%] mx-auto bg-black/50 relative text-white p-4 shadow-lg rounded">
       <div className="absolute inset-0 w-full h-full -z-10 rounded">
@@ -25,7 +27,13 @@ const DetailsModal: React.FC<OpinionModalProps> = ({ opinionData }) => {
         <div className="absolute inset-0 bg-black opacity-50"></div>
       </div>
       <div className="flex justify-between mb-8 ">
-        <div className="w-fit h-fit absolute top-4 left-4 rounded-full p-4 bg-[#FFFFF0] "></div>
+        <div className="absolute top-8 left-4 w-[3.5rem] h-[3.5rem] rounded-full overflow-hidden">
+          <img
+            src={opinionData.authorprofileimage}
+            alt="Profile"
+            className="w-full h-full object-cover rounded-full"
+          />
+        </div>
         {/* <div className="flex flex-col text-sm font-semibold right-0">
           <p>You Rated: 80%</p>
           <p>Society Rating: 36%</p>

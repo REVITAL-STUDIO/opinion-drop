@@ -42,7 +42,7 @@ export class UserService {
         profilePicture: string | null,
         profilePictureFile: Express.Multer.File | null,
         politicalAlignment: string | null,
-    }): Promise<void> {
+    }) {
         try {        
 
             if (userData.profilePictureFile) {
@@ -57,7 +57,7 @@ export class UserService {
                 userData.profilePicture,
                 userData.politicalAlignment,
             );
-            await this.userDAO.updateUser(updatedUser);
+            return await this.userDAO.updateUser(updatedUser);
         } catch (error) {
             console.error('Error in UserService updateUser:', error);
             throw new Error('Error updating user');

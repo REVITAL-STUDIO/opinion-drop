@@ -43,7 +43,7 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
     bio: "",
   });
 
-  const { currentUser, updateUserEmail, updateUserPassword } = useAuth();
+  const { currentUser, updateUserEmail, updateUserPassword, updateUserUsername, updateUserProfilePic } = useAuth();
   const [newPassword, setNewPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
@@ -153,22 +153,26 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
         console.log(`${key}: ${value}`);
       });
 
-      const response = await fetch(
+      if (userDataEdit.username !== userData.username) {
+        updateUserUsername(userDataEdit.username);
+      }
+
+      const res = await fetch(
         `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/users`,
         {
           method: "PUT",
           body: formData,
         }
       );
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error(
-          `Error Saving user information. Status: ${response.status}`
+          `Error Saving user information. Status: ${res.status}`
         );
       }
-      const newUserData = await response.json();
-      console.log("NEW USER DATA: ", newUserData);
-      setUserData(newUserData);
-      // setOpenMenu(false);
+      const response = await res.json();
+      updateUserProfilePic(response.data.userData.profilePicture);
+      setUserData(response.data.userData);
+      
     } catch (error) {
       console.error(error);
     }
@@ -271,9 +275,8 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
                   Password Change
                 </label>
                 <input
-                  className={`bg-transparent border border-black/20 rounded-md text-white placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none ${
-                    passwordError ? "border-2 border-red-400" : ""
-                  }`}
+                  className={`bg-transparent border border-black/20 rounded-md text-white placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none ${passwordError ? "border-2 border-red-400" : ""
+                    }`}
                   type="password"
                   id="Password"
                   name="Password"
@@ -284,9 +287,8 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
               </div>
               <div>
                 <input
-                  className={`bg-transparent border border-black/30 rounded-md text-black placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none${
-                    passwordError ? "border-2 border-red-400" : ""
-                  }`}
+                  className={`bg-transparent border border-black/30 rounded-md text-black placeholder:text-sm  focus:ring-none focus:border-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-none dark:focus:border-none${passwordError ? "border-2 border-red-400" : ""
+                    }`}
                   type="password"
                   id="Confirm-Password"
                   name="Confirm Password"
@@ -299,6 +301,7 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
                 <div className="flex items-start"></div>
               </div>
               <button
+                type="button"
                 onClick={saveUserData}
                 className="w-full text-white bg-gradient-to-bl hover:scale-95 to-red-300 from-blue-500 border rounded-full hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium   ease-in-out transition duration-150 text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
@@ -318,3 +321,7 @@ const Settings: React.FC<SettingsProps> = ({ closeSettings }) => {
   );
 };
 export default Settings;
+
+
+
+
