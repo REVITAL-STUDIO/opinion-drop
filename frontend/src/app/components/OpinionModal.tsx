@@ -169,7 +169,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       const updatedHighlight = highlights.find(
         (highlight) => highlight.highlightId == currentHighlightId
       );
-      console.log("updated highlight: ", updatedHighlight);
 
       if (updatedHighlight) {
         updateHighlight({
@@ -384,7 +383,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
 
   const fetchHighlights = async () => {
     try {
-      console.log("fetching highlights: ");
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/highlights/userHighlights/${opinionData.id}`,
         {
@@ -468,13 +466,8 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     const loadHighlights = async () => {
       try {
         const fetchedHighlights = await fetchHighlights();
-        console.log("fetched highlights: ", fetchedHighlights);
         const updatedHighlights: Highlight[] =
           applyHighlights(fetchedHighlights);
-        console.log(
-          "updated highlights after calling applyhighlights: ",
-          updatedHighlights
-        );
         if (updatedHighlights?.length > 0) {
           setHighlights(updatedHighlights);
         }
@@ -488,7 +481,6 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   }, []);
 
   useEffect(() => {
-    console.log("state variable highlights: ", highlights);
     loadHighlightOnclicks();
   }, [highlights]);
 

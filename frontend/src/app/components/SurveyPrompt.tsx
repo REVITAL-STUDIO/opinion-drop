@@ -15,30 +15,30 @@ function valuetext(value: number) {
   return `${value}`;
 }
 
-const SurveyPrompt: React.FC<SurveyPromptProps> = ({
-  prompt,
-  questionId,
-  onChange,
-}) => {
+
+const SurveyPrompt: React.FC<SurveyPromptProps> = ({ prompt, questionId, onChange }) => {
   const [sliderValue, setSliderValue] = useState<number>(50);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
-    if (typeof newValue === "number") {
+    if (typeof newValue === 'number') {
+      setSliderValue(newValue); 
       onChange(questionId, newValue);
     }
   };
+
 
   useEffect(() => {
     onChange(questionId, sliderValue);
   }, [questionId, sliderValue]);
 
+
   return (
-    <div className="flex flex-col  mx-auto">
+    <div className="flex flex-col p-4 gap-2 mx-auto">
       <p className="text-center text-sm">{prompt}</p>
       <div className="flex justify-center items-center">
         <Box sx={{ width: 300 }}>
           <Slider
-            value={sliderValue}
+            aria-label="Temperature"
             getAriaValueText={valuetext}
             valueLabelDisplay="on"
             shiftStep={30}
@@ -46,6 +46,7 @@ const SurveyPrompt: React.FC<SurveyPromptProps> = ({
             marks
             min={0}
             max={100}
+            value={sliderValue} 
             onChange={handleChange}
             className="mx-auto mt-4"
           />

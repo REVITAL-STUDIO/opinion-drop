@@ -143,7 +143,7 @@ const CesspitChildComment = ({
               Cancel
             </button>
             <button
-              onClick={() => postChildComment(newChildCommentText, comment.id)}
+              onClick={handlePostReply}
               type="button"
               className="py-2.5 px-4 text-sm font-medium text-center text-white bg-purple-700 rounded-lg shadow-lg ease-in-out duration-300 transition hover:bg-gray-800 active:bg-gray-700"
             >
