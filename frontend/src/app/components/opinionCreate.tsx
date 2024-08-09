@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDemocrat,
   faRepublican,
+  faX,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
@@ -11,7 +12,7 @@ import EssayPrompt from "./essayPrompt";
 import { motion, AnimatePresence } from "framer-motion";
 import FileUpload from "./FileUpload";
 interface OpinionCreateProps {
-  toggleCreate: () => void;
+  closeCreate: () => void; // Add the type definition for the function prop
   topic: {
     name: string;
     id: number;
@@ -36,8 +37,8 @@ interface FileExtended extends File {
 }
 
 const OpinionCreate: React.FC<OpinionCreateProps> = ({
-  toggleCreate,
   topic,
+  closeCreate,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<FileExtended[]>([]);
   const [selectedAffiliation, setSelectedAffiliation] = useState<string | null>(
@@ -96,7 +97,7 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
     setConfirmation(true);
     setTimeout(() => {
       setConfirmation(false);
-      toggleCreate(); // Close the modal after 2 seconds
+      closeCreate();
     }, 2000);
   };
 
@@ -154,8 +155,8 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
   }, []);
 
   return (
-    <>
-      {!close && (
+    <AnimatePresence>
+      <>
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -163,6 +164,9 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
           transition={{ ease: "easeInOut", duration: 0.8 }}
           className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-white bg-opacity-90 z-50"
         >
+          <button onClick={closeCreate} className="absolute top-0 left-0 p-4">
+            <FontAwesomeIcon icon={faX} className="text-lg" />
+          </button>
           <div
             ref={modalRef}
             className="w-full flex flex-col items-center justify-center"
@@ -299,8 +303,8 @@ const OpinionCreate: React.FC<OpinionCreateProps> = ({
             </AnimatePresence>
           </div>
         </motion.section>
-      )}
-    </>
+      </>
+    </AnimatePresence>
   );
 };
 

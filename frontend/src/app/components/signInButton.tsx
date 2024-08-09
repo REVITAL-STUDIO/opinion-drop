@@ -101,10 +101,10 @@ const SignInButton: React.FC = () => {
               >
                 <div className="relative flex items-center justify-center">
                   {/* Gradient ring */}
-                  <div className="absolute w-[4.2rem] h-[4.2rem] rounded-full bg-gradient-to-tl from-red-400 via-white to-blue-500"></div>
+                  <div className="absolute w-[2rem] h-[2rem] rounded-full bg-gradient-to-tl from-red-400 via-white to-blue-500"></div>
 
                   {/* Profile picture */}
-                  <div className="relative w-[4rem] h-[4rem] rounded-full overflow-hidden">
+                  <div className="relative w-[2rem] h-[2rem] rounded-full overflow-hidden">
                     <img
                       src={currentUser.profilePic}
                       alt="Profile"

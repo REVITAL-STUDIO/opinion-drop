@@ -11,13 +11,14 @@ import {
   faMicrophoneLinesSlash,
   faPenFancy,
   faThumbsUp,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import DetailsModal from "./DetailsModal";
 import OpinionModal from "./OpinionModal";
 import StateIt from "./stateIt";
 import DebateIt from "./debateIt";
 import MoreButton from "./moreButton";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import OpinionComments from "./OpinionComments";
 import { IoClose } from "react-icons/io5";
 import { useAuth } from "../hooks/AuthContext";
@@ -105,7 +106,7 @@ const Drop = ({ topic }: dropsProps) => {
       }
       const response = await res.json();
       setOpinions(response.data.opinions);
-      console.log("Opinions: ", response.data.opinions)
+      console.log("Opinions: ", response.data.opinions);
     } catch (error) {
       console.log("Error Fetching Opinions: ", error);
     }
@@ -115,7 +116,7 @@ const Drop = ({ topic }: dropsProps) => {
     fetchOpinions();
   }, []);
 
-  useEffect(() => { }, [opinions]);
+  useEffect(() => {}, [opinions]);
 
   const [currdeg, setCurrdeg] = useState(0);
   const rotate = (direction: "next" | "prev") => {
@@ -231,8 +232,6 @@ const Drop = ({ topic }: dropsProps) => {
     checkSurvey();
   }, [survey]);
 
-
-
   return (
     <section className=" flex  justify-center items-center">
       <div className="container ">
@@ -244,7 +243,7 @@ const Drop = ({ topic }: dropsProps) => {
         >
           {currentUser ? (
             opinions.length === 0 ? (
-              <div className="item relative shadow-lg bg-gradient-to-br to-white from-gray-600 shadow-white/100">
+              <div className="item relative shadow-lg bg-gradient-to-br to-white from-gray-600 ">
                 <button className="border w-[6rem] h-[6rem] shadow-md rounded-full flex justify-center items-center text-black">
                   <FontAwesomeIcon
                     icon={faPenFancy}
@@ -261,7 +260,7 @@ const Drop = ({ topic }: dropsProps) => {
                 slide ? (
                   <div
                     key={index}
-                    className={`item ${slide.id} relative shadow-lg shadow-white/50`}
+                    className={`item ${slide.id} relative`}
                     style={{
                       transform: `rotateY(${index * 60}deg) translateZ(250px)`,
                       overflow: "hidden",
@@ -287,10 +286,11 @@ const Drop = ({ topic }: dropsProps) => {
                       </button>
                       <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-gradient-to-tl from-purple-200 to-white bottom-2 right-2 flex justify-between items-center">
                         <button
-                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${activeButton === "like"
-                            ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
-                            : "scale-100 text-black"
-                            }`}
+                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
+                            activeButton === "like"
+                              ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
+                              : "scale-100 text-black"
+                          }`}
                         >
                           <FontAwesomeIcon
                             icon={faThumbsUp}
@@ -302,10 +302,11 @@ const Drop = ({ topic }: dropsProps) => {
                           {slide.totallikes}
                         </span>
                         <button
-                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 rotate-180 ${activeButton === "dislike"
-                            ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
-                            : "scale-100 text-black"
-                            }`}
+                          className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 rotate-180 ${
+                            activeButton === "dislike"
+                              ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
+                              : "scale-100 text-black"
+                          }`}
                         >
                           <FontAwesomeIcon
                             icon={faThumbsUp}
@@ -317,9 +318,9 @@ const Drop = ({ topic }: dropsProps) => {
                         </span>
                       </div>
                     </div>
-                    <div className="absolute top-4 right-4 bg-blue-500/80 text-white text-xs font-semibold py-2 px-4 rounded-full shadow-md flex items-center">
-                      <span className="mr-1">Rating:</span>
-                      <span>{slide.avgrating}%</span>
+                    <div className="absolute top-4 right-4 bg-[#2b2b2b] shadow-md text-white text-xs font-normal py-2 px-4 h-fit rounded-full flex items-center">
+                      <span className="mr-1 text-[10px]">Rating:</span>
+                      <span className="text-[10px]">{slide.avgrating}%</span>
                     </div>
                   </div>
                 ) : null
@@ -346,44 +347,49 @@ const Drop = ({ topic }: dropsProps) => {
       <div className="next shadow-lg" onClick={() => rotate("next")}>
         <FontAwesomeIcon icon={faAngleRight} className="w-5 h-5" />{" "}
       </div>
-      <div>
+      <AnimatePresence>
         {selectedOpinion && survey && (
           <>
-            {!close && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95 text-black bg-opacity-95  w-full h-screen flex justify-center items-center z-20"
+            <motion.div
+              initial={{ opacity: 0, y: -500 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -500 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="fixed inset-0 bg-gradient-to-tr from-blue-300/95 via-white/95 to-red-300/95 text-black bg-opacity-95  w-full min-h-screen flex justify-center items-center z-20"
+            >
+              {" "}
+              <button
+                onClick={closeModal}
+                className="absolute top-0 left-0 p-4"
               >
-                <div ref={detailsModalRef} className="w-1/2 ">
-                  {" "}
-                  <DetailsModal opinionData={selectedOpinion} />
-                </div>
-                <div className="w-1/2" ref={opinionModalRef}>
-                  <OpinionModal
-                    opinionData={selectedOpinion}
-                    toggleStateIt={toggleStateIt}
-                    toggleDebateIt={toggleDebateIt}
-                    hasSubmittedSurvey={hasSubmitted}
-                    survey={survey}
-                  />
-                </div>
-                <div ref={moreButtonRef}>
-                  <MoreButton
-                    toggleComments={toggleComments}
-                    showComments={showComments}
-                  />
-                  {showComments && (
-                    <OpinionComments opinionData={selectedOpinion} />
-                  )}
-                </div>
-              </motion.div>
-            )}
+                <FontAwesomeIcon icon={faX} className="text-lg" />
+              </button>
+              <div ref={detailsModalRef} className="w-1/2 ">
+                {" "}
+                <DetailsModal opinionData={selectedOpinion} />
+              </div>
+              <div className="w-1/2" ref={opinionModalRef}>
+                <OpinionModal
+                  opinionData={selectedOpinion}
+                  toggleStateIt={toggleStateIt}
+                  toggleDebateIt={toggleDebateIt}
+                  hasSubmittedSurvey={hasSubmitted}
+                  survey={survey}
+                />
+              </div>
+              <div ref={moreButtonRef}>
+                <MoreButton
+                  toggleComments={toggleComments}
+                  showComments={showComments}
+                />
+                {showComments && (
+                  <OpinionComments opinionData={selectedOpinion} />
+                )}
+              </div>
+            </motion.div>
           </>
         )}
-      </div>
+      </AnimatePresence>
     </section>
   );
 };

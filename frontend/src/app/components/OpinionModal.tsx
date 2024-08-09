@@ -9,14 +9,14 @@ import ProgressBar from "progressbar.js";
 import InteractionModal from "./InteractionModal";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import SurveyPrompt from "./SurveyPrompt";
 import {
   faFlag,
   faPaperPlane,
   faThumbsUp,
-  faBookmark
+  faBookmark,
 } from "@fortawesome/free-regular-svg-icons";
 import OpenRebuttal from "./RebuttalModal";
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
@@ -153,15 +153,15 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.highlightId === currentHighlightId
             ? {
-              ...highlight,
-              container: updateHighlightContainer(
-                highlight.container,
-                emoji,
-                "emoji"
-              ),
-              reactionType: "emoji",
-              reactionText: emoji,
-            }
+                ...highlight,
+                container: updateHighlightContainer(
+                  highlight.container,
+                  emoji,
+                  "emoji"
+                ),
+                reactionType: "emoji",
+                reactionText: emoji,
+              }
             : highlight
         )
       );
@@ -186,15 +186,15 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         prevHighlights.map((highlight) =>
           highlight.highlightId === currentHighlightId
             ? {
-              ...highlight,
-              container: updateHighlightContainer(
-                highlight.container,
-                comment,
-                "comment"
-              ),
-              reactionType: "comment",
-              reactionText: comment,
-            }
+                ...highlight,
+                container: updateHighlightContainer(
+                  highlight.container,
+                  comment,
+                  "comment"
+                ),
+                reactionType: "comment",
+                reactionText: comment,
+              }
             : highlight
         )
       );
@@ -1024,19 +1024,21 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
     <div className="z-30  w-[75%] h-[750px] bg-white text-black p-6 shadow-lg relative rounded-md">
       <div className="border-b-[1px] -mx-6 border-[#C5C5C5] mb-[3%] text-xl font-bold flex items-center px-8 gap-12">
         <a
-          className={`cursor-pointer ${selectedTab === "Opinion"
-            ? "border-b-[4px] border-[#606060] "
-            : "border-b-0"
-            }`}
+          className={`cursor-pointer ${
+            selectedTab === "Opinion"
+              ? "border-b-[4px] border-[#606060] "
+              : "border-b-0"
+          }`}
           onClick={() => setSelectedTab("Opinion")}
         >
           Opinion
         </a>
         <a
-          className={`cursor-pointer ${selectedTab === "Rebuttal"
-            ? "border-b-[4px] border-[#606060] "
-            : "border-b-0"
-            }`}
+          className={`cursor-pointer ${
+            selectedTab === "Rebuttal"
+              ? "border-b-[4px] border-[#606060] "
+              : "border-b-0"
+          }`}
           onClick={() => setSelectedTab("Rebuttal")}
         >
           Rebuttal
@@ -1045,8 +1047,9 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
       {/* Survey Container */}
       {!hasSubmittedSurvey && currentUser && survey && (
         <div
-          className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${hideOpinion ? "" : "invisible"
-            }`}
+          className={`absolute inset-x-0 bottom-0 left-0 h-[90%]     bg-[#2b2b2b] z-30 flex justify-center shadow-lg rounded-md ${
+            hideOpinion ? "" : "invisible"
+          }`}
         >
           <div className="absolute -top-[5rem] left-0 w-full   bg-[#2b2b2b] rounded-md text-white p-4  z-40">
             <h3 className="text-5xl  font-bold  p-4 mt-4">Tell Us..</h3>
@@ -1073,67 +1076,80 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
         </div>
       )}
       {showConfirmation && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="absolute w-full h-[100%] z-50 inset-0 bg-gradient-to-t from-[#2b2b2b] to-[#2b2b2b]/95 bg-opacity-100 rounded-md flex items-center justify-center"
-        >
-          <div className="px-4 py-[10%]  flex flex-col ">
-            <div className="p-4  mx-auto my-4 border-4 border-green-300 bg-green-300 rounded-full flex justify-center items-center">
-              <FontAwesomeIcon icon={faCheck} className="text-3xl text-white" />
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="absolute w-full h-[100%] z-50 inset-0 bg-gradient-to-t from-[#2b2b2b] to-[#2b2b2b]/95 bg-opacity-100 rounded-md flex items-center justify-center"
+          >
+            <div className="px-4 py-[10%]  flex flex-col ">
+              <div className="p-4  mx-auto my-4 border-4 border-green-300 bg-green-300 rounded-full flex justify-center items-center">
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  className="text-3xl text-white"
+                />
+              </div>
+              <span className="mx-auto text-4xl my-2 font-bold text-white">
+                Response Recorded
+              </span>
+              <span className="mx-auto text-white">
+                Your response has been recorded!
+              </span>
             </div>
-            <span className="mx-auto text-4xl my-2 font-bold text-white">
-              Response Recorded
-            </span>
-            <span className="mx-auto text-white">
-              Your response has been recorded!
-            </span>
-          </div>
-        </motion.div>
+          </motion.div>
+        </AnimatePresence>
       )}
 
-      <div className="w-full  overflow-y-auto">
+      <div className="w-full ">
         <div className="w-full flex justify-evenly relative items-center  p-4">
           <div className="relative w-[100%] flex">
             <h2 className="text-5xl leading-tight mb-4 w-4/6 font-black px-4">
               {opinionData.title.toUpperCase()}
             </h2>
-            {selectedTab == 'Opinion' &&
+            {selectedTab == "Opinion" && (
               <button
-              onClick={handleSaveOpinion}
+                onClick={handleSaveOpinion}
                 className="absolute right-6 text-sm"
               >
-                {userHasSaved ?
+                {userHasSaved ? (
                   <div className="flex flex-col">
-                    <FontAwesomeIcon className="w-[2rem] h-[2rem] text-green-400" icon={faCheck} />
+                    <FontAwesomeIcon
+                      className="w-[2rem] h-[2rem] text-green-400"
+                      icon={faCheck}
+                    />
                     saved
                   </div>
-                  :
-                  <div className="flex flex-col">
-                    <FontAwesomeIcon className="w-[2rem] h-[2rem]" icon={faBookmark} />
+                ) : (
+                  <div className="flex items-center gap-x-4">
+                    <FontAwesomeIcon
+                      className="w-[2rem] h-[2rem]"
+                      icon={faBookmark}
+                    />
                     save
                   </div>
-                }
+                )}
               </button>
-            }
-            {selectedTab == 'Rebuttal' &&
+            )}
+            {selectedTab == "Rebuttal" && (
               <button
                 onClick={openReplies}
                 className={`font-bold w-1/4 h-10 mt-2 border shadow-md rounded-full text-white flex items-center justify-center gap-x-2 bg-[#000] `}
               >
                 Rebuttal
                 <IoIosArrowDropdown
-                  className={`${replyMenu ? "rotate-0" : "-rotate-180"
-                    } transition ease-in-out duration-150`}
+                  className={`${
+                    replyMenu ? "rotate-0" : "-rotate-180"
+                  } transition ease-in-out duration-150`}
                 />
               </button>
-            }
+            )}
             {replyMenu && (
               <section
-                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                  }  transition-all ease-in-out duration-150 z-10 bg-[#fafafa] rounded-lg p-4 shadow-lg text-white `}
+                className={`absolute top-full right-4 gap-y-4 w-2/5 overflow-hidden transition-opacity ${
+                  replyMenu ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                }  transition-all ease-in-out duration-150  bg-[#fafafa] rounded-lg p-4  shadow-lg text-white `}
               >
                 <button
                   onClick={toggleStateIt}
@@ -1176,15 +1192,17 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
                   <div className="p-4 mx-auto mt-[2%] rounded-full w-[50%] flex justify-evenly items-center">
                     <button
                       onClick={() => handleLikeOpinion()}
-                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasLiked ? "bg-green-500 scale-105" : "bg-white"
-                        }`}
+                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${
+                        userHasLiked ? "bg-green-500 scale-105" : "bg-white"
+                      }`}
                     >
                       👍
                     </button>
                     <button
                       onClick={() => handleDislikeOpinion()}
-                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${userHasDisliked ? "bg-red-500 scale-105" : "bg-white"
-                        }`}
+                      className={`w-20 h-20 rounded-full hover:scale-105 ease-in-out duration-200 transition  text-3xl shadow-lg ${
+                        userHasDisliked ? "bg-red-500 scale-105" : "bg-white"
+                      }`}
                     >
                       👎
                     </button>

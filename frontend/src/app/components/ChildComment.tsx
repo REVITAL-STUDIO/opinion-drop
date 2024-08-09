@@ -86,11 +86,11 @@ const ChildComment = ({
           <p className="text-xs  font-light">{timeAgo(comment.createdat)}</p>
           <div className=" my-2 flex flex-col items-start gap-2 ">
             <p className={` w-[100%] text-[0.9rem] `}>
-              {rootCommentId != comment.parentcommentid &&
+              {rootCommentId != comment.parentcommentid && (
                 <span className="bold text-blue-500 mr-2">
                   @{comment.parentcommentauthor}
                 </span>
-              }
+              )}
               {textIsExpanded
                 ? comment.textcontent
                 : truncateText(comment.textcontent, textMaxChar)}
@@ -135,7 +135,7 @@ const ChildComment = ({
             autoFocus
             id="reply"
             rows={3}
-            className="w-full  pb-2 text-md mt-4 text-black  border border-gray-300 focus:outline-none focus:border-b-2 p-4 rounded-lg bg-[#ececec] dark:placeholder-gray-400 resize-none"
+            className="w-full  pb-2 text-md mt-4 text-white  border border-gray-300 focus:outline-none focus:border-b-2 p-4 rounded-lg bg-[#ececec] dark:placeholder-gray-400 resize-none"
             placeholder="Add a reply..."
             required
           ></textarea>

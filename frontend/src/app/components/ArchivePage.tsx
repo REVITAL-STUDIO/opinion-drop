@@ -2,9 +2,8 @@ import {
   faAngleLeft,
   faAngleRight,
   faEye,
-  faMicrophoneLines,
-  faMicrophoneLinesSlash,
   faThumbsDown,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
@@ -15,7 +14,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import OpinionModal from "./OpinionModal";
 import MoreButton from "./moreButton";
 import OpinionComments from "./OpinionComments";
@@ -27,6 +26,7 @@ interface dropsProps {
     name: string;
     id: number;
   };
+  closeArchivePage: () => void; // Add the type definition for the function prop
 }
 
 interface Opinion {
@@ -42,7 +42,7 @@ interface Opinion {
   avgrating?: number;
 }
 
-const ArchivePage = ({ topic }: dropsProps) => {
+const ArchivePage = ({ topic, closeArchivePage }: dropsProps) => {
   const [opinions, setOpinions] = useState<Opinion[]>([]);
   console.log("opinions:", opinions);
   const [rebuttals, setRebuttals] = useState<Opinion[]>([]);
@@ -133,38 +133,30 @@ const ArchivePage = ({ topic }: dropsProps) => {
     setShowComments(!showComments);
   };
 
-  const detailsModalRef = useRef<HTMLDivElement>(null);
-  const opinionModalRef = useRef<HTMLDivElement>(null);
-  const moreButtonRef = useRef<HTMLDivElement>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      setClose(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const handleOpenModal = (opinion: Opinion) => {
     setSelectedOpinion(opinion);
-    setClose(false); // Reset the close state
+  };
+
+  const closeModal = () => {
+    setSelectedOpinion(null);
   };
 
   return (
     <>
-      {close && (
+      <AnimatePresence>
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed bg-white/60 top-0 left-0 w-full min-h-screen flex items-center z-50"
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          className="fixed bg-white/75 top-0 left-0 w-full min-h-screen flex items-center z-50"
         >
+          <button
+            onClick={closeArchivePage}
+            className="absolute top-0 left-0 p-4"
+          >
+            <FontAwesomeIcon icon={faX} className="text-lg" />
+          </button>
           <div className="carousel-container ">
             <div className="my-4 text-5xl text-black">Catalogue</div>
             {loading ? ( // Step 4: Show loading state
@@ -227,10 +219,7 @@ const ArchivePage = ({ topic }: dropsProps) => {
                     className="swiper-slide cursor-pointer"
                   >
                     {/* Ensure SwiperSlide has a defined size */}
-                    <div
-                      ref={modalRef}
-                      className="w-full  h-full relative overflow-hidden"
-                    >
+                    <div className="w-full  h-full relative overflow-hidden">
                       {/* This div acts as a container for absolutely positioned elements */}
                       <div className="absolute  inset-0 w-full h-full">
                         {/* The actual image, styled to cover its parent container */}
@@ -266,10 +255,11 @@ const ArchivePage = ({ topic }: dropsProps) => {
                           {/* Likes and Dislikes */}
                           <div className="px-4 py-2 z-40 shadow-lg text-white rounded-full text-xs bg-gradient-to-tl from-purple-200 to-white  bottom-2 right-2 flex justify-between items-center">
                             <div
-                              className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${activeButton === "like"
-                                ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
-                                : "scale-100 text-black"
-                                }`}
+                              className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
+                                activeButton === "like"
+                                  ? "scale-125 bg-gradient-to-br from-blue-500 to-red-500 text-white shadow-sm"
+                                  : "scale-100 text-black"
+                              }`}
                             >
                               <FontAwesomeIcon
                                 icon={faThumbsUp}
@@ -280,10 +270,11 @@ const ArchivePage = ({ topic }: dropsProps) => {
                               {info.totallikes}
                             </span>
                             <div
-                              className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${activeButton === "dislike"
-                                ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
-                                : "scale-100 text-black"
-                                }`}
+                              className={`w-[1rem] h-[1rem] bg-white/75 rounded-full flex justify-center items-center ease-in-out transition duration-300 ${
+                                activeButton === "dislike"
+                                  ? "scale-125 text-white bg-gradient-to-br to-blue-200 from-red-800 shadow-sm"
+                                  : "scale-100 text-black"
+                              }`}
                             >
                               <FontAwesomeIcon
                                 icon={faThumbsDown}
@@ -295,7 +286,7 @@ const ArchivePage = ({ topic }: dropsProps) => {
                             </span>
                           </div>
                         </div>
-                        <div className="absolute top-4 right-4 bg-blue-500/80 text-white text-xs font-semibold py-2 px-4 rounded-full shadow-md flex items-center">
+                        <div className="absolute top-4 right-4 bg-[#2b2b2b] text-white text-xs font-normal py-2 px-4 rounded-full shadow-md flex items-center">
                           <span className="mr-1">Rating:</span>
                           <span>{info.avgrating}%</span>
                         </div>
@@ -308,40 +299,44 @@ const ArchivePage = ({ topic }: dropsProps) => {
           </div>
           {selectedOpinion && (
             <>
-              {!close && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95 text-black bg-opacity-95  w-full h-screen flex justify-center items-center z-20"
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="fixed inset-0 bg-gradient-to-tr from-blue-500/95 via-white/95 to-red-500/95 text-black bg-opacity-95  w-full h-screen flex justify-center items-center z-20"
+              >
+                <button
+                  onClick={closeModal}
+                  className="absolute top-0 left-0 p-4"
                 >
-                  <div ref={detailsModalRef} className="w-1/2 ">
-                    {" "}
-                    <DetailsModal opinionData={selectedOpinion} />
-                  </div>
-                  <div className="w-1/2" ref={opinionModalRef}>
-                    <OpinionModal
-                      opinionData={selectedOpinion}
-                      toggleStateIt={toggleStateIt}
-                      toggleDebateIt={toggleDebateIt}
-                    />
-                  </div>
-                  <div ref={moreButtonRef}>
-                    <MoreButton
-                      toggleComments={toggleComments}
-                      showComments={showComments}
-                    />
-                    {showComments && (
-                      <OpinionComments opinionData={selectedOpinion} />
-                    )}
-                  </div>
-                </motion.div>
-              )}
+                  <FontAwesomeIcon icon={faX} className="text-lg" />
+                </button>
+                <div className="w-1/2 ">
+                  {" "}
+                  <DetailsModal opinionData={selectedOpinion} />
+                </div>
+                <div className="w-1/2">
+                  <OpinionModal
+                    opinionData={selectedOpinion}
+                    toggleStateIt={toggleStateIt}
+                    toggleDebateIt={toggleDebateIt}
+                  />
+                </div>
+                <div>
+                  <MoreButton
+                    toggleComments={toggleComments}
+                    showComments={showComments}
+                  />
+                  {showComments && (
+                    <OpinionComments opinionData={selectedOpinion} />
+                  )}
+                </div>
+              </motion.div>
             </>
           )}
         </motion.section>
-      )}
+      </AnimatePresence>
     </>
   );
 };
